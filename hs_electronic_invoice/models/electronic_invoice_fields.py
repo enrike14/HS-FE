@@ -154,9 +154,7 @@ class electronic_invoice_fields(models.Model):
         help='Tipo de sucursal Eletrónica.'
     )
 
-    # payment_referece_credit_note = fields.ManyToOne(string="Referencia de FE", )
     reversal_reason_fe = fields.Char(string='Reason', readonly="True")
-    #reembolso = fields.Char(string = 'Reembolso', compute="on_change_payment_state", readonly = "True")
     anulado = fields.Char(string='Anulado', readonly="True", store="True")
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
@@ -166,11 +164,8 @@ class electronic_invoice_fields(models.Model):
     def on_change_pago(self):
         for record in self:
             logging.info('Blank QR: ' + str(record.qr_code))
-            # if str(record.amount_residual) == '0.0' and record.lastFiscalNumber:
             if str(record.qr_code) != "False":
                 record.pagadoCompleto = 'FECompletada'
-                # self.llamar_ebi_pac()
-                #logging.info('Amoount Valor: ' + str(record.amount_residual))
             else:
                 record.pagadoCompleto = 'Pendiente'
 
@@ -184,8 +179,7 @@ class electronic_invoice_fields(models.Model):
             if record.state == 'posted' and record.pagadoCompleto != "NumeroAsignado":
                 record.pagadoCompleto = "NumeroAsignado"
                 if record.lastFiscalNumber == False:
-                    #record.lastFiscalNumber = '000045'
-                    #first_id = self.env['electronic.invoice'].search([('payment_id','=',rec.invoice_payment_term_id.id)], order='days asc')[0].id
+
                     document = self.env["electronic.invoice"].search(
                         [('name', '=', 'ebi-pac')], limit=1)
                     if document:
@@ -416,7 +410,6 @@ class electronic_invoice_fields(models.Model):
 
     def set_datosTransaccion_dict(self, fiscalN, puntoFacturacion, clienteDict):
 
-        # output_date = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
         output_date = self.invoice_date.strftime("%Y-%m-%dT%H:%M:%SZ")
         fecha_fe_cn = ""
         cufe_fe_cn = ""
@@ -489,12 +482,11 @@ class electronic_invoice_fields(models.Model):
         logging.info('Llamar anulacion... ')
         context = self._context
         url_wsdl = ''
-        #self.delete_file(self.env.cr, context.get('uid'))
+
         document = self.env["electronic.invoice"].search(
             [('name', '=', 'ebi-pac')], limit=1)
 
         if document:
-            # (str(document.numeroDocumentoFiscal).rjust(10, '0'))
             fiscalN = self.lastFiscalNumber
             puntoFacturacion = (
                 str(document.puntoFacturacionFiscal).rjust(3, '0'))
@@ -508,16 +500,9 @@ class electronic_invoice_fields(models.Model):
         inv_tipo_emision_fe = ""
         inv_name = ""
 
-        #creditnote = self.env["account.move"].search([('reversed_entry_id','=',self.name)],limit = 1)
-        # if creditnote:
-        #inv_lastFiscalNumber = creditnote.lastFiscalNumber
-        #inv_tipo_documento_fe = creditnote.tipo_documento_fe
-        #inv_tipo_emision_fe = creditnote.tipo_emision_fe
-
         original_invoice_id = self.env["account.move"].search(
             [('id', '=', self.reversed_entry_id.id)], limit=1)
         if original_invoice_id:
-            #payment = original_invoice_id.payment_state
             inv_lastFiscalNumber = original_invoice_id.lastFiscalNumber
             inv_tipo_documento_fe = original_invoice_id.tipo_documento_fe
             inv_tipo_emision_fe = original_invoice_id.tipo_emision_fe
@@ -612,19 +597,9 @@ class electronic_invoice_fields(models.Model):
         logging.info('Documento EF PDF:' + str(res['documento']))
         # Define the Base64 string of the PDF file
         b64 = str(res['documento'])
-        #self.insert_data_to_electronic_invoice_moves(res, self.invoice_number)
-        #body = "<a href='data:application/pdf;base64,"+b64+"' target='_blank' download='HSFE.pdf'><i class='fa fa-file-pdf-o'></i>HSFE.pdf</a>"
-        #body = "Factura Electrónica Creada:<br> <b>CUFE:</b> (<a href='"+res.qr+"'>"+str(res.cufe)+")</a><br> <b>QR:</b><br> <img src='https://static.semrush.com/blog/uploads/media/43/b0/43b0b9a04c8a433a0c52360c9cc9aaf2/seo-guide-to-yoast-for-wordpress.svg'  height='288' width='388'/>"
-        #records = self._get_followers(cr, uid, ids, None, None, context=context)
-        #followers = records[ids[0]]['message_follower_ids']
-        # self.message_post(body=body)
-
-        #pdf = self.env.ref('module_name..report_id').render_qweb_pdf(self.ids)
         b64_pdf = b64  # base64.b64encode(pdf[0])
         # save pdf as attachment
         name = self.lastFiscalNumber
-        # if str(self.payment_state) == "reversed":
-        #name = name + "-Anulada"
 
         return self.env['ir.attachment'].create({
             'name': name + str(".pdf"),
@@ -678,7 +653,6 @@ class electronic_invoice_fields(models.Model):
 
             if "7" in str(item.name).lower() or "10" in str(item.name).lower() or "15" in str(item.name).lower():
                 items['itbmPercent'] = item.amount
-            # items.append(item.amount)
 
         return items
 
@@ -693,14 +667,12 @@ class electronic_invoice_fields(models.Model):
                 if item.tax_ids:
                     tax_ids_str = str(item.tax_ids).replace("account.tax", "").replace(
                         "(", "").replace(")", "").replace(",", "")
-                    # logging.info("Tax IDS:" + str(tuple_tax_ids_str))
                     if len(tax_ids_str) > 1:
                         tuple_tax_ids_str = tuple(
                             map(int, tax_ids_str.split(', ')))
                     else:
                         tuple_tax_ids_str = tuple(
                             map(int, tax_ids_str.replace(",", "").split(', ')))
-                    #tuple_tax_ids_str = tuple(map(int, tax_ids_str.split(', ')))
                     tax_item = self.env["account.tax"].search(
                         [('id', 'in', tuple_tax_ids_str)], limit=1)
                 else:
@@ -712,7 +684,6 @@ class electronic_invoice_fields(models.Model):
                             monto_porcentaje = tax_item.amount
                             if int(tax_item.amount) == 0:
                                 tasaITBMS = "00"
-                                # logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
                             if int(tax_item.amount) == 15:
                                 tasaITBMS = "03"
 
@@ -722,10 +693,10 @@ class electronic_invoice_fields(models.Model):
                             if int(tax_item.amount) == 7:
                                 tasaITBMS = "01"
                         elif tax_item.amount_type == 'group':
-                            # logging.info("tax_item.amount_type.children:" + str(tax_item.children_tax_ids))
+
                             ctax_ids_str = str(tax_item.children_tax_ids).replace(
                                 "account.tax", "").replace("(", "").replace(")", "")  # .replace(",","")
-                            # logging.info("children tuple ids str:" + str(ctax_ids_str))
+
                             if len(ctax_ids_str) > 1:
                                 ctuple_tax_ids_str = tuple(
                                     map(int, ctax_ids_str.split(', ')))
@@ -733,10 +704,9 @@ class electronic_invoice_fields(models.Model):
                                 ctuple_tax_ids_str = tuple(
                                     map(int, ctax_ids_str.replace(",", "").split(', ')))
 
-                            # logging.info("children tuple ids:" + str(ctuple_tax_ids_str))
                             group_tax_children = self.env["account.tax"].search(
                                 [('id', 'in', ctuple_tax_ids_str)])
-                            # logging.info("Children taxes:" + str(group_tax_children))
+
                             obj_sub_impuestos = self.get_taxes_in_group(
                                 group_tax_children)
                             logging.info("array subimpuestos: " +
@@ -744,7 +714,7 @@ class electronic_invoice_fields(models.Model):
                             monto_porcentaje = obj_sub_impuestos['itbmPercent']
                             if int(obj_sub_impuestos['itbmPercent']) == 0:
                                 tasaITBMS = "00"
-                                # logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
+
                             if int(obj_sub_impuestos['itbmPercent']) == 15:
                                 tasaITBMS = "03"
 
@@ -791,21 +761,6 @@ class electronic_invoice_fields(models.Model):
                         item.fechaFabricacion.strftime("%Y-%m-%dT%I:%M:%S-05:00"))
                     new_item_object['fechaCaducidad'] = str(
                         item.fechaCaducidad.strftime("%Y-%m-%dT%I:%M:%S-05:00"))
-
-                # if typeCustomers=="03":
-                # 	new_item_object["CodigoCPBS"]=item.product_id.codigoCPBS
-
-                # if item.tasaISC:
-                # 	new_item_object["TasaISC"]=item.product_id.codigoCPBS
-
-                # if item.valorISC:
-                # 	new_item_object["ValorISC"]=item.product_id.valorISC
-
-                # if item.tasaOTI:
-                # 	new_item_object["tasaOTI"]=item.product_id.tasaOTI
-
-                # if item.valorTasa:
-                # 	new_item_object["valorTasa"]=item.product_id.valorTasa
 
                 array_items.append(new_item_object)
         logging.info("Product info" + str(array_items))
@@ -870,47 +825,28 @@ class electronic_invoice_fields(models.Model):
         return client_obj
 
     def llamar_hs_azure(self):
-        url = "https://hsfeapi.azurewebsites.net//client"
+        url = "https://hsfeapi.azurewebsites.net/client"
         payload = json.dumps({
-
             "tipoClienteFE": "st",
-
             "tipoContribuyente": "s",
-
             "numeroRUC": "string",
-
             "pais": "string",
-
             "correoElectronico1": "svega@hermecsolutions.com",
-
             "digitoVerificadorRUC": "string",
-
             "razonSocial": "string",
-
             "direccion": "string",
-
             "codigoUbicacion": "string",
-
             "provincia": "string",
-
             "distrito": "string",
-
             "corregimiento": "string",
-
             "tipoIdentificacion": "string",
-
             "nroIdentificacionExtranjero": "string",
-
             "paisExtranjero": "string"
-
         })
 
         headers = {
-
             'Content-Type': 'application/json',
-
             'Cookie': 'ARRAffinity=bf6ec7b2fdefe629cdfb92d90c21f431d8e6f545420ab62c062de4206bb97bbd; ARRAffinitySameSite=bf6ec7b2fdefe629cdfb92d90c21f431d8e6f545420ab62c062de4206bb97bbd'
-
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
