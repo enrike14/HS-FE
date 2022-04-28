@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+	<data>
+		
+		<!-- model.name inherit form view -->
+		<record id="views_product_field_inherit1_form" model="ir.ui.view">
+			<field name="name">views.product.field.inherit1.form</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_only_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='general_information']" position="after">
+                        <page name="pageConfigEBIPAC" string="Configuración FE">
+                            <group>
+                                <group>
+									<field name="categoryProduct"/>
+									<field name="fechaFabricacion"/>
+									<field name="fechaCaducidad"/>
+									<field name="codigoCPBSAbrev"/>
+									<field name="codigoCPBS"/>
+									<field name="unidadMedidaCPBS"/>
+                                </group>
+                                <group>
+									<field name="codigoGTIN"/>
+									<field name="codigoGTINInv"/>
+									<field name="tasaISC"/>
+									<field name="valorISC"/>
+									<field name="tasaOTI"/>
+									<field name="valorTasa"/>
+                                </group>
+                            </group>
+                        </page>
+                   
+                </xpath>
+				
+		</field>
+		</record>
+		
+	</data>
+</odoo>

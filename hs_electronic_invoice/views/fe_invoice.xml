@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+	<record id="electronic_invoice_fields_inherit_form" model="ir.ui.view">
+	  <field name="name">electronic.invoice.fields.inherit.form</field>
+	  <field name="model">account.move</field>
+	  <field name="inherit_id" ref="account.view_move_form"/>
+	  <field name="arch" type="xml">
+		<xpath expr="//header" position="inside">
+			<button  attrs="{'invisible':['|','|',('state','!=','posted'),('pagadoCompleto','=','FECompletada'),('type','=','in_invoice')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
+			name="llamar_ebi_pac" string="Crear Documento Fiscal"  type="object" />
+		</xpath>
+
+		<xpath expr="//button[@name='button_draft']" position="attributes" >
+			<attribute name="attrs">{'invisible': [('pagadoCompleto','=','FECompletada')]}</attribute>
+		</xpath>
+		
+		<xpath expr="//field[@name='type']" position="before" >
+			<field name="qr_code" widget='image' attrs="{'invisible': [('pagadoCompleto','!=','FECompletada')]}" class="oe_avatar"/>				
+		</xpath>
+
+		<xpath expr="//field[@name='journal_id']" position="after" >
+			
+			<field name="puntoFactFiscal" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}" />	
+			<field name="pagadoCompleto" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}" />
+				<!--<field name="reembolso" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>		 -->
+			<field name="anulado" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+			<field name="nota_credito" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+				
+			
+		<!-- 	<field name="pagadoCompleto" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}" />	 -->				
+		</xpath>
+		<!-- header_left_group -->
+		<!-- <xpath expr="//group[@id='header_right_group']" position="after" >	 attrs="{'readonly':[('payment_state','=','paid')]}"			 -->
+		<!-- <xpath expr="/form/sheet/group" position="after" >		other_info		 -->
+		<!-- type -->
+		<xpath expr="//page[@name='other_info']" position="after">	
+			<page name="pageConfigFE" string="Configuración FE" attrs="{'invisible':[('type','=','in_invoice')]}">			
+				<group name="fe-group" string="Datos FE" >
+					<group name="left_g" string="">
+						<field name="tipo_documento_fe"  />							
+						<field name="tipo_emision_fe" />							
+						<field name="naturaleza_operacion_fe" />							
+						<field name="tipo_operacion_fe" />							
+						<field name="destino_operacion_fe" />							
+						<field name="tipoVenta_fe" />							
+						<!-- <field name="reembolso" />							 -->
+						<field name="reversal_reason_fe" />	
+						<field name="lastFiscalNumber"/>						
+					</group>
+					<group name="right_g" string="">
+						<field name="fecha_inicio_contingencia"  attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))], 'required':[('tipo_emision_fe','in',('02', '04'))]}"/>	
+						<field name="motivo_contingencia"  attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>
+						<field name="formatoCAFE_fe" />	
+						<field name="entregaCAFE_fe" />	
+						<field name="envioContenedor_fe" />	
+						<field name="procesoGeneracion_fe" />
+						<field name="tipoSucursal_fe" />	
+					</group>
+				</group>
+			</page>
+		</xpath>		
+	  </field>
+	</record>
+
+	<!-- actions opening views on models -->
+
+	<record model="ir.actions.act_window" id="account_move_action_window">
+		<field name="name">Bank Reconciliation</field>
+		<field name="res_model">account.move</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+
+  </data>
+</odoo>
