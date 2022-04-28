@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="electronic_invoice_list">
+      <field name="name">electronic.invoice.list</field>
+      <field name="model">electronic.invoice</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="wsdl" />
+          <field name="descripcion" />
+          <field name="tokenEmpresa" />
+          <field name="tokenPassword" />
+          <field name="codigoSucursalEmisor" />
+          <field name="numeroDocumentoFiscal" />
+          <field name="puntoFacturacionFiscal" />
+        </tree>
+      </field>
+    </record>
+    
+    <!-- VISTA DE FORMULARIO eeee1111e-->
+
+    <record id="electronic_invoice_form" model="ir.ui.view">
+      <field name="name">electronic.invoice.form</field>
+      <field name="model">electronic.invoice</field>
+      <field name="arch" type="xml">
+      
+        <form string="CuentasBank">
+          <sheet>
+            <div><h1>Parámetros de Configuración</h1></div>
+            <div><h6>Ingrese los datos bridados por la DGI.</h6></div>
+            <br></br>
+            <group>
+                <field name="name" />
+                <field name="wsdl" />
+                <field name="descripcion" />
+                <field name="tokenEmpresa" />
+                <field name="tokenPassword" />
+                <field name="codigoSucursalEmisor" />
+                <field name="numeroDocumentoFiscal" />
+                <field name="puntoFacturacionFiscal" />
+    
+            </group>
+          </sheet>
+        </form>
+
+
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="electronic_invoice_action_window">
+      <field name="name">Factura Electrónica</field>
+      <field name="res_model">electronic.invoice</field>
+      <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- Top menu item -->
+
+  <menuitem id="electronic_invoice_menu_root" name="Factura Electrónica" sequence="3" parent="account.menu_finance_configuration"/>
+  <!-- menu categories -->
+  <menuitem id="electronic_invoice_menu_1" name="Configuración"  parent="electronic_invoice_menu_root" sequence="1" action="electronic_invoice_action_window"/>
+  <!-- <menuitem id="report_reconciliation_menu" name="Reporte Conciliación"  parent="bank_reconciliation_menu_root" sequence="2" action="bank_reconciliation_action_window"/> -->
+
+  </data>
+</odoo>
