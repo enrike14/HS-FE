@@ -914,7 +914,7 @@ class electronic_invoice_fields(models.Model):
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
-        logging.info('Info AZURE: ' + str(response))
+        logging.info('Info AZURE: ' + str(response.text))
 
     def set_subtotales_dict(self, monto_sin_impuesto, monto_total_factura, cantidad_items, monto_impuesto_completo, info_items_array, info_pagos):
         # logging.info("Array items: " + str(info_items_array))
