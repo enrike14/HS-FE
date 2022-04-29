@@ -282,6 +282,8 @@ class electronic_invoice_fields(models.Model):
         tuple_impuesto_completo = grupo_monto_impuestos[0]
         monto_impuesto_completo = tuple_impuesto_completo[1]
         # get an array to info_pagos
+        self.get_array_payment_info(payments_items, monto_impuesto_completo)
+
         info_pagos = self.set_array_info_pagos(
             payments_items, monto_impuesto_completo)
 
@@ -859,6 +861,24 @@ class electronic_invoice_fields(models.Model):
 
         return subTotalesDict
 
+    def get_array_payment_info(self, payments_items, monto_impuesto_completo):
+        url = "https://hsfeapi.azurewebsites.net/listpayments"
+        payments = [item.amount for item in payments_items]
+        payload = json.dumps({
+            # "payment_method": "st",
+            "payments_items": payments,
+            "monto_impuesto_completo": monto_impuesto_completo,
+            "amount_untaxed": self.amount_untaxed,
+            "total_discount_price": self.total_precio_descuento
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        logging.info('Info AZURE PAGOS: ' + str(response.text))
+
     def get_client_info(self):
         url = "https://hsfeapi.azurewebsites.net/client"
 
@@ -885,4 +905,4 @@ class electronic_invoice_fields(models.Model):
         }
 
         response = requests.request("POST", url, headers=headers, data=payload)
-        logging.info('Info AZURE: ' + str(response.text))
+        logging.info('Info AZURE CLIENTE: ' + str(response.text))
