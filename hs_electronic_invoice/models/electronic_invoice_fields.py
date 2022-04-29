@@ -172,7 +172,8 @@ class electronic_invoice_fields(models.Model):
     @api.depends('state')
     def on_change_state(self):
         logging.info('Entró al onchange: ')
-        self.llamar_hs_azure()
+
+        self.get_client_info()
         for record in self:
             logging.info('HSInvoice: ' + str(record.amount_residual) +
                          ":" + str(record.lastFiscalNumber))
@@ -238,10 +239,6 @@ class electronic_invoice_fields(models.Model):
 
     def llamar_ebi_pac(self):
         invoice_number = '000001'
-        # user_name = ''
-        # user_email = ''
-        monto_total = ''
-        dictsItems = {}
         info_items_array = []
         lines_ids = ()
         info_pagos = []
@@ -252,9 +249,10 @@ class electronic_invoice_fields(models.Model):
             monto_sin_impuesto = record.amount_untaxed
             grupo_monto_impuestos = record.amount_by_group
             monto_total_factura = record.amount_total
-            # user_name = record.partner_id.name
-            # user_email = record.partner_id.email
             lines_ids = record.invoice_line_ids
+
+            # for line in lines_ids:
+            #
 
             ids_str = str(lines_ids).replace("account.move.line",
                                              "").replace("(", "").replace(")", "")
@@ -824,34 +822,6 @@ class electronic_invoice_fields(models.Model):
 
         return client_obj
 
-    def llamar_hs_azure(self):
-        url = "https://hsfeapi.azurewebsites.net/client"
-        payload = json.dumps({
-            "tipoClienteFE": "st",
-            "tipoContribuyente": "s",
-            "numeroRUC": "string",
-            "pais": "string",
-            "correoElectronico1": "svega@hermecsolutions.com",
-            "digitoVerificadorRUC": "string",
-            "razonSocial": "string",
-            "direccion": "string",
-            "codigoUbicacion": "string",
-            "provincia": "string",
-            "distrito": "string",
-            "corregimiento": "string",
-            "tipoIdentificacion": "string",
-            "nroIdentificacionExtranjero": "string",
-            "paisExtranjero": "string"
-        })
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Cookie': 'ARRAffinity=bf6ec7b2fdefe629cdfb92d90c21f431d8e6f545420ab62c062de4206bb97bbd; ARRAffinitySameSite=bf6ec7b2fdefe629cdfb92d90c21f431d8e6f545420ab62c062de4206bb97bbd'
-        }
-
-        response = requests.request("POST", url, headers=headers, data=payload)
-        logging.info('Info AZURE: ' + str(response.text))
-
     def set_subtotales_dict(self, monto_sin_impuesto, monto_total_factura, cantidad_items, monto_impuesto_completo, info_items_array, info_pagos):
         # logging.info("Array items: " + str(info_items_array))
 
@@ -887,3 +857,31 @@ class electronic_invoice_fields(models.Model):
                 '%.2f' % round(self.total_precio_descuento, 2))
 
         return subTotalesDict
+
+    def get_client_info(self):
+        url = "https://hsfeapi.azurewebsites.net/client"
+
+        payload = json.dumps({
+            "tipoClienteFE": self.partner_id.TipoClienteFE,
+            "tipoContribuyente": self.partner_id.tipoContribuyente,
+            "numeroRUC": self.partner_id.digitoVerificadorRUC,
+            "pais": self.partner_id.country_id.code,
+            "correoElectronico1": self.partner_id.email,
+            "digitoVerificadorRUC": self.partner_id.digitoVerificadorRUC,
+            "razonSocial": self.partner_id.razonSocial,
+            "direccion": self.partner_id.direccion,
+            "codigoUbicacion": self.partner_id.CodigoUbicacion,
+            "provincia": self.partner_id.provincia,
+            "distrito": self.partner_id.distrito,
+            "corregimiento": self.partner_id.corregimiento,
+            "tipoIdentificacion": self.partner_id.tipoIdentificacion,
+            "nroIdentificacionExtranjero": self.partner_id.nroIdentificacionExtranjero,
+            "paisExtranjero": self.partner_id.paisExtranjero
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        logging.info('Info AZURE: ' + str(response.text))
