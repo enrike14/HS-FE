@@ -350,7 +350,7 @@ class electronic_invoice_fields(models.Model):
 					item=info_items_array
 				),
 				totalesSubTotales=totales_subtotales_inv_dict
-				#,listaTotalOTI=info_items_array_oti
+				,listaTotalOTI=info_items_array_oti
 			)
 		)
 		# datos del EBI Completos
@@ -661,12 +661,12 @@ class electronic_invoice_fields(models.Model):
 		array_items_oti = []
 		if invoice_items:
 			for item in invoice_items:
-				listaTasaOTI=dict(totalOti={
-					"codigoTotalOTI": item.product_id.tasaOTI,
-					"valorTotalOTI": str('%.2f' % round(float(item.product_id.valorTasa), 2)) })
-		
-				array_items_oti.append([listaTasaOTI])
-				logging.info("Product info" + str(array_items_oti))
+				if item.product_id.tasaOTI:
+					listaTasaOTI=dict(totalOti={
+						"codigoTotalOTI": item.product_id.tasaOTI,
+						"valorTotalOTI": str('%.2f' % round(float(item.product_id.valorTasa), 2)) })
+					array_items_oti.append([listaTasaOTI])
+
 		return array_items_oti	
 	def set_array_item_object(self, invoice_items):
 		typeCustomers = self.partner_id.TipoClienteFE
