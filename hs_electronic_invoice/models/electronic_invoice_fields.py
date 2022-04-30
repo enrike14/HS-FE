@@ -878,6 +878,7 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info('Info AZURE PAGOS: ' + str(response.text))
+        return json.loads(response.text)
 
     def get_client_info(self):
         url = "https://hsfeapi.azurewebsites.net/client"
@@ -906,3 +907,4 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
+        return json.loads(response.text)
