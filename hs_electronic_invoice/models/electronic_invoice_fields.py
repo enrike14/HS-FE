@@ -349,8 +349,8 @@ class electronic_invoice_fields(models.Model):
 				listaItems=dict(
 					item=info_items_array
 				),
-				totalesSubTotales=totales_subtotales_inv_dict,
-				listaTotalOTI=info_items_array_oti
+				totalesSubTotales=totales_subtotales_inv_dict
+				#,listaTotalOTI=info_items_array_oti
 			)
 		)
 		# datos del EBI Completos
