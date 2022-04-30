@@ -350,9 +350,10 @@ class electronic_invoice_fields(models.Model):
 					item=info_items_array
 				),
 				totalesSubTotales=totales_subtotales_inv_dict
-				,listaTotalOTI=info_items_array_oti
+				#,listaTotalOTI=info_items_array_oti
 			)
 		)
+		
 		# datos del EBI Completos
 		logging.info('DATOS DE EBI COMPLETOS: ' + str(datos))
 		# send request to EBIPAC SERVICE
