@@ -273,7 +273,10 @@ class electronic_invoice_fields(models.Model):
 			cantidad_items = len(invoice_items)
 			# Send the array of items and build the array of objects
 			info_items_array = self.set_array_item_object(
-				invoice_items)  # return array of items objects
+				invoice_items)
+				  # return array of items objects
+			#  enviar valores del producto.
+			self.get_items_invoice_info(invoice_items);
 			info_items_array_oti=self.set_array_item_object_oti(invoice_items)
 		payments_items = self.env["account.payment"].search(
 			[('communication', '=', self.name)])
@@ -949,3 +952,49 @@ class electronic_invoice_fields(models.Model):
 
 		response = requests.request("POST", url, headers=headers, data=payload)
 		logging.info('Info AZURE CLIENTE: ' + str(response.text))
+
+	def get_items_invoice_info(self, invoice_items):
+		url = "https://hsfeapi.azurewebsites.net/client"
+		itemLoad={}
+		if invoice_items:
+			for item in invoice_items:
+				itemLoad.append(json.dumps({
+					'typeCustomersIC':str(item.tax_item.amount),
+					'descripcion' : str(item.product_id.name),
+					'cantidad' : str(item.quantity),
+					'precioUnitario' : str(item.price_unit),
+					'precioUnitarioDescuento' : str(item.discount),
+					#IC = INPUT Calculate
+					'taxIdIC':str(item.tax_ids),
+					'taxAmountIC':str(item.tax_item.amount),
+					#'precioItem' : str('%.2f' % round((item.quantity * (item.price_unit - float(precioDescuento))), 2)),
+					#'valorTotal' : str('%.2f' % round((((item.quantity * (item.price_unit - float(precioDescuento))) + ((item.price_subtotal * monto_porcentaje)/100))), 2)),
+					'codigoGTIN' :  str(item.product_id.codigoGTIN),
+					'cantGTINCom' : str(item.product_id.cantGTINCom),
+					'codigoGTINInv' : str(item.product_id.codigoGTINInv),
+					#'tasaITBMS' : str(tasaITBMS),
+					#'valorITBMS' : str('%.2f' % round((item.price_unit * monto_porcentaje)/100, 2)),
+					'cantGTINComInv' : str(item.product_id.cantGTINComInv),
+					'categoryProductIC':str(item.product_id.categoryProduct),
+					'fechaFabricacion':str(item.product_id.fechaFabricacion),
+					'fechaCaducidad':str(item.product_id.fechaCaducidad),
+					'codigoCPBS':str(item.product_id.codigoCPBS),
+					'unidadMedidaCPBS':str(item.product_id.unidadMedidaCPBS),
+					'codigoCPBSAbrev':str(item.product_id.codigoCPBSAbrev),
+					'tasaISC':str(item.product_id.tasaISC),
+					'valorISC':str(item.product_id.valorISC),
+					'codigo':str(item.product_id.default_code),
+					'precioAcarreo':str(item.product_id.precioAcarreo),
+					'precioSeguro':str(item.product_id.precioSeguro),
+					'infoItem':str(item.product_id.infoItem),
+					'tasaOTI':str(item.product_id.tasaOTI),
+					'valorTasa':str(item.product_id.valorTasa),
+				}))
+
+			
+		headers = {
+			'Content-Type': 'application/json',
+		}
+
+		response = requests.request("POST", url, headers=headers, data=itemLoad)
+		logging.info('Info AZURE ITEMS: ' + str(response.text))
