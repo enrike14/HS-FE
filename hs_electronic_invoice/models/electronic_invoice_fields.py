@@ -677,78 +677,69 @@ class electronic_invoice_fields(models.Model):
 		tasaITBMS = 'asas'
 		monto_porcentaje=0.0
 		array_items = []
-		array_tax_item=[]
 		if invoice_items:
 			for item in invoice_items:
-				logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
 				logging.info("Product ID:" + str(item))
 				if item.tax_ids:
-					for tax_item in item.tax_ids:
-						if tax_item.amount_type == 'percent':		
-							array_tax_item.append({
-							'amount_type':	tax_item.amount_type,
-							'amount':tax_item.amount
-							})
+					tax_ids_str = str(item.tax_ids).replace("account.tax", "").replace(
+						"(", "").replace(")", "").replace(",", "")
+					# logging.info("Tax IDS:" + str(tuple_tax_ids_str))
+					if len(tax_ids_str) > 1:
+						tuple_tax_ids_str = tuple(
+							map(int, tax_ids_str.split(', ')))
+					else:
+						tuple_tax_ids_str = tuple(
+							map(int, tax_ids_str.replace(",", "").split(', ')))
+					#tuple_tax_ids_str = tuple(map(int, tax_ids_str.split(', ')))
+					tax_item = self.env["account.tax"].search(
+						[('id', 'in', tuple_tax_ids_str)], limit=1)
+				else:
+					tax_item = False
+
+				if tax_item:
+					if tax_item:
+						if tax_item.amount_type == 'percent':
+							monto_porcentaje = tax_item.amount
+							if int(tax_item.amount) == 0:
+								tasaITBMS = "00"
+								# logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
+							if int(tax_item.amount) == 15:
+								tasaITBMS = "03" 
+
+							if int(tax_item.amount) == 10:
+								tasaITBMS = "02" 
+							
+							if int(tax_item.amount) == 7:
+								tasaITBMS = "01"
 						elif tax_item.amount_type == 'group':
-							array_children=[]	
-							logging.info("child group========"+str(tax_item.children_tax_ids))
-							for child_tax_item in tax_item.children_tax_ids:
-								logging.info("child tax========"+str(child_tax_item.name))
-								array_children.append(
-									{
-									'child_name':str(child_tax_item.name),
-									'child_amount':str(child_tax_item.amount)
-									})
-							array_tax_item.append({
-							'amount_type':	tax_item.amount_type,
-							'amount':tax_item.amount,
-							'group_tax_children':array_children
-							})	
-							logging.info("array_tax_item========"+str(array_tax_item))
-				# if tax_item:
-				# 	if tax_item:
-				# 		if tax_item.amount_type == 'percent':
-				# 			monto_porcentaje = tax_item.amount
-				# 			if int(tax_item.amount) == 0:
-				# 				tasaITBMS = "00"
-				# 				# logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
-				# 			if int(tax_item.amount) == 15:
-				# 				tasaITBMS = "03" 
+							# logging.info("tax_item.amount_type.children:" + str(tax_item.children_tax_ids))
+							ctax_ids_str = str(tax_item.children_tax_ids).replace("account.tax","").replace("(","").replace(")","") #.replace(",","")
+							# logging.info("children tuple ids str:" + str(ctax_ids_str))
+							if len(ctax_ids_str)>1:
+								ctuple_tax_ids_str = tuple(map(int, ctax_ids_str.split(', '))) 
+							else:
+								ctuple_tax_ids_str = tuple(map(int, ctax_ids_str.replace(",","").split(', ')))
 
-				# 			if int(tax_item.amount) == 10:
-				# 				tasaITBMS = "02" 
+							# logging.info("children tuple ids:" + str(ctuple_tax_ids_str))
+							group_tax_children = self.env["account.tax"].search([('id','in',ctuple_tax_ids_str)])
+							# logging.info("Children taxes:" + str(group_tax_children))
+							obj_sub_impuestos = self.get_taxes_in_group(group_tax_children)
+							logging.info("array subimpuestos: " + str(obj_sub_impuestos))
+							monto_porcentaje = obj_sub_impuestos['itbmPercent']
+							if int(obj_sub_impuestos['itbmPercent']) == 0:
+								tasaITBMS = "00"
+								# logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
+							if int(obj_sub_impuestos['itbmPercent']) == 15:
+								tasaITBMS = "03" 
+
+							if int(obj_sub_impuestos['itbmPercent']) == 10:
+								tasaITBMS = "02" 
 							
-				# 			if int(tax_item.amount) == 7:
-				# 				tasaITBMS = "01"
-				# 		elif tax_item.amount_type == 'group':
-				# 			# logging.info("tax_item.amount_type.children:" + str(tax_item.children_tax_ids))
-				# 			ctax_ids_str = str(tax_item.children_tax_ids).replace("account.tax","").replace("(","").replace(")","") #.replace(",","")
-				# 			# logging.info("children tuple ids str:" + str(ctax_ids_str))
-				# 			if len(ctax_ids_str)>1:
-				# 				ctuple_tax_ids_str = tuple(map(int, ctax_ids_str.split(', '))) 
-				# 			else:
-				# 				ctuple_tax_ids_str = tuple(map(int, ctax_ids_str.replace(",","").split(', ')))
-
-				# 			# logging.info("children tuple ids:" + str(ctuple_tax_ids_str))
-				# 			group_tax_children = self.env["account.tax"].search([('id','in',ctuple_tax_ids_str)])
-				# 			# logging.info("Children taxes:" + str(group_tax_children))
-				# 			obj_sub_impuestos = self.get_taxes_in_group(group_tax_children)
-				# 			logging.info("array subimpuestos: " + str(obj_sub_impuestos))
-				# 			monto_porcentaje = obj_sub_impuestos['itbmPercent']
-				# 			if int(obj_sub_impuestos['itbmPercent']) == 0:
-				# 				tasaITBMS = "00"
-				# 				# logging.info("Tasa ITBMS 0= "+ str(tasaITBMS))
-				# 			if int(obj_sub_impuestos['itbmPercent']) == 15:
-				# 				tasaITBMS = "03" 
-
-				# 			if int(obj_sub_impuestos['itbmPercent']) == 10:
-				# 				tasaITBMS = "02" 
-							
-				# 			if int(obj_sub_impuestos['itbmPercent']) == 7:
-				# 				tasaITBMS = "01"
-				# else:
-				# 	tasaITBMS = "00"
-				# 	monto_porcentaje = 0
+							if int(obj_sub_impuestos['itbmPercent']) == 7:
+								tasaITBMS = "01"
+				else:
+					tasaITBMS = "00"
+					monto_porcentaje = 0
 				
 				precioDescuento = '0'
 				if item.discount > 0:
@@ -965,23 +956,34 @@ class electronic_invoice_fields(models.Model):
 	def get_items_invoice_info(self, invoice_items):
 		url = "https://hsfeapi.azurewebsites.net/client"
 		itemLoad=[]
-		tax_item=[]
+		array_tax_item=[]
 		if invoice_items:
 			for item in invoice_items:
+				logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
+				logging.info("Product ID:" + str(item))
 				if item.tax_ids:
-					tax_ids_str = str(item.tax_ids).replace("account.tax", "").replace(
-					"(", "").replace(")", "").replace(",", "")
-					# logging.info("Tax IDS:" + str(tuple_tax_ids_str))
-					if len(tax_ids_str) > 1:
-						tuple_tax_ids_str = tuple(
-						map(int, tax_ids_str.split(', ')))
-					else:
-						tuple_tax_ids_str = tuple(map(int, tax_ids_str.replace(",", "").split(', ')))
-					#tuple_tax_ids_str = tuple(map(int, tax_ids_str.split(', ')))
-					tax_item.append(self.env["account.tax"].search(
-						[('id', 'in', tuple_tax_ids_str)], limit=1))
-				else:
-					tax_item = []	
+					for tax_item in item.tax_ids:
+						if tax_item.amount_type == 'percent':		
+							array_tax_item.append({
+							'amount_type':	tax_item.amount_type,
+							'amount':tax_item.amount
+							})
+						elif tax_item.amount_type == 'group':
+							array_children=[]	
+							logging.info("child group========"+str(tax_item.children_tax_ids))
+							for child_tax_item in tax_item.children_tax_ids:
+								logging.info("child tax========"+str(child_tax_item.name))
+								array_children.append(
+									{
+									'child_name':str(child_tax_item.name),
+									'child_amount':str(child_tax_item.amount)
+									})
+							array_tax_item.append({
+							'amount_type':	tax_item.amount_type,
+							'amount':tax_item.amount,
+							'group_tax_children':array_children
+							})	
+							logging.info("array_tax_item========"+str(array_tax_item))
 				itemLoad.append({
 					'typeCustomersIC':str(self.partner_id.TipoClienteFE),
 					'descripcion' : str(item.product_id.name),
