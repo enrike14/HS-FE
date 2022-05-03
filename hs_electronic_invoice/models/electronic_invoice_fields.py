@@ -341,6 +341,7 @@ class electronic_invoice_fields(models.Model):
                 descuentoBonificacion_dict]
 
         logging.info("Total objeto" + str(totales_subtotales_inv_dict))
+        self.get_transaction_data(puntoFacturacion)
         datos = dict(
             tokenEmpresa=tokenEmpresa,
             tokenPassword=tokenPassword,
@@ -411,76 +412,6 @@ class electronic_invoice_fields(models.Model):
         img.save(temp, format="PNG")
         qr_image = base64.b64encode(temp.getvalue())
         self.qr_code = qr_image
-
-    def set_datosTransaccion_dict(self, fiscalN, puntoFacturacion, clienteDict):
-
-        output_date = self.invoice_date.strftime("%Y-%m-%dT%H:%M:%SZ")
-        fecha_fe_cn = ""
-        cufe_fe_cn = ""
-        invoice_fe_cn = ""
-        fiscal_number_cn = ""
-        last_invoice_number = ""
-
-        logging.info("" + str(self.reversed_entry_id.id))
-        original_invoice_id = self.env["account.move"].search(
-            [('id', '=', self.reversed_entry_id.id)], limit=1)
-        if original_invoice_id:
-            last_invoice_number = original_invoice_id.name
-
-        original_invoice_info = self.env["electronic.invoice.moves"].search(
-            [('invoiceNumber', '=', last_invoice_number)], limit=1)
-        if original_invoice_info:
-            fecha_fe_cn = original_invoice_info.fechaRDGI
-            cufe_fe_cn = original_invoice_info.cufe
-            invoice_fe_cn = original_invoice_info.invoiceNumber
-            fiscal_number_cn = original_invoice_info.numeroDocumentoFiscal
-
-        logging.info("Tipo de Documento Nota Crédito: " +
-                     self.tipo_documento_fe)
-
-        informacionInteres = ""
-        if self.narration:
-            informacionInteres = self.narration
-        # DatosFactura
-        datosTransaccion = dict({
-            "tipoEmision": self.tipo_emision_fe,
-            "tipoDocumento": self.tipo_documento_fe,
-            "numeroDocumentoFiscal": self.lastFiscalNumber,
-            "puntoFacturacionFiscal": puntoFacturacion,
-            "naturalezaOperacion": self.naturaleza_operacion_fe,
-            "tipoOperacion": self.tipo_operacion_fe,
-            "destinoOperacion": self.destino_operacion_fe,
-            "formatoCAFE": self.formatoCAFE_fe,
-            "entregaCAFE": self.entregaCAFE_fe,
-            "envioContenedor": self.envioContenedor_fe,
-            "procesoGeneracion": self.procesoGeneracion_fe,
-            "tipoVenta": self.tipoVenta_fe,
-            "informacionInteres": informacionInteres,
-            "fechaEmision": str(output_date).replace("Z", "-05:00"),
-            "cliente": clienteDict
-        })
-
-        if datosTransaccion["tipoEmision"] in ('02', '04'):
-
-            datosTransaccion["fechaInicioContingencia"] = self.fecha_inicio_contingencia.strftime(
-                "%Y-%m-%dT%I:%M:%S-05:00")
-            # Minimo 15 caracteres
-            datosTransaccion["motivoContingencia"] = self.motivo_contingencia
-
-        if self.tipo_documento_fe == "04":
-            datosTransaccion["listaDocsFiscalReferenciados"] = dict({
-                "docFiscalReferenciado": {
-                    # fecha_fe_cn,
-                    "fechaEmisionDocFiscalReferenciado": str(output_date).replace("Z", "-05:00"),
-                    "cufeFEReferenciada": cufe_fe_cn,
-                    # "cufeFEReferenciada":'',
-                    # "nroFacturaPapel": fiscal_number_cn,
-                    # "nroFacturaImpFiscal":fiscal_number_cn
-                }
-            })
-
-        logging.info('Datos de la transaccion: ' + str(datosTransaccion))
-        return datosTransaccion
 
     def send_anulation_fe(self):
         logging.info('Llamar anulacion... ')
@@ -882,6 +813,124 @@ class electronic_invoice_fields(models.Model):
         response = requests.request(
             "POST", url, headers=headers, data=payload)
         logging.info('Info AZURE PAGOS: ' + str(response.text))
+        return json.loads(response.text)
+
+    def set_datosTransaccion_dict(self, fiscalN, puntoFacturacion, clienteDict):
+        output_date = self.invoice_date.strftime("%Y-%m-%dT%H:%M:%SZ")
+        fecha_fe_cn = ""
+        cufe_fe_cn = ""
+        invoice_fe_cn = ""
+        fiscal_number_cn = ""
+        last_invoice_number = ""
+
+        logging.info("" + str(self.reversed_entry_id.id))
+        original_invoice_id = self.env["account.move"].search(
+            [('id', '=', self.reversed_entry_id.id)], limit=1)
+        if original_invoice_id:
+            last_invoice_number = original_invoice_id.name
+
+        original_invoice_info = self.env["electronic.invoice.moves"].search(
+            [('invoiceNumber', '=', last_invoice_number)], limit=1)
+        if original_invoice_info:
+            fecha_fe_cn = original_invoice_info.fechaRDGI
+            cufe_fe_cn = original_invoice_info.cufe
+            invoice_fe_cn = original_invoice_info.invoiceNumber
+            fiscal_number_cn = original_invoice_info.numeroDocumentoFiscal
+
+        logging.info("Tipo de Documento Nota Crédito: " +
+                     self.tipo_documento_fe)
+
+        informacionInteres = ""
+        if self.narration:
+            informacionInteres = self.narration
+        # DatosFactura
+        datosTransaccion = dict({
+            "tipoEmision": self.tipo_emision_fe,
+            "tipoDocumento": self.tipo_documento_fe,
+            "numeroDocumentoFiscal": self.lastFiscalNumber,
+            "puntoFacturacionFiscal": puntoFacturacion,
+            "naturalezaOperacion": self.naturaleza_operacion_fe,
+            "tipoOperacion": self.tipo_operacion_fe,
+            "destinoOperacion": self.destino_operacion_fe,
+            "formatoCAFE": self.formatoCAFE_fe,
+            "entregaCAFE": self.entregaCAFE_fe,
+            "envioContenedor": self.envioContenedor_fe,
+            "procesoGeneracion": self.procesoGeneracion_fe,
+            "tipoVenta": self.tipoVenta_fe,
+            "informacionInteres": informacionInteres,
+            "fechaEmision": str(output_date).replace("Z", "-05:00"),
+            "cliente": clienteDict
+        })
+
+        if datosTransaccion["tipoEmision"] in ('02', '04'):
+
+            datosTransaccion["fechaInicioContingencia"] = self.fecha_inicio_contingencia.strftime(
+                "%Y-%m-%dT%I:%M:%S-05:00")
+            # Minimo 15 caracteres
+            datosTransaccion["motivoContingencia"] = self.motivo_contingencia
+
+        if self.tipo_documento_fe == "04":
+            datosTransaccion["listaDocsFiscalReferenciados"] = dict({
+                "docFiscalReferenciado": {
+                    # fecha_fe_cn,
+                    "fechaEmisionDocFiscalReferenciado": str(output_date).replace("Z", "-05:00"),
+                    "cufeFEReferenciada": cufe_fe_cn,
+                    # "cufeFEReferenciada":'',
+                    # "nroFacturaPapel": fiscal_number_cn,
+                    # "nroFacturaImpFiscal":fiscal_number_cn
+                }
+            })
+
+        logging.info('Datos de la transaccion: ' + str(datosTransaccion))
+        return datosTransaccion
+
+    def get_transaction_data(self, puntoFacturacion):
+        url = self.hsfeURLstr + "/transactiondata"
+        cufe_fe_cn = ""
+        last_invoice_number = ""
+
+        original_invoice_id = self.env["account.move"].search(
+            [('id', '=', self.reversed_entry_id.id)], limit=1)
+        if original_invoice_id:
+            last_invoice_number = original_invoice_id.name
+
+        original_invoice_info = self.env["electronic.invoice.moves"].search(
+            [('invoiceNumber', '=', last_invoice_number)], limit=1)
+        if original_invoice_info:
+            cufe_fe_cn = original_invoice_info.cufe
+
+        fiscalReferenciados = {
+            "fechaEmisionDocFiscalReferenciado": self.invoice_date.strftime("%Y-%m-%dT%H:%M:%S-05:00"),
+            "cufeFEReferenciada": cufe_fe_cn,
+        }
+
+        payload = json.dumps({
+            "tipoEmision": self.tipo_emision_fe,
+            "tipoDocumento": self.tipo_documento_fe,
+            "numeroDocumentoFiscal": self.lastFiscalNumber,
+            "puntoFacturacionFiscal": puntoFacturacion,
+            "naturalezaOperacion": self.naturaleza_operacion_fe,
+            "tipoOperacion": self.tipo_operacion_fe,
+            "destinoOperacion": self.destino_operacion_fe,
+            "formatoCAFE": self.formatoCAFE_fe,
+            "entregaCAFE": self.entregaCAFE_fe,
+            "envioContenedor": self.envioContenedor_fe,
+            "procesoGeneracion": self.procesoGeneracion_fe,
+            "tipoVenta": self.tipoVenta_fe,
+            "informacionInteres": self.narration if self.narration else "",
+            "fechaEmision": self.invoice_date.strftime("%Y-%m-%dT%H:%M:%S-05:00"),
+            "cliente": self.get_client_info(),
+            "fechaInicioContingencia": self.fecha_inicio_contingencia.strftime("%Y-%m-%dT%I:%M:%S-05:00"),
+            "motivoContingencia": self.motivo_contingencia,
+            "listaDocsFiscalReferenciados": json.dumps(fiscalReferenciados)
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
         return json.loads(response.text)
 
     def get_client_info(self):
