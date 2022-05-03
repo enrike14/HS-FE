@@ -694,12 +694,11 @@ class electronic_invoice_fields(models.Model):
 							logging.info("child group========"+str(tax_item.children_tax_ids))
 							for child_tax_item in tax_item.children_tax_ids:
 								logging.info("child tax========"+str(child_tax_item.name))
-								array_children.append([
+								array_children.append(
 									{
 									'child_name':str(child_tax_item.name),
 									'child_amount':str(child_tax_item.amount)
-									}
-									])
+									})
 							array_tax_item.append({
 							'amount_type':	tax_item.amount_type,
 							'amount':tax_item.amount,
