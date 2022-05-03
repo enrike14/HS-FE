@@ -921,7 +921,7 @@ class electronic_invoice_fields(models.Model):
             "fechaEmision": self.invoice_date.strftime("%Y-%m-%dT%H:%M:%S-05:00"),
             "cliente": self.get_client_info(),
             "fechaInicioContingencia": self.fecha_inicio_contingencia.strftime("%Y-%m-%dT%I:%M:%S-05:00") if self.fecha_inicio_contingencia else None,
-            "motivoContingencia": "Motivo Contingencia: " + str(self.motivo_contingencia) if self.motivo_contingencia else "",
+            "motivoContingencia": "Motivo Contingencia: " + str(self.motivo_contingencia) if self.motivo_contingencia else "Motivo Contingencia: N/A",
             "listaDocsFiscalReferenciados": fiscalReferenciados
         })
 
