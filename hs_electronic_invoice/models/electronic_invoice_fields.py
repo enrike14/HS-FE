@@ -953,70 +953,70 @@ class electronic_invoice_fields(models.Model):
 		response = requests.request("POST", url, headers=headers, data=payload)
 		logging.info('Info AZURE CLIENTE: ' + str(response.text))
 
-	def get_items_invoice_info(self, invoice_items):
-		url = "https://hsfeapi.azurewebsites.net/client"
-		itemLoad=[]
-		array_tax_item=[]
-		if invoice_items:
-			for item in invoice_items:
-				logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
-				logging.info("Product ID:" + str(item))
-				if item.tax_ids:
-					for tax_item in item.tax_ids:
-						if tax_item.amount_type == 'percent':		
-							array_tax_item.append({
-							'amount_type':	tax_item.amount_type,
-							'amount':tax_item.amount
-							})
-						elif tax_item.amount_type == 'group':
-							array_children=[]	
-							logging.info("child group========"+str(tax_item.children_tax_ids))
-							for child_tax_item in tax_item.children_tax_ids:
-								logging.info("child tax========"+str(child_tax_item.name))
-								array_children.append(
-									{
-									'child_name':str(child_tax_item.name),
-									'child_amount':str(child_tax_item.amount)
-									})
-							array_tax_item.append({
-							'amount_type':	tax_item.amount_type,
-							'amount':tax_item.amount,
-							'group_tax_children':array_children
-							})	
-							logging.info("array_tax_item========"+str(array_tax_item))
-				itemLoad.append({
-					'typeCustomersIC':str(self.partner_id.TipoClienteFE),
-					'descripcion' : str(item.product_id.name),
-					'cantidad' : item.quantity,
-					'precioUnitario' : item.price_unit,
-					'descuento' : item.discount,
-					#IC = INPUT Calculate
-					'arrayTaxes':tax_item,
-					'codigoGTIN' :  str(item.product_id.codigoGTIN),
-					'cantGTINCom' : item.product_id.cantGTINCom,
-					'codigoGTINInv' : item.product_id.codigoGTINInv,
-					'cantGTINComInv' : item.product_id.cantGTINComInv,
-					'categoryProductIC':str(item.product_id.categoryProduct),
-					'fechaFabricacion':str(item.product_id.fechaFabricacion),
-					'fechaCaducidad':str(item.product_id.fechaCaducidad),
-					'codigoCPBS':str(item.product_id.codigoCPBS),
-					'unidadMedidaCPBS':str(item.product_id.unidadMedidaCPBS),
-					'codigoCPBSAbrev':str(item.product_id.codigoCPBSAbrev),
-					'tasaISC':str(item.product_id.tasaISC),
-					'valorISC':item.product_id.valorISC,
-					'codigo':str(item.product_id.default_code),
-					'precioAcarreo':item.product_id.precioAcarreo,
-					'precioSeguro':item.product_id.precioSeguro,
-					'infoItem':str(item.product_id.infoItem),
-					'tasaOTI':str(item.product_id.tasaOTI),
-					'valorTasa':item.product_id.valorTasa,
-				})
+	# def get_items_invoice_info(self, invoice_items):
+	# 	url = "https://hsfeapi.azurewebsites.net/client"
+	# 	itemLoad=[]
+	# 	array_tax_item=[]
+	# 	if invoice_items:
+	# 		for item in invoice_items:
+	# 			logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
+	# 			logging.info("Product ID:" + str(item))
+	# 			if item.tax_ids:
+	# 				for tax_item in item.tax_ids:
+	# 					if tax_item.amount_type == 'percent':		
+	# 						array_tax_item.append({
+	# 						'amount_type':	tax_item.amount_type,
+	# 						'amount':tax_item.amount
+	# 						})
+	# 					elif tax_item.amount_type == 'group':
+	# 						array_children=[]	
+	# 						logging.info("child group========"+str(tax_item.children_tax_ids))
+	# 						for child_tax_item in tax_item.children_tax_ids:
+	# 							logging.info("child tax========"+str(child_tax_item.name))
+	# 							array_children.append(
+	# 								{
+	# 								'child_name':str(child_tax_item.name),
+	# 								'child_amount':str(child_tax_item.amount)
+	# 								})
+	# 						array_tax_item.append({
+	# 						'amount_type':	tax_item.amount_type,
+	# 						'amount':tax_item.amount,
+	# 						'group_tax_children':array_children
+	# 						})	
+	# 						logging.info("array_tax_item========"+str(array_tax_item))
+	# 			itemLoad.append({
+	# 				'typeCustomersIC':str(self.partner_id.TipoClienteFE),
+	# 				'descripcion' : str(item.product_id.name),
+	# 				'cantidad' : item.quantity,
+	# 				'precioUnitario' : item.price_unit,
+	# 				'descuento' : item.discount,
+	# 				#IC = INPUT Calculate
+	# 				'arrayTaxes':array_tax_item,
+	# 				'codigoGTIN' :  str(item.product_id.codigoGTIN),
+	# 				'cantGTINCom' : item.product_id.cantGTINCom,
+	# 				'codigoGTINInv' : item.product_id.codigoGTINInv,
+	# 				'cantGTINComInv' : item.product_id.cantGTINComInv,
+	# 				'categoryProductIC':str(item.product_id.categoryProduct),
+	# 				'fechaFabricacion':str(item.product_id.fechaFabricacion),
+	# 				'fechaCaducidad':str(item.product_id.fechaCaducidad),
+	# 				'codigoCPBS':str(item.product_id.codigoCPBS),
+	# 				'unidadMedidaCPBS':str(item.product_id.unidadMedidaCPBS),
+	# 				'codigoCPBSAbrev':str(item.product_id.codigoCPBSAbrev),
+	# 				'tasaISC':str(item.product_id.tasaISC),
+	# 				'valorISC':item.product_id.valorISC,
+	# 				'codigo':str(item.product_id.default_code),
+	# 				'precioAcarreo':item.product_id.precioAcarreo,
+	# 				'precioSeguro':item.product_id.precioSeguro,
+	# 				'infoItem':str(item.product_id.infoItem),
+	# 				'tasaOTI':str(item.product_id.tasaOTI),
+	# 				'valorTasa':item.product_id.valorTasa,
+	# 			})
 
 			
-		headers = {
-			'Content-Type': 'application/json',
-		}
-		dataJsonItem={"list_items":itemLoad}
-		response = requests.request("POST", url, headers=headers, data=json.dumps(dataJsonItem))
+	# 	headers = {
+	# 		'Content-Type': 'application/json',
+	# 	}
+	# 	dataJsonItem={"list_items":itemLoad}
+	# 	response = requests.request("POST", url, headers=headers, data=json.dumps(dataJsonItem))
 		
-		logging.info('Info AZURE ITEMS: ' + str(response.text))
+	# 	logging.info('Info AZURE ITEMS: ' + str(response.text))
