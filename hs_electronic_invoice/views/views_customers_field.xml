@@ -26,7 +26,7 @@
 									<field name="distrito"/>
 									<field name="corregimiento"/>
 									<field name="tipoIdentificacion" />
-									<field name="nroIdentificacionExtranjero attrs="{'invisible':[('tipoIdentificacion','=','04')], 'required':[('tipoIdentificacion','=','04')]}""/>
+									<field name="nroIdentificacionExtranjero"/>
 									<field name="paisExtranjero"/>
 									<field name="paisOtro"/>
                                 </group>
