@@ -159,7 +159,7 @@ class electronic_invoice_fields(models.Model):
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
     total_precio_descuento = 0.0
-    hsfeURLstr = ""
+    hsfeURLstr = fields.Char(string='HermecURL', readonly="True", store="True")
 
     @api.depends('qr_code')
     def on_change_pago(self):
