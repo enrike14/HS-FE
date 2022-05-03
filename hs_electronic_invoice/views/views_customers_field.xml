@@ -19,16 +19,15 @@
 									<field name="razonSocial"/>
 									<field name="direccion"/>
 									<field name="CodigoUbicacion"/>
-									<field name="provincia"/>
+								
                                 </group>
                                 <group>
+									<field name="provincia"/>
 									<field name="distrito"/>
 									<field name="corregimiento"/>
-									<field name="distrito"/>
 									<field name="tipoIdentificacion"/>
 									<field name="nroIdentificacionExtranjero"/>
 									<field name="paisExtranjero"/>
-									<field name="pais"/>
 									<field name="paisOtro"/>
                                 </group>
                             </group>
