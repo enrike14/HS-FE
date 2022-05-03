@@ -920,7 +920,7 @@ class electronic_invoice_fields(models.Model):
             "informacionInteres": self.narration if self.narration else "",
             "fechaEmision": self.invoice_date.strftime("%Y-%m-%dT%H:%M:%S-05:00"),
             "cliente": self.get_client_info(),
-            "fechaInicioContingencia": self.fecha_inicio_contingencia.strftime("%Y-%m-%dT%I:%M:%S-05:00") if self.fecha_inicio_contingencia else "",
+            "fechaInicioContingencia": self.fecha_inicio_contingencia.strftime("%Y-%m-%dT%I:%M:%S-05:00") if self.fecha_inicio_contingencia else None,
             "motivoContingencia": self.motivo_contingencia,
             "listaDocsFiscalReferenciados": json.dumps(fiscalReferenciados)
         })
@@ -935,7 +935,34 @@ class electronic_invoice_fields(models.Model):
 
     def get_client_info(self):
         url = self.hsfeURLstr + "/client"
-        logging.info("URL Servicio HERMEC:" + url)
+        payload = json.dumps({
+            "tipoClienteFE": self.partner_id.TipoClienteFE,
+            "tipoContribuyente": self.partner_id.tipoContribuyente,
+            "numeroRUC": self.partner_id.numeroRUC,
+            "pais": self.partner_id.country_id.code,
+            "correoElectronico1": self.partner_id.email,
+            "digitoVerificadorRUC": self.partner_id.digitoVerificadorRUC,
+            "razonSocial": self.partner_id.razonSocial,
+            "direccion": self.partner_id.direccion,
+            "codigoUbicacion": self.partner_id.CodigoUbicacion,
+            "provincia": self.partner_id.provincia,
+            "distrito": self.partner_id.distrito,
+            "corregimiento": self.partner_id.corregimiento,
+            "tipoIdentificacion": self.partner_id.tipoIdentificacion,
+            "nroIdentificacionExtranjero": self.partner_id.nroIdentificacionExtranjero,
+            "paisExtranjero": self.partner_id.paisExtranjero
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        logging.info('Info AZURE CLIENTE: ' + str(response.text))
+        return json.loads(response.text)
+
+    def get_sub_totals(self):
+        url = self.hsfeURLstr + "/subtotals"
         payload = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
