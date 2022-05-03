@@ -798,7 +798,7 @@ class electronic_invoice_fields(models.Model):
     def get_array_payment_info(self, payments_items, monto_impuesto_completo):
         url = self.hsfeURLstr + "/listpayments"
         payments = [item.amount for item in payments_items]
-        payload = json.dumps({
+        payment_values = json.dumps({
             # "payment_method": "st",
             "payments_items": payments,
             "monto_impuesto_completo": monto_impuesto_completo,
@@ -811,7 +811,7 @@ class electronic_invoice_fields(models.Model):
         }
 
         response = requests.request(
-            "POST", url, headers=headers, data=payload)
+            "POST", url, headers=headers, data=payment_values)
         logging.info('Info AZURE PAGOS: ' + str(response.text))
         return json.loads(response.text)
 
@@ -904,7 +904,7 @@ class electronic_invoice_fields(models.Model):
             "cufeFEReferenciada": cufe_fe_cn,
         }
 
-        payload = json.dumps({
+        transaction_values = json.dumps({
             "tipoEmision": self.tipo_emision_fe,
             "tipoDocumento": self.tipo_documento_fe,
             "numeroDocumentoFiscal": self.lastFiscalNumber,
@@ -929,13 +929,14 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request(
+            "POST", url, headers=headers, data=transaction_values)
         logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
         return json.loads(response.text)
 
     def get_client_info(self):
         url = self.hsfeURLstr + "/client"
-        payload = json.dumps({
+        client_values = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
             "numeroRUC": self.partner_id.numeroRUC,
@@ -957,7 +958,8 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request(
+            "POST", url, headers=headers, data=client_values)
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
