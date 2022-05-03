@@ -677,29 +677,26 @@ class electronic_invoice_fields(models.Model):
 		tasaITBMS = 'asas'
 		monto_porcentaje=0.0
 		array_items = []
-
+		array_tax_item=[]
 		if invoice_items:
 			for item in invoice_items:
 				logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
 				logging.info("Product ID:" + str(item))
-				# if item.tax_ids:
-				# 	tax_ids_str = str(item.tax_ids).replace("account.tax", "").replace(
-				# 		"(", "").replace(")", "").replace(",", "")
-				# 	# logging.info("Tax IDS:" + str(tuple_tax_ids_str))
-				# 	if len(tax_ids_str) > 1:
-				# 		tuple_tax_ids_str = tuple(
-				# 			map(int, tax_ids_str.split(', ')))
-				# 	else:
-				# 		tuple_tax_ids_str = tuple(
-				# 			map(int, tax_ids_str.replace(",", "").split(', ')))
-				# 	#tuple_tax_ids_str = tuple(map(int, tax_ids_str.split(', ')))
-				# 	tax_item = self.env["account.tax"].search(
-				# 		[('id', 'in', tuple_tax_ids_str)], limit=1)
-				# else:
-				# 	tax_item = False
-				for tax_item in item.tax_ids:
-					logging.info("Tax item:" + str(tax_item.amount))
-
+				if item.tax_ids:
+					for tax_item in item.tax_ids:
+						if tax_item.amount_type == 'percent':		
+							array_tax_item.append({
+							'amount_type':	tax_item.amount_type,
+							'amount':tax_item.amount
+							})
+						elif tax_item.amount_type == 'group':
+							for child_tax_item in tax_item.amount_type.children:
+								logging.info("child tax========"+str(child_tax_item))
+							# array_tax_item.append({
+							# 'amount_type':	tax_item.amount_type,
+							# 'amount':tax_item.amount,
+							# 'group_tax_children':
+							# })	
 				# if tax_item:
 				# 	if tax_item:
 				# 		if tax_item.amount_type == 'percent':
