@@ -690,14 +690,22 @@ class electronic_invoice_fields(models.Model):
 							'amount':tax_item.amount
 							})
 						elif tax_item.amount_type == 'group':
+							array_children=[]	
 							logging.info("child group========"+str(tax_item.children_tax_ids))
 							for child_tax_item in tax_item.children_tax_ids:
 								logging.info("child tax========"+str(child_tax_item.name))
-							# array_tax_item.append({
-							# 'amount_type':	tax_item.amount_type,
-							# 'amount':tax_item.amount,
-							# 'group_tax_children':
-							# })	
+								array_children.append([
+									{
+									'child_name':str(child_tax_item.name),
+									'child_amount':str(child_tax_item.amount)
+									}
+									])
+							array_tax_item.append({
+							'amount_type':	tax_item.amount_type,
+							'amount':tax_item.amount,
+							'group_tax_children':array_children
+							})	
+							logging.info("array_tax_item========"+str(array_tax_item))
 				# if tax_item:
 				# 	if tax_item:
 				# 		if tax_item.amount_type == 'percent':
@@ -980,10 +988,9 @@ class electronic_invoice_fields(models.Model):
 					'descripcion' : str(item.product_id.name),
 					'cantidad' : item.quantity,
 					'precioUnitario' : item.price_unit,
-					'precioUnitarioDescuento' : item.discount,
+					'descuento' : item.discount,
 					#IC = INPUT Calculate
-					'taxIdIC':tax_item,
-					'taxAmountIC':item.tax_item.amount,
+					'arrayTaxes':tax_item,
 					'codigoGTIN' :  str(item.product_id.codigoGTIN),
 					'cantGTINCom' : item.product_id.cantGTINCom,
 					'codigoGTINInv' : item.product_id.codigoGTINInv,
