@@ -47,7 +47,9 @@
 						<field name="tipoVenta_fe" />							
 						<!-- <field name="reembolso" />							 -->
 						<field name="reversal_reason_fe" />	
-						<field name="lastFiscalNumber"/>						
+						<field name="lastFiscalNumber"/>	
+						<field name="hsfeURLstr"/>
+											
 					</group>
 					<group name="right_g" string="">
 						<field name="fecha_inicio_contingencia"  attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))], 'required':[('tipo_emision_fe','in',('02', '04'))]}"/>	
