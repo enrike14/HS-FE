@@ -276,7 +276,7 @@ class electronic_invoice_fields(models.Model):
 				invoice_items)
 				  # return array of items objects
 			#  enviar valores del producto.
-			self.get_items_invoice_info(invoice_items);
+			#self.get_items_invoice_info(invoice_items);
 			info_items_array_oti=self.set_array_item_object_oti(invoice_items)
 		payments_items = self.env["account.payment"].search(
 			[('communication', '=', self.name)])
