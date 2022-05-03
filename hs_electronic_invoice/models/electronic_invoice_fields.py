@@ -936,6 +936,8 @@ class electronic_invoice_fields(models.Model):
 
     def get_client_info(self):
         url = self.hsfeURLstr + "/client"
+        logging.info("PRUEBA DE ARREGLO PAGO = " +
+                     str(self.amount_by_group[0][1]))
         client_values = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
@@ -965,28 +967,29 @@ class electronic_invoice_fields(models.Model):
 
     def get_sub_totals(self):
         url = self.hsfeURLstr + "/subtotals"
-        payload = json.dumps({
-            "tipoClienteFE": self.partner_id.TipoClienteFE,
-            "tipoContribuyente": self.partner_id.tipoContribuyente,
-            "numeroRUC": self.partner_id.numeroRUC,
-            "pais": self.partner_id.country_id.code,
-            "correoElectronico1": self.partner_id.email,
-            "digitoVerificadorRUC": self.partner_id.digitoVerificadorRUC,
-            "razonSocial": self.partner_id.razonSocial,
-            "direccion": self.partner_id.direccion,
-            "codigoUbicacion": self.partner_id.CodigoUbicacion,
-            "provincia": self.partner_id.provincia,
-            "distrito": self.partner_id.distrito,
-            "corregimiento": self.partner_id.corregimiento,
-            "tipoIdentificacion": self.partner_id.tipoIdentificacion,
-            "nroIdentificacionExtranjero": self.partner_id.nroIdentificacionExtranjero,
-            "paisExtranjero": self.partner_id.paisExtranjero
+        payments_items = self.env["account.payment"].search(
+            [('communication', '=', self.name)])
+        grupo_monto_impuestos = self.amount_by_group
+        tuple_impuesto_completo = grupo_monto_impuestos[0]
+        monto_impuesto_completo = tuple_impuesto_completo[1]
+
+        sub_total_values = json.dumps({
+            "amount_untaxed": 1.2,
+            "amount_tax_completed": 0.55,
+            "total_discount_price": 0,
+            "items_qty": 0,
+            "payment_time": 0,
+            "array_total_items_value": [
+                0
+            ],
+            "array_payment_form": self.get_array_payment_info(payments_items, monto_impuesto_completo)
         })
 
         headers = {
             'Content-Type': 'application/json',
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request(
+            "POST", url, headers=headers, data=sub_total_values)
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
