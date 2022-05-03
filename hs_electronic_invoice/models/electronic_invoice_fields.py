@@ -696,7 +696,7 @@ class electronic_invoice_fields(models.Model):
 				# else:
 				# 	tax_item = False
 				for tax_item in item.tax_ids:
-					logging.info("Tax item:" + str(tax_item))
+					logging.info("Tax item:" + str(tax_item.amount))
 				# if tax_item:
 				# 	if tax_item:
 				# 		if tax_item.amount_type == 'percent':
