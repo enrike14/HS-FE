@@ -677,8 +677,10 @@ class electronic_invoice_fields(models.Model):
 		tasaITBMS = 'asas'
 		monto_porcentaje=0.0
 		array_items = []
+
 		if invoice_items:
 			for item in invoice_items:
+				logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
 				logging.info("Product ID:" + str(item))
 				# if item.tax_ids:
 				# 	tax_ids_str = str(item.tax_ids).replace("account.tax", "").replace(
@@ -697,6 +699,7 @@ class electronic_invoice_fields(models.Model):
 				# 	tax_item = False
 				for tax_item in item.tax_ids:
 					logging.info("Tax item:" + str(tax_item.amount))
+
 				# if tax_item:
 				# 	if tax_item:
 				# 		if tax_item.amount_type == 'percent':
