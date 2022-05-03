@@ -928,7 +928,7 @@ class electronic_invoice_fields(models.Model):
         headers = {
             'Content-Type': 'application/json',
         }
-
+        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
             "POST", url, headers=headers, data=transaction_values)
         logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
