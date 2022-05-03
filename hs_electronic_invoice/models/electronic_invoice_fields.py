@@ -159,7 +159,7 @@ class electronic_invoice_fields(models.Model):
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
     total_precio_descuento = 0.0
-    hsfeURL = ""
+    hsfeURLstr = ""
 
     @api.depends('qr_code')
     def on_change_pago(self):
@@ -184,7 +184,8 @@ class electronic_invoice_fields(models.Model):
                     document = self.env["electronic.invoice"].search(
                         [('name', '=', 'ebi-pac')], limit=1)
                     if document:
-                        self.hsfeURL = document.hsfeURL
+                        self.hsfeURLstr = document.hsfeURL
+                        logging.info("LA URL" + self.hsfeURLstr)
                         fiscalN = (
                             str(document.numeroDocumentoFiscal).rjust(10, '0'))
                         puntoFacturacion = (
@@ -864,7 +865,7 @@ class electronic_invoice_fields(models.Model):
         return subTotalesDict
 
     def get_array_payment_info(self, payments_items, monto_impuesto_completo):
-        url = self.hsfeURL + "/listpayments"
+        url = self.hsfeURLstr + "/listpayments"
         payments = [item.amount for item in payments_items]
         payload = json.dumps({
             # "payment_method": "st",
@@ -884,7 +885,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_client_info(self):
-        url = self.hsfeURL + "/client"
+        url = self.hsfeURLstr + "/client"
         payload = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
