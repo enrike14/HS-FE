@@ -16,6 +16,8 @@
           <field name="codigoSucursalEmisor" />
           <field name="numeroDocumentoFiscal" />
           <field name="puntoFacturacionFiscal" />
+          <field name="hsfeURL" />
+          
         </tree>
       </field>
     </record>
@@ -41,6 +43,7 @@
                 <field name="codigoSucursalEmisor" />
                 <field name="numeroDocumentoFiscal" />
                 <field name="puntoFacturacionFiscal" />
+                  <field name="hsfeURL" />
     
             </group>
           </sheet>

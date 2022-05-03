@@ -7,15 +7,16 @@ from datetime import datetime
 
 
 class electronic_invoice(models.Model):
-	_name = "electronic.invoice"
-	name = fields.Char(string="Nombre")
-	wsdl = fields.Char(string="URL WSDL")
-	descripcion = fields.Char(string="Descripción")
-	tokenEmpresa = fields.Char(string="Token Empresa")
-	tokenPassword = fields.Char(string="Token Password")
-	codigoSucursalEmisor = fields.Char(string="Código Sucursal")
-	numeroDocumentoFiscal = fields.Integer(string="No. Documento Fiscal")
-	puntoFacturacionFiscal = fields.Char(string="Punto Facturación Fiscal")
+    _name = "electronic.invoice"
+    name = fields.Char(string="Nombre")
+    wsdl = fields.Char(string="URL WSDL")
+    descripcion = fields.Char(string="Descripción")
+    tokenEmpresa = fields.Char(string="Token Empresa")
+    tokenPassword = fields.Char(string="Token Password")
+    codigoSucursalEmisor = fields.Char(string="Código Sucursal")
+    numeroDocumentoFiscal = fields.Integer(string="No. Documento Fiscal")
+    puntoFacturacionFiscal = fields.Char(string="Punto Facturación Fiscal")
+    hsfeURL = fields.Char(string="URL HsFE Services")
 
 
 """     def action_bank_reconciliation_change(self):

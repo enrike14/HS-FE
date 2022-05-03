@@ -159,6 +159,7 @@ class electronic_invoice_fields(models.Model):
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
     total_precio_descuento = 0.0
+    hsfeURL = ""
 
     @api.depends('qr_code')
     def on_change_pago(self):
@@ -183,6 +184,7 @@ class electronic_invoice_fields(models.Model):
                     document = self.env["electronic.invoice"].search(
                         [('name', '=', 'ebi-pac')], limit=1)
                     if document:
+                        self.hsfeURL = document.hsfeURL
                         fiscalN = (
                             str(document.numeroDocumentoFiscal).rjust(10, '0'))
                         puntoFacturacion = (
@@ -862,7 +864,7 @@ class electronic_invoice_fields(models.Model):
         return subTotalesDict
 
     def get_array_payment_info(self, payments_items, monto_impuesto_completo):
-        url = "https://hsfeapi.azurewebsites.net/listpayments"
+        url = self.hsfeURL + "/listpayments"
         payments = [item.amount for item in payments_items]
         payload = json.dumps({
             # "payment_method": "st",
@@ -876,12 +878,13 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request(
+            "POST", url, headers=headers, data=payload)
         logging.info('Info AZURE PAGOS: ' + str(response.text))
+        return json.loads(response.text)
 
     def get_client_info(self):
-        url = "https://hsfeapi.azurewebsites.net/client"
-
+        url = self.hsfeURL + "/client"
         payload = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
@@ -906,3 +909,4 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
+        return json.loads(response.text)
