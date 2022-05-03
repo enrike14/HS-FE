@@ -886,6 +886,7 @@ class electronic_invoice_fields(models.Model):
 
     def get_client_info(self):
         url = self.hsfeURLstr + "/client"
+        logging.info("URL Servicio HERMEC:" + url)
         payload = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
