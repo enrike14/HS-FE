@@ -797,26 +797,6 @@ class electronic_invoice_fields(models.Model):
 
         return subTotalesDict
 
-    def get_array_payment_info(self, payments_items, monto_impuesto_completo,):
-        url = self.hsfeURLstr + "/listpayments"
-        payments = [item.amount for item in payments_items]
-        payment_values = json.dumps({
-            # "payment_method": "st",
-            "payments_items": payments,
-            "monto_impuesto_completo": monto_impuesto_completo,
-            "amount_untaxed": self.amount_untaxed,
-            "total_discount_price": self.total_precio_descuento
-        })
-
-        headers = {
-            'Content-Type': 'application/json',
-        }
-
-        response = requests.request(
-            "POST", url, headers=headers, data=payment_values)
-        logging.info('Info AZURE PAGOS: ' + str(response.text))
-        return json.loads(response.text)
-
     def set_datosTransaccion_dict(self, fiscalN, puntoFacturacion, clienteDict):
         output_date = self.invoice_date.strftime("%Y-%m-%dT%H:%M:%SZ")
         fecha_fe_cn = ""
@@ -885,6 +865,26 @@ class electronic_invoice_fields(models.Model):
 
         logging.info('Datos de la transaccion: ' + str(datosTransaccion))
         return datosTransaccion
+
+    def get_array_payment_info(self, payments_items, monto_impuesto_completo,):
+        url = self.hsfeURLstr + "/listpayments"
+        payments = [item.amount for item in payments_items]
+        payment_values = json.dumps({
+            # "payment_method": "st",
+            "payments_items": payments,
+            "monto_impuesto_completo": monto_impuesto_completo,
+            "amount_untaxed": self.amount_untaxed,
+            "total_discount_price": self.total_precio_descuento
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+        }
+
+        response = requests.request(
+            "POST", url, headers=headers, data=payment_values)
+        logging.info('Info AZURE PAGOS: ' + str(response.text))
+        return json.loads(response.text)
 
     def get_transaction_data(self, puntoFacturacion):
         url = self.hsfeURLstr + "/transactiondata"
@@ -986,7 +986,7 @@ class electronic_invoice_fields(models.Model):
         headers = {
             'Content-Type': 'application/json',
         }
-
+        logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
             "POST", url, headers=headers, data=sub_total_values)
         logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
