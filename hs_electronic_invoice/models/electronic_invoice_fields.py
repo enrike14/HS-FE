@@ -690,8 +690,9 @@ class electronic_invoice_fields(models.Model):
 							'amount':tax_item.amount
 							})
 						elif tax_item.amount_type == 'group':
-							for child_tax_item in tax_item.amount_type.children:
-								logging.info("child tax========"+str(child_tax_item))
+							logging.info("child group========"+str(tax_item.children_tax_ids))
+							for child_tax_item in tax_item.children_tax_ids:
+								logging.info("child tax========"+str(child_tax_item.name))
 							# array_tax_item.append({
 							# 'amount_type':	tax_item.amount_type,
 							# 'amount':tax_item.amount,
