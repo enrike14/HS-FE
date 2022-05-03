@@ -975,12 +975,12 @@ class electronic_invoice_fields(models.Model):
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": self.amount_by_group[0][1],
+            "amount_tax_completed": self.amount_by_group[0][0],
             "total_discount_price": self.total_precio_descuento,
             "items_qty": cantidad_items,
             "payment_time": 1,
             "array_total_items_value": payments,
-            "array_payment_form": self.get_array_payment_info(payments_items, self.amount_by_group[0][1])
+            "array_payment_form": self.get_array_payment_info(payments_items, self.amount_by_group[0][0])
         })
 
         headers = {
