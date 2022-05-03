@@ -342,6 +342,8 @@ class electronic_invoice_fields(models.Model):
 
         logging.info("Total objeto" + str(totales_subtotales_inv_dict))
         self.get_transaction_data(puntoFacturacion)
+        self.get_sub_totals(cantidad_items)
+
         datos = dict(
             tokenEmpresa=tokenEmpresa,
             tokenPassword=tokenPassword,
@@ -795,7 +797,7 @@ class electronic_invoice_fields(models.Model):
 
         return subTotalesDict
 
-    def get_array_payment_info(self, payments_items, monto_impuesto_completo):
+    def get_array_payment_info(self, payments_items, monto_impuesto_completo,):
         url = self.hsfeURLstr + "/listpayments"
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
@@ -965,24 +967,20 @@ class electronic_invoice_fields(models.Model):
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
-    def get_sub_totals(self):
+    def get_sub_totals(self, cantidad_items):
         url = self.hsfeURLstr + "/subtotals"
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
-        grupo_monto_impuestos = self.amount_by_group
-        tuple_impuesto_completo = grupo_monto_impuestos[0]
-        monto_impuesto_completo = tuple_impuesto_completo[1]
+        payments = [item.amount for item in payments_items]
 
         sub_total_values = json.dumps({
-            "amount_untaxed": 1.2,
-            "amount_tax_completed": 0.55,
-            "total_discount_price": 0,
-            "items_qty": 0,
-            "payment_time": 0,
-            "array_total_items_value": [
-                0
-            ],
-            "array_payment_form": self.get_array_payment_info(payments_items, monto_impuesto_completo)
+            "amount_untaxed": self.amount_untaxed,
+            "amount_tax_completed": self.amount_by_group[0][1],
+            "total_discount_price": self.total_precio_descuento,
+            "items_qty": cantidad_items,
+            "payment_time": 1,
+            "array_total_items_value": payments,
+            "array_payment_form": self.get_array_payment_info(payments_items, self.amount_by_group[0][1])
         })
 
         headers = {
@@ -991,5 +989,5 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request(
             "POST", url, headers=headers, data=sub_total_values)
-        logging.info('Info AZURE CLIENTE: ' + str(response.text))
+        logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
         return json.loads(response.text)
