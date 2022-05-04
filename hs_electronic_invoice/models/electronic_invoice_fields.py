@@ -485,7 +485,7 @@ class electronic_invoice_fields(models.Model):
             self.message_post(body=body)
 
     def action_download_fe_pdf(self, FiscalNumber):
-        # logging.info('Llamar a crear PDF... ')
+        logging.info('Llamar a crear PDF NUMERO ' + FiscalNumber)
 
         document = self.env["electronic.invoice"].search(
             [('name', '=', 'ebi-pac')], limit=1)
@@ -866,7 +866,7 @@ class electronic_invoice_fields(models.Model):
         logging.info('Datos de la transaccion: ' + str(datosTransaccion))
         return datosTransaccion
 
-    def get_array_payment_info(self, payments_items, monto_impuesto_completo,):
+    def get_array_payment_info(self, payments_items, monto_impuesto_completo):
         url = self.hsfeURLstr + "/listpayments"
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
