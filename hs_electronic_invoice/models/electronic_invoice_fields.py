@@ -15,7 +15,7 @@ from odoo.http import content_disposition
 import qrcode
 from odoo.exceptions import UserError
 import requests
-
+import time
 import json
 
 _logger = logging.getLogger(__name__)
@@ -390,6 +390,7 @@ class electronic_invoice_fields(models.Model):
                 # add QR in invoice info
                 self.generate_qr_in_invoice(res)
                 # generate the pdf document
+                time.sleep(6)
                 self.action_download_fe_pdf(self.lastFiscalNumber)
             else:
                 self.insert_data_to_logs(res, invoice_number)
