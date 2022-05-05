@@ -880,6 +880,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
         }
 
         response = requests.request(
@@ -930,6 +931,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
         }
         logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
@@ -961,6 +963,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
         }
 
         response = requests.request(
@@ -986,6 +989,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
         }
         logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
