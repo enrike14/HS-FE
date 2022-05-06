@@ -975,7 +975,7 @@ class electronic_invoice_fields(models.Model):
 
     def get_sub_totals(self, cantidad_items):
 
-        logging.info("Lines IDS Values: " + str(len(self.lines_ids)))
+        logging.info("Lines IDS Values: " + str(len(self.invoice_line_ids)))
         logging.info("Cantidad Values: " + cantidad_items)
         url = self.hsfeURLstr + "/subtotals"
         payments_items = self.env["account.payment"].search(
