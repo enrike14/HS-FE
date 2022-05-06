@@ -867,13 +867,15 @@ class electronic_invoice_fields(models.Model):
         logging.info('Datos de la transaccion: ' + str(datosTransaccion))
         return datosTransaccion
 
-    def get_array_payment_info(self, payments_items, monto_impuesto_completo):
+    def get_array_payment_info(self):
         url = self.hsfeURLstr + "/listpayments"
+        payments_items = self.env["account.payment"].search(
+            [('communication', '=', self.name)])
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
             # "payment_method": "st",
             "payments_items": payments,
-            "monto_impuesto_completo": monto_impuesto_completo,
+            "monto_impuesto_completo": self.amount_by_group[0][1],
             "amount_untaxed": self.amount_untaxed,
             "total_discount_price": self.total_precio_descuento
         })
@@ -972,6 +974,9 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_sub_totals(self, cantidad_items):
+
+        logging.info("Lines IDS Values: " + str(len(self.lines_ids)))
+        logging.info("Cantidad Values: " + cantidad_items)
         url = self.hsfeURLstr + "/subtotals"
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
@@ -984,7 +989,7 @@ class electronic_invoice_fields(models.Model):
             "items_qty": cantidad_items,
             "payment_time": 1,
             "array_total_items_value": payments,
-            "array_payment_form": self.get_array_payment_info(payments_items, self.amount_by_group[0][1])
+            "array_payment_form": self.get_array_payment_info()
         })
 
         headers = {
