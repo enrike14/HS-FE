@@ -160,6 +160,7 @@ class electronic_invoice_fields(models.Model):
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
     total_precio_descuento = 0.0
     hsfeURLstr = fields.Char(string='HermecURL', readonly="True", store="True")
+    puntoFacturacion = "0000"
 
     @api.depends('qr_code')
     def on_change_pago(self):
@@ -188,11 +189,11 @@ class electronic_invoice_fields(models.Model):
                         logging.info("LA URL" + self.hsfeURLstr)
                         fiscalN = (
                             str(document.numeroDocumentoFiscal).rjust(10, '0'))
-                        puntoFacturacion = (
+                        self.puntoFacturacion = (
                             str(document.puntoFacturacionFiscal).rjust(3, '0'))
 
                         record.lastFiscalNumber = fiscalN
-                        record.puntoFactFiscal = puntoFacturacion
+                        record.puntoFactFiscal = self.puntoFacturacion
 
                         document.numeroDocumentoFiscal = str(
                             int(document.numeroDocumentoFiscal)+1)
@@ -296,7 +297,7 @@ class electronic_invoice_fields(models.Model):
         if config_document_obj:
             fiscalN = (
                 str(config_document_obj.numeroDocumentoFiscal).rjust(10, '0'))
-            puntoFacturacion = (
+            self.puntoFacturacion = (
                 str(config_document_obj.puntoFacturacionFiscal).rjust(3, '0'))
             tokenEmpresa = config_document_obj.tokenEmpresa
             tokenPassword = config_document_obj.tokenPassword
@@ -341,8 +342,8 @@ class electronic_invoice_fields(models.Model):
                 descuentoBonificacion_dict]
 
         logging.info("Total objeto" + str(totales_subtotales_inv_dict))
-        self.get_transaction_data(puntoFacturacion)
-        self.get_sub_totals(cantidad_items)
+        self.get_transaction_data()
+        self.get_sub_totals()
 
         datos = dict(
             tokenEmpresa=tokenEmpresa,
@@ -351,7 +352,7 @@ class electronic_invoice_fields(models.Model):
                 codigoSucursalEmisor=codigoSucursal,
                 tipoSucursal="1",
                 datosTransaccion=self.set_datosTransaccion_dict(
-                    fiscalN, puntoFacturacion, clienteDict),
+                    fiscalN, self.puntoFacturacion, clienteDict),
                 listaItems=dict(
                     item=info_items_array
                 ),
@@ -426,7 +427,7 @@ class electronic_invoice_fields(models.Model):
 
         if document:
             fiscalN = self.lastFiscalNumber
-            puntoFacturacion = (
+            self.puntoFacturacion = (
                 str(document.puntoFacturacionFiscal).rjust(3, '0'))
             tokenEmpresa = document.tokenEmpresa
             tokenPassword = document.tokenPassword
@@ -457,7 +458,7 @@ class electronic_invoice_fields(models.Model):
                 {
                     "codigoSucursalEmisor": codigoSucursal,
                     "numeroDocumentoFiscal": inv_lastFiscalNumber,
-                    "puntoFacturacionFiscal": puntoFacturacion,
+                    "puntoFacturacionFiscal": self.puntoFacturacion,
                     "tipoDocumento": inv_tipo_documento_fe,
                     "tipoEmision": inv_tipo_emision_fe
                 }),
@@ -494,7 +495,7 @@ class electronic_invoice_fields(models.Model):
         if document:
             # self.lastFiscalNumber #(str(document.numeroDocumentoFiscal).rjust(10, '0'))
             fiscalN = FiscalNumber
-            puntoFacturacion = (
+            self.puntoFacturacion = (
                 str(document.puntoFacturacionFiscal).rjust(3, '0'))
             tokenEmpresa = document.tokenEmpresa
             tokenPassword = document.tokenPassword
@@ -524,7 +525,7 @@ class electronic_invoice_fields(models.Model):
                 {
                     "codigoSucursalEmisor": codigoSucursal,
                     "numeroDocumentoFiscal": fiscalN,
-                    "puntoFacturacionFiscal": puntoFacturacion,
+                    "puntoFacturacionFiscal": self.puntoFacturacion,
                     "tipoDocumento": inv_tipo_documento_fe,
                     "tipoEmision": inv_tipo_emision_fe
                 }),
@@ -890,7 +891,7 @@ class electronic_invoice_fields(models.Model):
         logging.info('Info AZURE PAGOS: ' + str(response.text))
         return json.loads(response.text)
 
-    def get_transaction_data(self, puntoFacturacion):
+    def get_transaction_data(self):
         url = self.hsfeURLstr + "/transactiondata"
         cufe_fe_cn = ""
         last_invoice_number = ""
@@ -914,7 +915,7 @@ class electronic_invoice_fields(models.Model):
             "tipoEmision": self.tipo_emision_fe,
             "tipoDocumento": self.tipo_documento_fe,
             "numeroDocumentoFiscal": self.lastFiscalNumber,
-            "puntoFacturacionFiscal": puntoFacturacion,
+            "puntoFacturacionFiscal": self.puntoFacturacion,
             "naturalezaOperacion": self.naturaleza_operacion_fe,
             "tipoOperacion": self.tipo_operacion_fe,
             "destinoOperacion": self.destino_operacion_fe,
@@ -973,10 +974,7 @@ class electronic_invoice_fields(models.Model):
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
-    def get_sub_totals(self, cantidad_items):
-
-        logging.info("Lines IDS Values: " + str(len(self.invoice_line_ids)))
-        logging.info("Cantidad Values: " + str(cantidad_items))
+    def get_sub_totals(self):
         url = self.hsfeURLstr + "/subtotals"
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
@@ -986,7 +984,7 @@ class electronic_invoice_fields(models.Model):
             "amount_untaxed": self.amount_untaxed,
             "amount_tax_completed": self.amount_by_group[0][1],
             "total_discount_price": self.total_precio_descuento,
-            "items_qty": cantidad_items,
+            "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
             "array_total_items_value": payments,
             "array_payment_form": self.get_array_payment_info()
