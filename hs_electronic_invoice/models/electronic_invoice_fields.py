@@ -285,7 +285,7 @@ class electronic_invoice_fields(models.Model):
         tuple_impuesto_completo = grupo_monto_impuestos[0]
         monto_impuesto_completo = tuple_impuesto_completo[1]
         # get an array to info_pagos
-        self.get_array_payment_info(payments_items, monto_impuesto_completo)
+        self.get_array_payment_info()
 
         info_pagos = self.set_array_info_pagos(
             payments_items, monto_impuesto_completo)
