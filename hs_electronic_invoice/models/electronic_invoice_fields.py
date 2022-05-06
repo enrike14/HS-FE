@@ -390,7 +390,7 @@ class electronic_invoice_fields(models.Model):
 
                 # add QR in invoice info
                 self.generate_qr_in_invoice(res)
-                # generate the pdf document
+
                 time.sleep(6)
                 self.action_download_fe_pdf(self.lastFiscalNumber)
             else:
@@ -548,13 +548,6 @@ class electronic_invoice_fields(models.Model):
             'res_id': self.id,
             'mimetype': 'application/x-pdf'
         })
-
-    def delete_file(self, cr, uid):
-        #id_list = []
-        cr.execute("DELETE FROM ir_attachment WHERE name = '" +
-                   self.lastFiscalNumber+"'")
-        cr.commit()
-        logging.info("CR" + str(cr))
 
     def insert_data_to_electronic_invoice_moves(self, res, invoice_number):
         # Save the log info
@@ -867,6 +860,8 @@ class electronic_invoice_fields(models.Model):
 
         logging.info('Datos de la transaccion: ' + str(datosTransaccion))
         return datosTransaccion
+
+    # HSFE HSServices Calls
 
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "/listpayments"
