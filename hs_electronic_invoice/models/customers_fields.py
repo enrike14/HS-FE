@@ -44,4 +44,8 @@ class customers_fields(models.Model):
 		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
+		elif str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
+			self.tipoContribuyente='1'
+		else:
+			self.tipoContribuyente=''
 		
