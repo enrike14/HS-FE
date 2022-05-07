@@ -1043,18 +1043,18 @@ class electronic_invoice_fields(models.Model):
                             logging.info(
                                 "array_tax_item========"+str(array_tax_item))
                 itemLoad.append({
-                    'typeCustomersIC': str(self.partner_id.TipoClienteFE),
+                    'typeCustomers': str(self.partner_id.TipoClienteFE),
                     'descripcion': str(item.product_id.name),
                     'cantidad': item.quantity,
                     'precioUnitario': item.price_unit,
-                    'descuento': item.discount,
+                    'precioUnitarioDescuento': item.discount,
                     # IC = INPUT Calculate
                     'arrayTaxes': array_tax_item,
                     'codigoGTIN':  str(item.product_id.codigoGTIN),
                     'cantGTINCom': "",  # item.product_id.cantGTINCom,
                     'codigoGTINInv': item.product_id.codigoGTINInv,
                     'cantGTINComInv': "",  # item.product_id.cantGTINComInv,
-                    'categoryProductIC': str(item.product_id.categoryProduct),
+                    'categoryProduct': str(item.product_id.categoryProduct),
                     'fechaFabricacion': str(item.product_id.fechaFabricacion),
                     'fechaCaducidad': str(item.product_id.fechaCaducidad),
                     'codigoCPBS': str(item.product_id.codigoCPBS),
