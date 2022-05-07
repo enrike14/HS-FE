@@ -11,17 +11,23 @@
 				<xpath expr="//page[@name='general_information']" position="after">
                         <page name="pageConfigEBIPAC" string="Configuración FE">
                             <group>
-                                <group>
+                               <group>
 									<field name="categoryProduct"/>
 									<field name="fechaFabricacion"/>
 									<field name="fechaCaducidad"/>
 									<field name="codigoCPBSAbrev"/>
-									<field name="codigoCPBS"/>
-									<field name="unidadMedidaCPBS"/>
+									<field name="codigoCPBS" />
+									<field name="unidadMedida"/>
+									<field name="infoItem"/>
+									<field name="precioAcarreo"/>
+									<field name="precioSeguro"/>
                                 </group>
                                 <group>
+									<field name="unidadMedidaCPBS"/>
 									<field name="codigoGTIN"/>
+									 <field name="cantGTINCom"/>
 									<field name="codigoGTINInv"/>
+									<field name="cantGTINComInv"/>
 									<field name="tasaISC"/>
 									<field name="valorISC"/>
 									<field name="tasaOTI"/>
