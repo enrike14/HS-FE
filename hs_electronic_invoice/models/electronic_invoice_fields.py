@@ -17,6 +17,8 @@ from odoo.exceptions import UserError
 import requests
 import time
 import json
+from odoo.http import request
+from odoo import http
 
 _logger = logging.getLogger(__name__)
 
@@ -967,6 +969,8 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request(
             "POST", url, headers=headers, data=client_values)
+        logging.info("URL Odoo:" + str(request.httprequest.host_url))
+        logging.info("Cliente Enviado:" + str(client_values))
         logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
