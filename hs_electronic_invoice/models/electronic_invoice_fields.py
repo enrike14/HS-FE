@@ -875,6 +875,7 @@ class electronic_invoice_fields(models.Model):
 
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "/listpayments"
+        logging.info("URL COMPLETO:" + str(url))
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
         payments = [item.amount for item in payments_items]
