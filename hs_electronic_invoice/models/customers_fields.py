@@ -45,7 +45,7 @@ class customers_fields(models.Model):
 
 	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
-		logging.info('onchange tipocliente---: ' + str(self))
+		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
 		
