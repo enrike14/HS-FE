@@ -13,7 +13,7 @@
                             <group>
                                 <group>
 									<field name="TipoClienteFE"/>
-									<field name="tipoContribuyente" attrs="{'readonly':[('TipoClienteFE','in',('01', '03'))}"/>
+									<field name="tipoContribuyente" attrs="{'readonly':[('TipoClienteFE','in',('01', '03'))]}"/>
 									<field name="numeroRUC"/>
 									<field name="digitoVerificadorRUC" attrs="{'invisible':[('TipoClienteFE','not in',('01', '03'))], 'required':[('TipoClienteFE','in',('01', '03'))]}"/>
 									<field name="razonSocial" attrs="{'invisible':[('TipoClienteFE','not in',('01', '03'))], 'required':[('TipoClienteFE','in',('01', '03'))]}"/>
