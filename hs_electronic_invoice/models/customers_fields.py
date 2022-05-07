@@ -4,7 +4,7 @@ from dataclasses import field
 from email.policy import default
 from odoo import models, fields, api
 from datetime import datetime
-
+import logging
 
 class customers_fields(models.Model):
 	#_inherit = "product.product"
@@ -40,6 +40,7 @@ class customers_fields(models.Model):
 
 	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
+		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
 		
