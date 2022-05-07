@@ -37,4 +37,9 @@ class customers_fields(models.Model):
 	#telefono1	 ///correoElectronico1
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro")
+
+	@api.depends('TipoClienteFE')
+	def on_change_tipoIdent(self):
+		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
+			self.tipoContribuyente='2'
 		
