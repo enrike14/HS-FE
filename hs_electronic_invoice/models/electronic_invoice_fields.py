@@ -997,7 +997,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_items_invoice_info(self):
-        url = "https://hsfeapi.azurewebsites.net/client"
+        url = self.hsfeURLstr + "/items"
         itemLoad = []
         array_tax_item = []
         if self.invoice_line_ids:
