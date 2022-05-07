@@ -13,8 +13,8 @@
                             <group>
                                <group>
 									<field name="categoryProduct"/>
-									<field name="fechaFabricacion"/>
-									<field name="fechaCaducidad"/>
+									<field name="fechaFabricacion"  attrs="{'invisible':[('categoryProduct','not in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))], 'required':[('categoryProduct','in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))]}"/>
+									<field name="fechaCaducidad"  attrs="{'invisible':[('categoryProduct','not in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))], 'required':[('categoryProduct','in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))]}"/>
 									<field name="codigoCPBSAut" />
 									<field name="codigoCPBSAbrev"/>
 									<field name="codigoCPBS" />
