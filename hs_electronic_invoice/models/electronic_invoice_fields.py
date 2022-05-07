@@ -874,7 +874,7 @@ class electronic_invoice_fields(models.Model):
         self.get_items_invoice_info()
 
     def get_array_payment_info(self):
-        url = self.hsfeURLstr + "/listpayments"
+        url = self.hsfeURLstr + "api/listpayments"
         logging.info("URL COMPLETO:" + str(url))
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
@@ -898,7 +898,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_transaction_data(self):
-        url = self.hsfeURLstr + "/transactiondata"
+        url = self.hsfeURLstr + "api/transactiondata"
         cufe_fe_cn = ""
         last_invoice_number = ""
 
@@ -949,7 +949,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_client_info(self):
-        url = self.hsfeURLstr + "/client"
+        url = self.hsfeURLstr + "api/client"
         logging.info("PRUEBA DE ARREGLO PAGO = " +
                      str(self.amount_by_group[0][1]))
         client_values = json.dumps({
@@ -983,7 +983,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_sub_totals(self):
-        url = self.hsfeURLstr + "/subtotals"
+        url = self.hsfeURLstr + "api/subtotals"
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
         payments = [item.amount for item in payments_items]
@@ -1009,7 +1009,7 @@ class electronic_invoice_fields(models.Model):
         return json.loads(response.text)
 
     def get_items_invoice_info(self):
-        url = self.hsfeURLstr + "/items"
+        url = self.hsfeURLstr + "api/items"
         itemLoad = []
         array_tax_item = []
         if self.invoice_line_ids:
