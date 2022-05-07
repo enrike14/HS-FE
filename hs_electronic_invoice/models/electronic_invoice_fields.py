@@ -1039,9 +1039,9 @@ class electronic_invoice_fields(models.Model):
                     # IC = INPUT Calculate
                     'arrayTaxes': array_tax_item,
                     'codigoGTIN':  str(item.product_id.codigoGTIN),
-                    'cantGTINCom': ""  # item.product_id.cantGTINCom,
+                    'cantGTINCom': "",  # item.product_id.cantGTINCom,
                     'codigoGTINInv': item.product_id.codigoGTINInv,
-                    'cantGTINComInv': ""  # item.product_id.cantGTINComInv,
+                    'cantGTINComInv': "",  # item.product_id.cantGTINComInv,
                     'categoryProductIC': str(item.product_id.categoryProduct),
                     'fechaFabricacion': str(item.product_id.fechaFabricacion),
                     'fechaCaducidad': str(item.product_id.fechaCaducidad),
