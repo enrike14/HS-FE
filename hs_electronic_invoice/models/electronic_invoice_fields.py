@@ -866,6 +866,13 @@ class electronic_invoice_fields(models.Model):
 
     # HSFE HSServices Calls
 
+    def call_hs_services(self):
+        self.get_array_payment_info()
+        self.get_transaction_data()
+        self.get_client_info()
+        self.get_sub_totals()
+        self.get_items_invoice_info()
+
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "/listpayments"
         payments_items = self.env["account.payment"].search(
