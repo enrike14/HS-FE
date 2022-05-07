@@ -1061,7 +1061,7 @@ class electronic_invoice_fields(models.Model):
                     'unidadMedidaCPBS': str(item.product_id.unidadMedidaCPBS),
                     'codigoCPBSAbrev': str(item.product_id.codigoCPBSAbrev),
                     'tasaISC': str(item.product_id.tasaISC),
-                    'valorISC': item.product_id.valorISC,
+                    # 'valorISC': item.product_id.valorISC,
                     'codigo': str(item.product_id.default_code),
                     'precioAcarreo': 0.00,  # item.product_id.precioAcarreo,
                     'precioSeguro': 0.00,  # item.product_id.precioSeguro,
