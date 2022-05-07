@@ -20,7 +20,7 @@ class customers_fields(models.Model):
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
 	('03', 'Gobierno'),
-	('04', 'Extranjero')],string = 'Tipo Cliente FE',default=get_tipoCliente)
+	('04', 'Extranjero')],string = 'Tipo Cliente FE')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
 	('2', 'Jurídico')],string = 'Tipo Contribuyente')
