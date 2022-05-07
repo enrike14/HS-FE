@@ -1057,6 +1057,7 @@ class electronic_invoice_fields(models.Model):
                     'tasaOTI': str(item.product_id.tasaOTI),
                     'valorTasa': item.product_id.valorTasa,
                 })
+                #self.narration if self.narration else "",
 
         headers = {
             'Content-Type': 'application/json',
