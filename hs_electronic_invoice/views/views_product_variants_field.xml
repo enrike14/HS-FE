@@ -31,8 +31,8 @@
 									<field name="cantGTINComInv"/>
 									<field name="tasaISC"/>
 									<field name="valorISC"/>
-									<field name="tasaOTI"/>
-									<field name="valorTasa"/>
+									<field name="tasaOTI" />
+									<field name="valorTasa" attrs="{'invisible':[('tasaOTI','not in',('01', '02', '03'))], 'required':[('tasaOTI','in',('01', '02', '03'))]}"/>
                                 </group>
                             </group>
                         </page>
