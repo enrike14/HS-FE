@@ -278,7 +278,7 @@ class electronic_invoice_fields(models.Model):
             # set the invoice_items length
             cantidad_items = len(invoice_items)
             # Send the array of items and build the array of objects
-            self.get_items_invoice_info()
+           # self.get_items_invoice_info()
             info_items_array = self.set_array_item_object(
                 invoice_items)  # return array of items objects
 
