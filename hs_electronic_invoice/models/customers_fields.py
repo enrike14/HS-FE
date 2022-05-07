@@ -11,11 +11,16 @@ class customers_fields(models.Model):
 	#_name = "res.partner"
 	_inherit = "res.partner"
 	#asignar campos al modulo de res.partner
+	def get_tipoCliente(self):
+		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
+		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
+			self.tipoContribuyente='2'	
+
 	TipoClienteFE = fields.Selection(
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
 	('03', 'Gobierno'),
-	('04', 'Extranjero')],string = 'Tipo Cliente FE')
+	('04', 'Extranjero')],string = 'Tipo Cliente FE',default=get_tipoCliente)
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
 	('2', 'Jurídico')],string = 'Tipo Contribuyente')
