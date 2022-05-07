@@ -11,10 +11,6 @@ class customers_fields(models.Model):
 	#_name = "res.partner"
 	_inherit = "res.partner"
 	#asignar campos al modulo de res.partner
-	def get_tipoCliente(self):
-		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
-		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
-			self.tipoContribuyente='2'	
 
 	TipoClienteFE = fields.Selection(
 	[('01', 'Contribuyente'),
@@ -43,7 +39,7 @@ class customers_fields(models.Model):
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro")
 
-	@api.depends('TipoClienteFE')
+	@api.onchange('TipoClienteFE')
 	def on_change_tipoIdent(self):
 		logging.info('onchange tipocliente---: ' + str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
