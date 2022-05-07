@@ -12,4 +12,9 @@ class electronic_invoice_cpbs(models.Model):
 	segmento =  fields.Char(string="Segmento")
 	familiaID =  fields.Char(string="Familia ID")
 	familia =  fields.Char(string="Familia")
- 
+	def name_get(self):
+		result = []
+		for record in self:
+			record_name = record.familia
+			result.append((record.id, record_name))
+		return result

@@ -15,6 +15,7 @@
 									<field name="categoryProduct"/>
 									<field name="fechaFabricacion"/>
 									<field name="fechaCaducidad"/>
+									<field name="codigoCPBSAut" />
 									<field name="codigoCPBSAbrev"/>
 									<field name="codigoCPBS" />
 									<field name="unidadMedida"/>
