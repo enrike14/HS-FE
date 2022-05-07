@@ -27,6 +27,7 @@
         "views/views_product_field.xml",
         "views/views_product_variants_field.xml",
         "views/views_customers_field.xml",
+        "views/views_fe_cpbs.xml",
     ],
     # only loaded in demonstration mode
     "demo": [
