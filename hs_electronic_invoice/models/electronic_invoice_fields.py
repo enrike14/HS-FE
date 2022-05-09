@@ -824,11 +824,13 @@ class electronic_invoice_fields(models.Model):
             tokenEmpresa = config_document_obj.tokenEmpresa
             tokenPassword = config_document_obj.tokenPassword
             codigoSucursal = config_document_obj.codigoSucursalEmisor
+            url_wsdl = config_document_obj.wsdl
 
         monto_sin_impuesto = self.amount_untaxed
         monto_total_factura = self.amount_total
 
         transaction_values = json.dumps({
+            "wsdl_url": url_wsdl,
             "tokenEmpresa": tokenEmpresa,
             "tokenPassword": tokenPassword,
             "codigoSucursalEmisor": codigoSucursal,
@@ -1111,3 +1113,4 @@ class electronic_invoice_fields(models.Model):
         dataJsonItem = {"list_items": itemLoad}
         response = requests.request(
             "POST", url, headers=headers, data=json.dumps(dataJsonItem))
+        return json.loads(response.text)
