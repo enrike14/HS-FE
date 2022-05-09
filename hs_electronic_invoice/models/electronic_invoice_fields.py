@@ -1063,7 +1063,7 @@ class electronic_invoice_fields(models.Model):
                     'precioAcarreo': item.product_id.precioAcarreo if item.product_id.precioAcarreo else 0.00,
                     'precioSeguro': item.product_id.precioSeguro if item.product_id.precioSeguro else 0.00,
                     'infoItem': str(item.product_id.infoItem),
-                    'tasaOTI': str(item.product_id.tasaOTI),
+                    'tasaOTI': str(item.product_id.tasaOTI) if item.product_id.tasaOTI else "0",
                     'valorTasa': item.product_id.valorTasa,
                 })
                 #self.narration if self.narration else "",
