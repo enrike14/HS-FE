@@ -258,7 +258,7 @@ class electronic_invoice_fields(models.Model):
             # set the invoice_items length
             cantidad_items = len(invoice_items)
             # Send the array of items and build the array of objects
-           # self.get_items_invoice_info()
+       # self.get_items_invoice_info()
             info_items_array = self.set_array_item_object(
                 invoice_items)  # return array of items objects
 
@@ -802,27 +802,50 @@ class electronic_invoice_fields(models.Model):
 
     # HSFE HSServices Calls
 
-    def create_fiscal_doc(self):
-        url = self.hsfeURLstr + "api/transactiondata"
+    def send_fiscal_doc(self):
+        url = self.hsfeURLstr + "api/send"
+        original_invoice_values = {}
         original_invoice_id = self.env["account.move"].search(
             [('id', '=', self.reversed_entry_id.id)], limit=1)
 
-        inv_lastFiscalNumber = ""
-        inv_tipo_documento_fe = ""
-        inv_tipo_emision_fe = ""
-        inv_name = ""
-
         if original_invoice_id:
-            inv_lastFiscalNumber = original_invoice_id.lastFiscalNumber
-            inv_tipo_documento_fe = original_invoice_id.tipo_documento_fe
-            inv_tipo_emision_fe = original_invoice_id.tipo_emision_fe
+            original_invoice_values = {
+                "codigoSucursalEmisor": codigoSucursal,
+                "numeroDocumentoFiscal": original_invoice_id.lastFiscalNumber,
+                "puntoFacturacionFiscal": self.puntoFacturacion,
+                "tipoDocumento": original_invoice_id.tipo_documento_fe,
+                "tipoEmision": original_invoice_id.tipo_emision_fe
+            }
+
+        # constultamos el objeto de nuestra configuración del servicio
+        config_document_obj = self.env["electronic.invoice"].search(
+            [('name', '=', 'ebi-pac')], limit=1)
+        if config_document_obj:
+            tokenEmpresa = config_document_obj.tokenEmpresa
+            tokenPassword = config_document_obj.tokenPassword
+            codigoSucursal = config_document_obj.codigoSucursalEmisor
+
+        monto_sin_impuesto = self.amount_untaxed
+        monto_total_factura = self.amount_total
 
         transaction_values = json.dumps({
-            "tipoEmision": self.tipo_emision_fe,
-            "tipoDocumento": self.tipo_documento_fe,
-            "numeroDocumentoFiscal": self.lastFiscalNumber,
-            "puntoFacturacionFiscal": self.puntoFacturacion,
-            "naturalezaOperacion": self.naturaleza_operacion_fe
+            "tokenEmpresa": tokenEmpresa,
+            "tokenPassword": tokenPassword,
+            "codigoSucursalEmisor": codigoSucursal,
+            "tipoSucursal": self.tipoSucursal_fe,
+            "datosTransacion": self.get_transaction_data(),
+            "listaItems": self.get_items_invoice_info(),
+            "subTotales": self.get_sub_totals(),
+            "listaFormaPago": self.get_array_payment_info(),
+            "amount_residual": self.amount_residual,
+            "original_invoice": original_invoice_values,
+            "retencion": {
+                'codigoRetencion': "2",
+                'montoRetencion':  str('%.2f' % round((monto_total_factura - monto_sin_impuesto), 2))
+            },
+            "descuentoBonificacion": {
+                "descDescuento": "Descuentos aplicados a los productos",
+                "montoDescuento": str('%.2f' % round(self.total_precio_descuento, 2))}
         })
 
         headers = {
@@ -834,12 +857,6 @@ class electronic_invoice_fields(models.Model):
             "POST", url, headers=headers, data=transaction_values)
         logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
         return json.loads(response.text)
-
-        self.get_array_payment_info()
-        self.get_transaction_data()
-        self.get_client_info()
-        self.get_sub_totals()
-        self.get_items_invoice_info()
 
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "api/listpayments"
