@@ -167,7 +167,6 @@ class electronic_invoice_fields(models.Model):
     @api.depends('qr_code')
     def on_change_pago(self):
         for record in self:
-            logging.info('Blank QR: ' + str(record.qr_code))
             if str(record.qr_code) != "False":
                 record.pagadoCompleto = 'FECompletada'
             else:
@@ -175,11 +174,7 @@ class electronic_invoice_fields(models.Model):
 
     @api.depends('state')
     def on_change_state(self):
-        logging.info('Entró al onchange: ')
-
         for record in self:
-            logging.info('HSInvoice: ' + str(record.amount_residual) +
-                         ":" + str(record.lastFiscalNumber))
             if record.state == 'posted' and record.pagadoCompleto != "NumeroAsignado":
                 record.pagadoCompleto = "NumeroAsignado"
                 if record.lastFiscalNumber == False:
@@ -188,7 +183,6 @@ class electronic_invoice_fields(models.Model):
                         [('name', '=', 'ebi-pac')], limit=1)
                     if document:
                         self.hsfeURLstr = document.hsfeURL
-                        logging.info("LA URL" + self.hsfeURLstr)
                         fiscalN = (
                             str(document.numeroDocumentoFiscal).rjust(10, '0'))
                         self.puntoFacturacion = (
@@ -203,42 +197,28 @@ class electronic_invoice_fields(models.Model):
     @api.depends('type', 'partner_id')
     def on_change_type(self):
         if self.type:
-            logging.info('Entró a cambio type:' + str(self.type))
-            logging.info('El residuo del monto:' + str(self.amount_residual))
             for record in self:
                 if record.type == 'out_refund' and str(record.amount_residual) == "0.0":
-                    logging.info('Entró a Nota de Crédito: NCRFE - Anulación')
                     record.tipo_documento_fe = "04"
                     record.nota_credito = "NotaCredito"
                 else:
                     record.nota_credito = ""
-                    # and self.payment_state == "not_paid":
                     if record.type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id != False:
-
                         original_invoice_id = self.env["account.move"].search(
                             [('id', '=', self.reversed_entry_id.id)], limit=1)
                         if original_invoice_id:
                             payment = original_invoice_id.amount_residual
                             inv_monto_total = original_invoice_id.amount_total
-                            logging.info(
-                                "estos son los pagos!!!" + str(payment))
-                            if payment != inv_monto_total:  # and payment != "reversed":
-                                logging.info(
-                                    'Entró a Nota de Crédito: Reembolso')
+                            if payment != inv_monto_total:
                                 record.tipo_documento_fe = "09"
                                 record.nota_credito = "Reembolso"
                             else:
-                                logging.info(
-                                    'Entró a Nota de Crédito: NCRFE PARCIAL.')
                                 self.tipo_documento_fe = "04"
                                 self.nota_credito = "NotaCredito"
                     else:
-                        # and self.payment_state == "not_paid":
                         if record.type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id == False:
-                            logging.info('Entró a Nota de Crédito: NCG')
                             record.tipo_documento_fe = "06"
                             record.nota_credito = "NotaCredito"
-
         else:
             record.nota_credito = ""
 
@@ -392,7 +372,7 @@ class electronic_invoice_fields(models.Model):
                 self.message_post(body=body)
 
                 # add QR in invoice info
-                self.generate_qr_in_invoice(res)
+                self.generate_qr(res)
 
                 time.sleep(6)
                 self.action_download_fe_pdf(self.lastFiscalNumber)
@@ -404,21 +384,6 @@ class electronic_invoice_fields(models.Model):
                 self.message_post(body=body)
         else:
             self.send_anulation_fe()
-
-    def generate_qr_in_invoice(self, res):
-        qr = qrcode.QRCode(
-            version=1,
-            error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
-        )
-        qr.add_data(res.qr)
-        qr.make(fit=True)
-        img = qr.make_image()
-        temp = BytesIO()
-        img.save(temp, format="PNG")
-        qr_image = base64.b64encode(temp.getvalue())
-        self.qr_code = qr_image
 
     def send_anulation_fe(self):
         logging.info('Llamar anulacion... ')
@@ -541,8 +506,7 @@ class electronic_invoice_fields(models.Model):
         b64 = str(res['documento'])
         b64_pdf = b64  # base64.b64encode(pdf[0])
         # save pdf as attachment
-        name = self.lastFiscalNumber
-
+        name = FiscalNumber
         return self.env['ir.attachment'].create({
             'name': name + str(".pdf"),
             'type': 'binary',
@@ -550,34 +514,6 @@ class electronic_invoice_fields(models.Model):
             'res_model': self._name,
             'res_id': self.id,
             'mimetype': 'application/x-pdf'
-        })
-
-    def insert_data_to_electronic_invoice_moves(self, res, invoice_number):
-        # Save the log info
-        self.env['electronic.invoice.logs'].create({
-            'codigo': res['codigo'],
-            'mensaje': res['mensaje'],
-            'resultado': res['resultado'],
-            'invoiceNumber': invoice_number
-        })
-
-        # Save the move info
-        self.env['electronic.invoice.moves'].create({
-            'cufe': res['cufe'],
-            'qr': res['qr'],
-            'invoiceNumber': invoice_number,
-            'fechaRDGI': res['fechaRecepcionDGI'],
-            'numeroDocumentoFiscal':  self.lastFiscalNumber,
-            'puntoFacturacionFiscal': self.puntoFactFiscal,
-        })
-
-    def insert_data_to_logs(self, res, invoice_number):
-
-        self.env['electronic.invoice.logs'].create({
-            'codigo': res['codigo'],
-            'mensaje': res['mensaje'],
-            'resultado': res['resultado'],
-            'invoiceNumber': invoice_number
         })
 
     def get_taxes_in_group(self, group_children_taxes):
@@ -866,7 +802,39 @@ class electronic_invoice_fields(models.Model):
 
     # HSFE HSServices Calls
 
-    def call_hs_services(self):
+    def create_fiscal_doc(self):
+        url = self.hsfeURLstr + "api/transactiondata"
+        original_invoice_id = self.env["account.move"].search(
+            [('id', '=', self.reversed_entry_id.id)], limit=1)
+
+        inv_lastFiscalNumber = ""
+        inv_tipo_documento_fe = ""
+        inv_tipo_emision_fe = ""
+        inv_name = ""
+
+        if original_invoice_id:
+            inv_lastFiscalNumber = original_invoice_id.lastFiscalNumber
+            inv_tipo_documento_fe = original_invoice_id.tipo_documento_fe
+            inv_tipo_emision_fe = original_invoice_id.tipo_emision_fe
+
+        transaction_values = json.dumps({
+            "tipoEmision": self.tipo_emision_fe,
+            "tipoDocumento": self.tipo_documento_fe,
+            "numeroDocumentoFiscal": self.lastFiscalNumber,
+            "puntoFacturacionFiscal": self.puntoFacturacion,
+            "naturalezaOperacion": self.naturaleza_operacion_fe
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
+        }
+        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
+        response = requests.request(
+            "POST", url, headers=headers, data=transaction_values)
+        logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
+        return json.loads(response.text)
+
         self.get_array_payment_info()
         self.get_transaction_data()
         self.get_client_info()
@@ -1006,6 +974,63 @@ class electronic_invoice_fields(models.Model):
             "POST", url, headers=headers, data=sub_total_values)
         logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
         return json.loads(response.text)
+
+    def generate_qr(self, res):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(res.qr)
+        qr.make(fit=True)
+        img = qr.make_image()
+        temp = BytesIO()
+        img.save(temp, format="PNG")
+        qr_image = base64.b64encode(temp.getvalue())
+        self.qr_code = qr_image
+
+    def download_pdf(self, fiscalNumber, document):
+        b64 = str(document)
+        b64_pdf = b64  # base64.b64encode(pdf[0])
+        # save pdf as attachment
+        name = fiscalNumber
+        return self.env['ir.attachment'].create({
+            'name': name + str(".pdf"),
+            'type': 'binary',
+            'datas': b64_pdf,
+            'res_model': self._name,
+            'res_id': self.id,
+            'mimetype': 'application/x-pdf'
+        })
+
+    def insert_data_to_electronic_invoice_moves(self, res, invoice_number):
+        # Save the log info
+        self.env['electronic.invoice.logs'].create({
+            'codigo': res['codigo'],
+            'mensaje': res['mensaje'],
+            'resultado': res['resultado'],
+            'invoiceNumber': invoice_number
+        })
+
+        # Save the move info
+        self.env['electronic.invoice.moves'].create({
+            'cufe': res['cufe'],
+            'qr': res['qr'],
+            'invoiceNumber': invoice_number,
+            'fechaRDGI': res['fechaRecepcionDGI'],
+            'numeroDocumentoFiscal':  self.lastFiscalNumber,
+            'puntoFacturacionFiscal': self.puntoFactFiscal,
+        })
+
+    def insert_data_to_logs(self, res, invoice_number):
+
+        self.env['electronic.invoice.logs'].create({
+            'codigo': res['codigo'],
+            'mensaje': res['mensaje'],
+            'resultado': res['resultado'],
+            'invoiceNumber': invoice_number
+        })
 
     def get_items_invoice_info(self):
         url = self.hsfeURLstr + "api/items"
