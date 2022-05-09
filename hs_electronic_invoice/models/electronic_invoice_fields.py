@@ -852,7 +852,7 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
+        #logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
             "POST", url, headers=headers, data=transaction_values)
         logging.info('Info AZURE ALL VALUE DATA: ' + str(response.text))
@@ -860,7 +860,7 @@ class electronic_invoice_fields(models.Model):
 
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "api/listpayments"
-        logging.info("URL COMPLETO:" + str(url))
+        #logging.info("URL COMPLETO:" + str(url))
         payments_items = self.env["account.payment"].search(
             [('communication', '=', self.name)])
         payments = [item.amount for item in payments_items]
@@ -878,7 +878,7 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request(
             "POST", url, headers=headers, data=payment_values)
-        logging.info('Info AZURE PAGOS: ' + str(response.text))
+        #logging.info('Info AZURE PAGOS: ' + str(response.text))
         return json.loads(response.text)
 
     def get_transaction_data(self):
@@ -926,16 +926,14 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
+        #logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
             "POST", url, headers=headers, data=transaction_values)
-        logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
+        #logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
         return json.loads(response.text)
 
     def get_client_info(self):
         url = self.hsfeURLstr + "api/client"
-        logging.info("PRUEBA DE ARREGLO PAGO = " +
-                     str(self.amount_by_group[0][1]))
         client_values = json.dumps({
             "tipoClienteFE": self.partner_id.TipoClienteFE,
             "tipoContribuyente": self.partner_id.tipoContribuyente,
@@ -961,9 +959,9 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request(
             "POST", url, headers=headers, data=client_values)
-        logging.info("URL Odoo:" + str(request.httprequest.host_url))
-        logging.info("Cliente Enviado:" + str(client_values))
-        logging.info('Info AZURE CLIENTE: ' + str(response.text))
+        #logging.info("URL Odoo:" + str(request.httprequest.host_url))
+        #logging.info("Cliente Enviado:" + str(client_values))
+        #logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
     def get_sub_totals(self):
@@ -986,10 +984,10 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
+        #logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
             "POST", url, headers=headers, data=sub_total_values)
-        logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
+        #logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
         return json.loads(response.text)
 
     def generate_qr(self, res):
@@ -1055,8 +1053,7 @@ class electronic_invoice_fields(models.Model):
         array_tax_item = []
         if self.invoice_line_ids:
             for item in self.invoice_line_ids:
-                logging.info("Product ID AMOUNT:" + str(item.tax_ids.amount))
-                logging.info("Product ID:" + str(item))
+
                 if item.tax_ids:
                     for tax_item in item.tax_ids:
                         if tax_item.amount_type == 'percent':
@@ -1066,11 +1063,9 @@ class electronic_invoice_fields(models.Model):
                             })
                         elif tax_item.amount_type == 'group':
                             array_children = []
-                            logging.info("child group========" +
-                                         str(tax_item.children_tax_ids))
+
                             for child_tax_item in tax_item.children_tax_ids:
-                                logging.info("child tax========" +
-                                             str(child_tax_item.name))
+
                                 array_children.append(
                                     {
                                         'child_name': str(child_tax_item.name),
@@ -1081,8 +1076,7 @@ class electronic_invoice_fields(models.Model):
                                 'amount': tax_item.amount,
                                 'group_tax_children': array_children
                             })
-                            logging.info(
-                                "array_tax_item========"+str(array_tax_item))
+
                 itemLoad.append({
                     'typeCustomers': str(self.partner_id.TipoClienteFE),
                     'categoriaProducto': str(item.product_id.categoryProduct),
@@ -1109,7 +1103,7 @@ class electronic_invoice_fields(models.Model):
                     'valorTasa': item.product_id.valorTasa,
                 })
                 #self.narration if self.narration else "",
-        logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
+       # logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
         headers = {
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
@@ -1117,5 +1111,3 @@ class electronic_invoice_fields(models.Model):
         dataJsonItem = {"list_items": itemLoad}
         response = requests.request(
             "POST", url, headers=headers, data=json.dumps(dataJsonItem))
-
-        logging.info('Info AZURE ITEMS: ' + str(response.text))
