@@ -855,7 +855,7 @@ class electronic_invoice_fields(models.Model):
         logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
             "POST", url, headers=headers, data=transaction_values)
-        logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
+        logging.info('Info AZURE ALL VALUE DATA: ' + str(response.text))
         return json.loads(response.text)
 
     def get_array_payment_info(self):
