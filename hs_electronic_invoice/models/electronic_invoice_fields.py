@@ -836,9 +836,8 @@ class electronic_invoice_fields(models.Model):
             if item.discount > 0:
                 precioDescuento = str(
                     (float(item.price_unit) * float(item.discount)) / 100)
-
-        #logging.info("Descuento:" + str(precioDescuento))
-        self.total_precio_descuento += float(precioDescuento)
+                #logging.info("Descuento:" + str(precioDescuento))
+                self.total_precio_descuento += float(precioDescuento)
 
         if(len(self.amount_by_group) > 1):
             retencion = {
