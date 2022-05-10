@@ -49,7 +49,7 @@
 
   <!--<menuitem id="electronic_invoice_menu_root" name="Factura Electrónica" sequence="3" parent="account.menu_finance_configuration"/>-->
   <!-- menu categories -->
-  <menuitem id="electronic_invoice_menu_6" name="Configurar Distritos"  parent="electronic_invoice_menu_root" sequence="6" action="electronic_invoice_district_action_window"/>
+  <menuitem id="electronic_invoice_menu_6" name="Administrar Distritos"  parent="electronic_invoice_menu_root" sequence="6" action="electronic_invoice_district_action_window"/>
   <!-- <menuitem id="report_reconciliation_menu" name="Reporte Conciliación"  parent="bank_reconciliation_menu_root" sequence="2" action="bank_reconciliation_action_window"/> -->
 
   </data>
