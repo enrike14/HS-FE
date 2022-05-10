@@ -258,7 +258,7 @@ class electronic_invoice_fields(models.Model):
             # set the invoice_items length
             cantidad_items = len(invoice_items)
             # Send the array of items and build the array of objects
-       # self.get_items_invoice_info()
+           # self.get_items_invoice_info()
             info_items_array = self.set_array_item_object(
                 invoice_items)  # return array of items objects
 
@@ -825,6 +825,7 @@ class electronic_invoice_fields(models.Model):
             tokenPassword = config_document_obj.tokenPassword
             codigoSucursal = config_document_obj.codigoSucursalEmisor
             url_wsdl = config_document_obj.wsdl
+            self. puntoFacturacion = config_document_obj.puntoFacturacionFiscal
 
         monto_sin_impuesto = self.amount_untaxed
         monto_total_factura = self.amount_total
@@ -1105,7 +1106,7 @@ class electronic_invoice_fields(models.Model):
                     'valorTasa': item.product_id.valorTasa,
                 })
                 #self.narration if self.narration else "",
-       # logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
+           # logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
         headers = {
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
