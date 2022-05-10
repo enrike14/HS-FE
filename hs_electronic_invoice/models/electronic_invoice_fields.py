@@ -258,7 +258,7 @@ class electronic_invoice_fields(models.Model):
             # set the invoice_items length
             cantidad_items = len(invoice_items)
             # Send the array of items and build the array of objects
-           # self.get_items_invoice_info()
+       # self.get_items_invoice_info()
             info_items_array = self.set_array_item_object(
                 invoice_items)  # return array of items objects
 
@@ -830,6 +830,15 @@ class electronic_invoice_fields(models.Model):
 
         monto_sin_impuesto = self.amount_untaxed
         monto_total_factura = self.amount_total
+
+        precioDescuento = '0'
+        for item in self.invoice_line_ids:
+            if item.discount > 0:
+                precioDescuento = str(
+                    (float(item.price_unit) * float(item.discount)) / 100)
+
+        #logging.info("Descuento:" + str(precioDescuento))
+        self.total_precio_descuento += float(precioDescuento)
 
         if(len(self.amount_by_group) > 1):
             retencion = {
