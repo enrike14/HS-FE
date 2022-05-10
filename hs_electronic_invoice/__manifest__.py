@@ -29,6 +29,7 @@
         "views/views_customers_field.xml",
         "views/views_fe_cpbs.xml",
         "views/views_fe_province.xml",
+        "views/views_fe_district.xml",
     ],
     # only loaded in demonstration mode
     "demo": [

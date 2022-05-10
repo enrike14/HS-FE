@@ -6,7 +6,7 @@ class FEProvince(models.Model):
 	code = fields.Char(string='Código', size=3, required=True, translate=True)
 	name = fields.Char(string='Nombre', size=255, required=True, translate=True)
 	country_id = fields.Many2one('res.country', string='País', required=False, translate=True, compute='_get_country_id', store=True, ondelete='cascade')
-	district_ids = fields.One2many('neonety.district', 'province_id', string='Distritos')
+	district_ids = fields.One2many('fe.district', 'province_id', string='Distritos')
 
 	@api.depends('name')
 	def _get_country_id(self):

@@ -4,3 +4,4 @@ access_electronic_invoice_logs,access.electronic.invoice.logs,model_electronic_i
 access_electronic_invoice_moves,access.electronic.invoice.moves,model_electronic_invoice_moves,base.group_user,1,1,1,1
 access_electronic_invoice_cpbs,access.electronic.invoice.cpbs,model_electronic_invoice_cpbs,base.group_user,1,1,1,1
 access_electronic_invoice_province,access.electronic.invoice.province,model_electronic_invoice_province,base.group_user,1,1,1,1
+access_electronic_invoice_district,access.electronic.invoice.district,model_electronic_invoice_district,base.group_user,1,1,1,1
