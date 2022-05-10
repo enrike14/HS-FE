@@ -805,6 +805,7 @@ class electronic_invoice_fields(models.Model):
     def send_fiscal_doc(self):
         url = self.hsfeURLstr + "api/send"
         original_invoice_values = {}
+        retencion = {}
         original_invoice_id = self.env["account.move"].search(
             [('id', '=', self.reversed_entry_id.id)], limit=1)
 
@@ -830,6 +831,12 @@ class electronic_invoice_fields(models.Model):
         monto_sin_impuesto = self.amount_untaxed
         monto_total_factura = self.amount_total
 
+        if(len(self.amount_by_group) > 1):
+            retencion = {
+                'codigoRetencion': "2",
+                'montoRetencion':  str('%.2f' % round((monto_total_factura - monto_sin_impuesto), 2))
+            }
+
         transaction_values = json.dumps({
             "wsdl_url": url_wsdl,
             "tokenEmpresa": tokenEmpresa,
@@ -842,10 +849,7 @@ class electronic_invoice_fields(models.Model):
             "listaFormaPago": self.get_array_payment_info(),
             "amount_residual": self.amount_residual,
             "original_invoice": original_invoice_values,
-            "retencion": {
-                'codigoRetencion': "2",
-                'montoRetencion':  str('%.2f' % round((monto_total_factura - monto_sin_impuesto), 2))
-            },
+            "retencion": retencion,
             "descuentoBonificacion": {
                 "descDescuento": "Descuentos aplicados a los productos",
                 "montoDescuento": str('%.2f' % round(self.total_precio_descuento, 2))}
@@ -929,7 +933,7 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
+        #logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
             "POST", url, headers=headers, data=transaction_values)
         #logging.info('Info AZURE TRANSACTION DATA: ' + str(response.text))
