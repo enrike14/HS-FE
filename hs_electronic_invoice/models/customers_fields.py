@@ -24,6 +24,13 @@ class customers_fields(models.Model):
 	digitoVerificadorRUC=fields.Char(string="digitoVerificadorRUC")
 	razonSocial=fields.Char(string="Razón Social")
 	direccion=fields.Char(string="Dirección")
+	#ubicacion change
+	neonety_country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
+	country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
+	province_id = fields.Many2one('electronic.invoice.province', string='Provincia')
+	district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
+	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
+	#codigo
 	CodigoUbicacion=fields.Char(string="Codigo Ubicación")
 	provincia=fields.Char(string="Provincia")
 	distrito=fields.Char(string="Distrito")
@@ -47,4 +54,9 @@ class customers_fields(models.Model):
 			self.tipoContribuyente='1'
 		else:
 			self.tipoContribuyente=''
+	
+	def _get_country_id(self):
+		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
+		country_id = self._cr.fetchone()
+		return country_id
 		
