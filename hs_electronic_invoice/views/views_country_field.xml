@@ -8,7 +8,7 @@
 			<field name="model">res.country</field>
 			<field name="inherit_id" ref="base.view_country_form"/>
 			<field name="arch" type="xml">
-            <xpath expr="//field[@name='code']" position="before" >
+            <xpath expr="//field[@name='code']" position="after" >
 			    <field name="province_ids"/>				
 			</xpath>
 		</field>
