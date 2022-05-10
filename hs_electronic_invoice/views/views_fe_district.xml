@@ -10,7 +10,7 @@
         <tree>
             <field name="code" />
               <field name="name" />
-          
+          <field name="province_id" />
         </tree>
       </field>
     </record>
@@ -29,6 +29,8 @@
             <group>
                <field name="code" />
               <field name="name" />
+                <field name="province_id" />
+              
             </group>
           </sheet>
         </form>
