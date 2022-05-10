@@ -1086,7 +1086,7 @@ class electronic_invoice_fields(models.Model):
 
                 itemLoad.append({
                     'typeCustomers': str(self.partner_id.TipoClienteFE),
-                    'categoriaProducto': str(item.product_id.categoryProduct),
+                    'categoriaProducto': str(item.product_id.categoryProduct) if item.product_id.categoryProduct else "",
                     'descripcion': str(item.product_id.name),
                     'codigo': str(item.product_id.default_code) if item.product_id.default_code else "",
                     'arrayTaxes': array_tax_item,
