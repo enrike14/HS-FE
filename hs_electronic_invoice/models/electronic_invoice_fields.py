@@ -1110,7 +1110,7 @@ class electronic_invoice_fields(models.Model):
                     'valorTasa': item.product_id.valorTasa,
                 })
                 #self.narration if self.narration else "",
-           # logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
+            logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
         headers = {
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
