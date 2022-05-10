@@ -11,3 +11,4 @@ from . import customers_fields
 from . import electronic_invoice_cpbs
 from . import electronic_invoice_province
 from . import electronic_invoice_district
+from . import electronic_invoice_district
