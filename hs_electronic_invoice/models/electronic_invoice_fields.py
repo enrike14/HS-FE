@@ -258,7 +258,7 @@ class electronic_invoice_fields(models.Model):
             # set the invoice_items length
             cantidad_items = len(invoice_items)
             # Send the array of items and build the array of objects
-       # self.get_items_invoice_info()
+           # self.get_items_invoice_info()
             info_items_array = self.set_array_item_object(
                 invoice_items)  # return array of items objects
 
@@ -811,9 +811,7 @@ class electronic_invoice_fields(models.Model):
 
         if original_invoice_id:
             original_invoice_values = {
-                "codigoSucursalEmisor": codigoSucursal,
-                "numeroDocumentoFiscal": original_invoice_id.lastFiscalNumber,
-                "puntoFacturacionFiscal": self.puntoFacturacion,
+                "lastFiscalNumber": original_invoice_id.lastFiscalNumber,
                 "tipoDocumento": original_invoice_id.tipo_documento_fe,
                 "tipoEmision": original_invoice_id.tipo_emision_fe
             }
@@ -863,12 +861,41 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("Transactions Values HS HERMEC" + str(all_values))
-        response = requests.request(
+        res = requests.request(
             "POST", url, headers=headers, data=all_values)
         logging.info('Info AZURE ALL VALUE DATA: ' +
-                     str(json.loads(response.text)))
-        return json.loads(response.text)
+                     str(json.loads(res.text)))
+
+        if(int(res['codigo']) == 200):
+            self.insert_data_to_electronic_invoice_moves(
+                res, self.lastFiscalNumber)
+
+            tipo_doc_text = "Factura Electrónica Creada" + \
+                " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
+                res.qr+"'>"+str(res.cufe)+")</a><br>"
+            if self.tipo_documento_fe == "04":
+                tipo_doc_text = "Nota de Crédito Creada" + \
+                    " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
+                    res.qr+"'>"+str(res.cufe)+")</a><br>"
+
+            if self.tipo_documento_fe == "09":
+                tipo_doc_text = "Reembolso Creado Correctamente."
+
+            body = tipo_doc_text
+
+            self.message_post(body=body)
+
+            # add QR in invoice info
+            self.generate_qr(res)
+
+            time.sleep(6)
+            self.download_pdf(self, self.lastFiscalNumber, res['pdf_document'])
+            # self.action_download_fe_pdf(self.lastFiscalNumber)
+        else:
+            self.insert_data_to_logs(res, self.lastFiscalNumber)
+            body = "Factura Electrónica No Generada:<br> <b style='color:red;'>Error " + \
+                res.codigo+":</b> ("+res.mensaje+")<br>"
+            self.message_post(body=body)
 
     def get_array_payment_info(self):
         url = self.hsfeURLstr + "api/listpayments"
@@ -996,7 +1023,7 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
+        #logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
             "POST", url, headers=headers, data=sub_total_values)
         #logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
@@ -1115,7 +1142,7 @@ class electronic_invoice_fields(models.Model):
                     'valorTasa': item.product_id.valorTasa,
                 })
                 #self.narration if self.narration else "",
-            logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
+            #logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
         headers = {
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
