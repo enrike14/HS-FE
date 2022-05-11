@@ -3,7 +3,7 @@
   <data>
     <!-- explicit list view definition -->
 
-    <record model="ir.ui.view" id="electronic_invoice_sector_list_sector">
+    <record model="ir.ui.view" id="electronic_invoice_sector_list">
       <field name="name">electronic.invoice.sector.list</field>
       <field name="model">electronic.invoice.sector</field>
       <field name="arch" type="xml">
@@ -51,7 +51,7 @@
 
   <!--<menuitem id="electronic_invoice_menu_root" name="Factura Electrónica" sequence="3" parent="account.menu_finance_configuration"/>-->
   <!-- menu categories -->
-  <menuitem id="electronic_invoice_menu_sector" name="Administrar Corregimiento"  parent="electronic_invoice_menu_root" sequence="7" action="electronic_invoice_sector_action_window"/>
+  <menuitem id="electronic_invoice_menu" name="Administrar Corregimiento"  parent="electronic_invoice_menu_root" sequence="7" action="electronic_invoice_sector_action_window"/>
   <!-- <menuitem id="report_reconciliation_menu" name="Reporte Conciliación"  parent="bank_reconciliation_menu_root" sequence="2" action="bank_reconciliation_action_window"/> -->
 
   </data>
