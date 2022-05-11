@@ -29,8 +29,8 @@
             <group>
                <field name="code" />
               <field name="name" />
-                <field name="province_id" />
-              
+              <field name="province_id" />
+              <field name="sector_ids" />
             </group>
           </sheet>
         </form>

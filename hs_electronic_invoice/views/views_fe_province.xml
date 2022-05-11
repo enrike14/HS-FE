@@ -10,7 +10,6 @@
         <tree>
             <field name="code" />
               <field name="name" />
-              <field name="country_id" />
           
         </tree>
       </field>
