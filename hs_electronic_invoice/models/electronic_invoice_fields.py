@@ -828,24 +828,20 @@ class electronic_invoice_fields(models.Model):
             url_wsdl = config_document_obj.wsdl
             self. puntoFacturacion = config_document_obj.puntoFacturacionFiscal
 
-        monto_sin_impuesto = self.amount_untaxed
-        monto_total_factura = self.amount_total
-
         precioDescuento = '0'
         for item in self.invoice_line_ids:
             if item.discount > 0:
                 precioDescuento = str(
                     (float(item.price_unit) * float(item.discount)) / 100)
-                #logging.info("Descuento:" + str(precioDescuento))
                 self.total_precio_descuento += float(precioDescuento)
 
         if(len(self.amount_by_group) > 1):
             retencion = {
                 'codigoRetencion': "2",
-                'montoRetencion':  str('%.2f' % round((monto_total_factura - monto_sin_impuesto), 2))
+                'montoRetencion':  str('%.2f' % round((self.amount_total - self.amount_untaxed), 2))
             }
 
-        transaction_values = json.dumps({
+        all_values = json.dumps({
             "wsdl_url": url_wsdl,
             "tokenEmpresa": tokenEmpresa,
             "tokenPassword": tokenPassword,
@@ -867,10 +863,11 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        logging.info("Transactions Values HS HERMEC" + str(transaction_values))
+        logging.info("Transactions Values HS HERMEC" + str(all_values))
         response = requests.request(
-            "POST", url, headers=headers, data=transaction_values)
-        logging.info('Info AZURE ALL VALUE DATA: ' + str(response.text))
+            "POST", url, headers=headers, data=all_values)
+        logging.info('Info AZURE ALL VALUE DATA: ' +
+                     str(json.loads(response.text)))
         return json.loads(response.text)
 
     def get_array_payment_info(self):
