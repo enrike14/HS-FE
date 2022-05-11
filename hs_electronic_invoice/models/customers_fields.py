@@ -70,8 +70,8 @@ class customers_fields(models.Model):
 	@api.onchange('province_id')
 	def onchange_province_id(self):
 		res = {}
-		self.district_id=""
-		self.sector_id=""
+		# self.district_id=""
+		# self.sector_id=""
 		if self.province_id:
 			self._cr.execute('SELECT electronic_invoice_district.id, electronic_invoice_district.name FROM electronic_invoice_district WHERE electronic_invoice_district.province_id = %s AND electronic_invoice_district.country_id = ( SELECT electronic_invoice_province.country_id FROM electronic_invoice_province WHERE electronic_invoice_province.id = %s) ', (self.province_id.id, self.province_id.id))
 			districts = self._cr.fetchall()
@@ -85,7 +85,7 @@ class customers_fields(models.Model):
 	@api.onchange('district_id')
 	def onchange_district_id(self):
 		res = {}
-		self.sector_id=""
+		# self.sector_id=""
 		if self.district_id:
 			self._cr.execute('SELECT electronic_invoice_sector.id, electronic_invoice_sector.name FROM electronic_invoice_sector WHERE electronic_invoice_sector.district_id = %s AND  electronic_invoice_sector.country_id = ( SELECT electronic_invoice_district.country_id FROM electronic_invoice_district WHERE electronic_invoice_district.id = %s) ', (self.district_id.id, self.district_id.id))
 			sectors = self._cr.fetchall()
