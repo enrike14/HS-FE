@@ -16,8 +16,8 @@
 										<field name="fechaFabricacion"  attrs="{'invisible':[('categoryProduct','not in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))], 'required':[('categoryProduct','in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))]}"/>
 									<field name="fechaCaducidad"  attrs="{'invisible':[('categoryProduct','not in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))], 'required':[('categoryProduct','in',('Materia prima Farmacéutica', 'Medicina', 'Alimento'))]}"/>
 									<field name="codigoCPBSAut" />
-									<field name="codigoCPBSAbrev"/>
-									<field name="codigoCPBS" />
+									<field name="codigoCPBSAbrev" invisible="1"/>
+									<field name="codigoCPBS" invisible="1" />
 									<field name="unidadMedida"/>
 									<field name="infoItem"/>
 									<field name="precioAcarreo"/>
