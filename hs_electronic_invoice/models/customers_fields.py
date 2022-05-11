@@ -34,9 +34,9 @@ class customers_fields(models.Model):
 	#ubicacion change
 	#neonety_country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
 	country_id = fields.Many2one('res.country', string='País')
-	province_id = fields.Many2one('electronic.invoice.province', string='Provincia')
-	district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
-	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
+	# province_id = fields.Many2one('electronic.invoice.province', string='Provincia')
+	# district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
+	# sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
 	#codigo
 	CodigoUbicacion=fields.Char(string="Codigo Ubicación")
 	provincia=fields.Char(string="Provincia")
