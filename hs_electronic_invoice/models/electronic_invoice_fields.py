@@ -996,7 +996,7 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-        #logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
+        logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
             "POST", url, headers=headers, data=sub_total_values)
         #logging.info('Info AZURE SUBTOTALES: ' + str(response.text))
@@ -1099,9 +1099,9 @@ class electronic_invoice_fields(models.Model):
                     'precioUnitario': item.price_unit,
                     'precioUnitarioDescuento': item.discount,
                     'codigoGTIN':  str(item.product_id.codigoGTIN) if item.product_id.codigoGTIN else "",
-                    'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "0",
+                    'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "",
                     'codigoGTINInv': item.product_id.codigoGTINInv,
-                    'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "0",
+                    'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "",
                     'fechaFabricacion': str(item.product_id.fechaFabricacion).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaFabricacion else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
                     'fechaCaducidad': str(item.product_id.fechaCaducidad).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaCaducidad else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
                     'codigoCPBS': str(item.product_id.codigoCPBS),
