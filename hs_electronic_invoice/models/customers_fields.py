@@ -81,7 +81,7 @@ class customers_fields(models.Model):
 			for district in districts:
 				ids.append(district[0])
 			res['domain'] = {'district_id': [('id', 'in', ids)]}
-		self.CodigoUbicacion=str(self.provincia+"-"+self.distrito+"-"+self.corregimiento)
+		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
 		return res
 
 	@api.onchange('district_id')
@@ -96,10 +96,10 @@ class customers_fields(models.Model):
 			for sector in sectors:
 				ids.append(sector[0])
 			res['domain'] = {'sector_id': [('id', 'in', ids)]}
-		self.CodigoUbicacion=str(self.provincia+"-"+self.distrito+"-"+self.corregimiento)
+		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
 		return res
 	
 	@api.onchange('sector_id')
 	def onchange_sector_id(self):
-		self.CodigoUbicacion=str(self.provincia+"-"+self.distrito+"-"+self.corregimiento)
+		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
 		
