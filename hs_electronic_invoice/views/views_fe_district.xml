@@ -40,7 +40,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="electronic_invoice_district_action_window">
-      <field name="name">Registros - Factura Electrónica</field>
+      <field name="name">Registros - Distritos</field>
       <field name="res_model">electronic.invoice.district</field>
       <field name="view_mode">tree,form</field>
   </record>

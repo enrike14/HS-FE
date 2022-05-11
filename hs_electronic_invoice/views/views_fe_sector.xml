@@ -42,7 +42,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="electronic_invoice_sector_action_window">
-      <field name="name">Registros - Factura Electrónica</field>
+      <field name="name">Registros - Corregimientos</field>
       <field name="res_model">electronic.invoice.sector</field>
       <field name="view_mode">tree,form</field>
   </record>
