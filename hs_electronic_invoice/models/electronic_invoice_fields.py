@@ -865,19 +865,21 @@ class electronic_invoice_fields(models.Model):
         logging.info("VALUES SEND" + str(all_values))
         res = requests.request(
             "POST", url, headers=headers, data=all_values)
-        logging.info("RES" + str(res.text.codigo))
+        #logging.info("RES" + str(res.text.codigo))
 
-        if(int(res.text.codigo) == 200):
+        respuesta = res.text.dict()
+
+        if(int(respuesta["codigo"]) == 200):
             self.insert_data_to_electronic_invoice_moves(
                 res, self.lastFiscalNumber)
 
             tipo_doc_text = "Factura Electrónica Creada" + \
                 " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                res.text['qr']+"'>"+str(res.text['cufe'])+")</a><br>"
+                respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
             if self.tipo_documento_fe == "04":
                 tipo_doc_text = "Nota de Crédito Creada" + \
                     " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                    res.text['qr']+"'>"+str(res.text['cufe'])+")</a><br>"
+                    respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
 
             if self.tipo_documento_fe == "09":
                 tipo_doc_text = "Reembolso Creado Correctamente."
