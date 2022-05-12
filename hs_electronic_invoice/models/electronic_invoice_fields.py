@@ -865,9 +865,9 @@ class electronic_invoice_fields(models.Model):
         logging.info("VALUES SEND" + str(all_values))
         res = requests.request(
             "POST", url, headers=headers, data=all_values)
-        logging.info("RES" + str(res.text['codigo']))
+        logging.info("RES" + str(res.text.codigo))
 
-        if(int(res.text['codigo']) == 200):
+        if(int(res.text.codigo) == 200):
             self.insert_data_to_electronic_invoice_moves(
                 res, self.lastFiscalNumber)
 
