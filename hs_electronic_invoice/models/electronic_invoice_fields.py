@@ -872,7 +872,7 @@ class electronic_invoice_fields(models.Model):
 
         if(int(respuesta["codigo"]) == 200):
             self.insert_data_to_electronic_invoice_moves(
-                res, self.lastFiscalNumber)
+                respuesta, self.lastFiscalNumber)
 
             tipo_doc_text = "Factura Electrónica Creada" + \
                 " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
@@ -890,16 +890,16 @@ class electronic_invoice_fields(models.Model):
             self.message_post(body=body)
 
             # add QR in invoice info
-            self.generate_qr(res)
+            self.generate_qr(respuesta)
 
             time.sleep(6)
             self.download_pdf(self, self.lastFiscalNumber,
-                              res.text['pdf_document'])
+                              respuesta.text['pdf_document'])
             # self.action_download_fe_pdf(self.lastFiscalNumber)
         else:
-            self.insert_data_to_logs(res, self.lastFiscalNumber)
+            self.insert_data_to_logs(respuesta, self.lastFiscalNumber)
             body = "Factura Electrónica No Generada:<br> <b style='color:red;'>Error " + \
-                res.codigo+":</b> ("+res.mensaje+")<br>"
+                respuesta['codigo']+":</b> ("+respuesta['mensaje']+")<br>"
             self.message_post(body=body)
 
     def get_array_payment_info(self):
@@ -1041,7 +1041,7 @@ class electronic_invoice_fields(models.Model):
             box_size=10,
             border=4,
         )
-        qr.add_data(res.qr)
+        qr.add_data(res['qr'])
         qr.make(fit=True)
         img = qr.make_image()
         temp = BytesIO()
