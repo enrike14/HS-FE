@@ -867,7 +867,7 @@ class electronic_invoice_fields(models.Model):
             "POST", url, headers=headers, data=all_values)
         #logging.info("RES" + str(res.text.codigo))
 
-        respuesta = res.dict()
+        respuesta = json.loads(res.text)
         logging.info("RES" + str(respuesta))
 
         if(int(respuesta["codigo"]) == 200):
