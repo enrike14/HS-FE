@@ -997,12 +997,12 @@ class electronic_invoice_fields(models.Model):
             'Content-Type': 'application/json',
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
-
+        logging.info("Cliente Enviado:" + str(client_values))
         response = requests.request(
             "POST", url, headers=headers, data=client_values)
         #logging.info("URL Odoo:" + str(request.httprequest.host_url))
-        #logging.info("Cliente Enviado:" + str(client_values))
-        #logging.info('Info AZURE CLIENTE: ' + str(response.text))
+
+        logging.info('Info AZURE CLIENTE: ' + str(response.text))
         return json.loads(response.text)
 
     def get_sub_totals(self):
