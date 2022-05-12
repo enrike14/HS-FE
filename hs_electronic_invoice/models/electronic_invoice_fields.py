@@ -865,8 +865,6 @@ class electronic_invoice_fields(models.Model):
         logging.info("VALUES SEND" + str(all_values))
         res = requests.request(
             "POST", url, headers=headers, data=all_values)
-        logging.info('Info AZURE ALL VALUE DATA: ' +
-                     str(json.loads(res)))
 
         if(int(res['codigo']) == 200):
             self.insert_data_to_electronic_invoice_moves(
