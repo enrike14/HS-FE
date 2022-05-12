@@ -894,7 +894,7 @@ class electronic_invoice_fields(models.Model):
 
             time.sleep(6)
             self.download_pdf(self, self.lastFiscalNumber,
-                              respuesta.text['pdf_document'])
+                              respuesta['pdf_document'])
             # self.action_download_fe_pdf(self.lastFiscalNumber)
         else:
             self.insert_data_to_logs(respuesta, self.lastFiscalNumber)
