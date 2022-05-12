@@ -1129,7 +1129,7 @@ class electronic_invoice_fields(models.Model):
                     'precioUnitarioDescuento': item.discount,
                     'codigoGTIN':  str(item.product_id.codigoGTIN) if item.product_id.codigoGTIN else "",
                     'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "",
-                    'codigoGTINInv': item.product_id.codigoGTINInv,
+                    'codigoGTINInv': item.product_id.codigoGTINInv if item.product_id.cantGTINCom else "",
                     'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "",
                     'fechaFabricacion': str(item.product_id.fechaFabricacion).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaFabricacion else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
                     'fechaCaducidad': str(item.product_id.fechaCaducidad).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaCaducidad else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
