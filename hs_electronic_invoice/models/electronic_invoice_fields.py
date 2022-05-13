@@ -1074,10 +1074,10 @@ class electronic_invoice_fields(models.Model):
 
         # Save the move info
         self.env['electronic.invoice.moves'].create({
-            'cufe': res['cufe'] if res['cufe'] else "",
-            'qr': res['qr'] if res['qr'] else "",
+            'cufe': res['cufe'] if 'cufe' in res else "",
+            'qr': res['qr'] if 'qr' in res else "",
             'invoiceNumber': invoice_number,
-            'fechaRDGI': res['fechaRecepcionDGI'] if res['fechaRecepcionDGI'] else "",
+            'fechaRDGI': res['fechaRecepcionDGI'] if 'fechaRecepcionDGI' in res else "",
             'numeroDocumentoFiscal':  self.lastFiscalNumber,
             'puntoFacturacionFiscal': self.puntoFactFiscal,
         })
