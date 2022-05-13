@@ -875,20 +875,15 @@ class electronic_invoice_fields(models.Model):
 
             tipo_doc_text = respuesta['mensaje']
 
-            try:
-                if 'qr' in res and 'cufe' in res:
-                    tipo_doc_text = "Factura Electrónica Creada" + \
+            if 'qr' in res and 'cufe' in res:
+                tipo_doc_text = "Factura Electrónica Creada" + \
+                    " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
+                    respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
+                if self.tipo_documento_fe == "04":
+                    tipo_doc_text = "Nota de Crédito Creada" + \
                         " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                        respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
-                    if self.tipo_documento_fe == "04":
-                        tipo_doc_text = "Nota de Crédito Creada" + \
-                            " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                            respuesta['qr']+"'>" + \
-                            str(respuesta['cufe'])+")</a><br>"
-            except:
-                body = "Ha ocurrido un <br> <b style='color:red;'>Error:" + \
-                    respuesta['codigo']+":</b> ("+respuesta['mensaje']+")<br>"
-                self.message_post(body=body)
+                        respuesta['qr']+"'>" + \
+                        str(respuesta['cufe'])+")</a><br>"
 
             if self.tipo_documento_fe == "09":
                 tipo_doc_text = "Reembolso Creado Correctamente."
