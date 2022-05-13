@@ -865,7 +865,6 @@ class electronic_invoice_fields(models.Model):
         logging.info("VALUES SEND" + str(all_values))
         res = requests.request(
             "POST", url, headers=headers, data=all_values)
-        #logging.info("RES" + str(res.text.codigo))
 
         respuesta = json.loads(res.text)
         logging.info("RES" + str(respuesta))
@@ -874,13 +873,22 @@ class electronic_invoice_fields(models.Model):
             self.insert_data_to_electronic_invoice_moves(
                 respuesta, self.lastFiscalNumber)
 
-            tipo_doc_text = "Factura Electrónica Creada" + \
-                " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
-            if self.tipo_documento_fe == "04":
-                tipo_doc_text = "Nota de Crédito Creada" + \
-                    " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
-                    respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
+            tipo_doc_text = ""
+
+            try:
+                if respuesta['qr']:
+                    tipo_doc_text = "Factura Electrónica Creada" + \
+                        " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
+                        respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
+                    if self.tipo_documento_fe == "04":
+                        tipo_doc_text = "Nota de Crédito Creada" + \
+                            " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
+                            respuesta['qr']+"'>" + \
+                            str(respuesta['cufe'])+")</a><br>"
+            except:
+                body = "Ha ocurrido un <br> <b style='color:red;'>Error:" + \
+                    respuesta['codigo']+":</b> ("+respuesta['mensaje']+")<br>"
+                self.message_post(body=body)
 
             if self.tipo_documento_fe == "09":
                 tipo_doc_text = "Reembolso Creado Correctamente."
@@ -892,7 +900,6 @@ class electronic_invoice_fields(models.Model):
             # add QR in invoice info
             self.generate_qr(respuesta)
 
-            # time.sleep(6)
             self.download_pdf(self.lastFiscalNumber,
                               respuesta['pdf_document'])
             # self.action_download_fe_pdf(self.lastFiscalNumber)
