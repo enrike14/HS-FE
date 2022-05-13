@@ -871,7 +871,7 @@ class electronic_invoice_fields(models.Model):
 
         if(int(respuesta["codigo"]) == 200):
             self.insert_data_to_electronic_invoice_moves(
-                respuesta, self.lastFiscalNumber)
+                respuesta, self.name)
 
             tipo_doc_text = ""
 
@@ -904,7 +904,7 @@ class electronic_invoice_fields(models.Model):
                               respuesta['pdf_document'])
             # self.action_download_fe_pdf(self.lastFiscalNumber)
         else:
-            self.insert_data_to_logs(respuesta, self.lastFiscalNumber)
+            self.insert_data_to_logs(respuesta, self.name)
             body = "Factura Electrónica No Generada:<br> <b style='color:red;'>Error " + \
                 respuesta['codigo']+":</b> ("+respuesta['mensaje']+")<br>"
             self.message_post(body=body)
