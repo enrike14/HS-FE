@@ -1071,20 +1071,13 @@ class electronic_invoice_fields(models.Model):
         })
 
     def insert_data_to_electronic_invoice_moves(self, res, invoice_number):
-        # Save the log info
-        self.env['electronic.invoice.logs'].create({
-            'codigo': res['codigo'],
-            'mensaje': res['mensaje'],
-            'resultado': res['resultado'],
-            'invoiceNumber': invoice_number
-        })
 
         # Save the move info
         self.env['electronic.invoice.moves'].create({
-            'cufe': res['cufe'],
-            'qr': res['qr'],
+            'cufe': res['cufe'] if res['cufe'] else "",
+            'qr': res['qr'] if res['qr'] else "",
             'invoiceNumber': invoice_number,
-            'fechaRDGI': res['fechaRecepcionDGI'],
+            'fechaRDGI': res['fechaRecepcionDGI'] if res['fechaRecepcionDGI'] else "",
             'numeroDocumentoFiscal':  self.lastFiscalNumber,
             'puntoFacturacionFiscal': self.puntoFactFiscal,
         })
