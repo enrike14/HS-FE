@@ -873,10 +873,10 @@ class electronic_invoice_fields(models.Model):
             self.insert_data_to_electronic_invoice_moves(
                 respuesta, self.name)
 
-            tipo_doc_text = ""
+            tipo_doc_text = respuesta['mensaje']
 
             try:
-                if respuesta['qr']:
+                if 'qr' in res and 'cufe' in res:
                     tipo_doc_text = "Factura Electrónica Creada" + \
                         " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
                         respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
