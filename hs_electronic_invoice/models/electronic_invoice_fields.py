@@ -898,7 +898,8 @@ class electronic_invoice_fields(models.Model):
             self.message_post(body=body)
 
             # add QR in invoice info
-            self.generate_qr(respuesta)
+            if 'qr' in res:
+                self.generate_qr(respuesta)
 
             self.download_pdf(self.lastFiscalNumber,
                               respuesta['pdf_document'])
