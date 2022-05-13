@@ -875,7 +875,7 @@ class electronic_invoice_fields(models.Model):
 
             tipo_doc_text = respuesta['mensaje']
 
-            if 'qr' in res and 'cufe' in res:
+            if 'qr' in respuesta and 'cufe' in respuesta:
                 tipo_doc_text = "Factura Electrónica Creada" + \
                     " :<br> <b>CUFE:</b> (<a target='_blank' href='" + \
                     respuesta['qr']+"'>"+str(respuesta['cufe'])+")</a><br>"
@@ -893,7 +893,7 @@ class electronic_invoice_fields(models.Model):
             self.message_post(body=body)
 
             # add QR in invoice info
-            if 'qr' in res:
+            if 'qr' in respuesta:
                 self.generate_qr(respuesta)
 
             self.download_pdf(self.lastFiscalNumber,
