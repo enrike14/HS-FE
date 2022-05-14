@@ -17,6 +17,8 @@ class electronic_invoice(models.Model):
     numeroDocumentoFiscal = fields.Integer(string="No. Documento Fiscal")
     puntoFacturacionFiscal = fields.Char(string="Punto Facturación Fiscal")
     hsfeURL = fields.Char(string="URL HsFE Services")
+    hsUser = fields.Char(string="User HsFE Services")
+    hsPassword = fields.Char(string="Password HsFE Services")
 
 
 """     def action_bank_reconciliation_change(self):
