@@ -19,7 +19,7 @@ class product_field(models.Model):
 	codigoCPBSAut = fields.Many2one('electronic.invoice.cpbs',string="Código CPBS")
 	codigoCPBSAbrev = fields.Char(string="Código CPBS Abrev",related='codigoCPBSAut.segmentoID')
 	codigoCPBS = fields.Char(string="Código CPBS",related='codigoCPBSAut.familiaID')
-	unidadMedidaCPBSAut = fields.Many2one(string="Unidad de Medida CPBS")
+	unidadMedidaCPBSAut = fields.Many2one('electronic.invoice.measures',string="Unidad de Medida CPBS")
 	unidadMedidaCPBS = fields.Char(string="Unidad de Medida CPBS",related='unidadMedidaCPBSAut.name')
 	codigoGTIN = fields.Char(string="Código GTIN",size=14,help=mensaje_codigo)
 	codigoGTINInv = fields.Char(string="Código GTIN para la unidad de inventario",size=14,help=mensaje_codigo)
