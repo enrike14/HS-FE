@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 class electronic_invoice_measures(models.Model):
-	_name = "electronic.invoice.cpbs"
+	_name = "electronic.invoice.measures"
 	name= fields.Char(string="Nombre",size=20)
 	symbol= fields.Char(string="Simbolo")
 	def name_get(self):

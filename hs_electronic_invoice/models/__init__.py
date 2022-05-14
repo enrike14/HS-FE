@@ -9,7 +9,7 @@ from . import product_variants_field
 from . import account_move_reversal
 from . import customers_fields
 from . import country_fields
-#from . import electronic_invoice_cpbs
+from . import electronic_invoice_cpbs
 from . import electronic_invoice_province
 from . import electronic_invoice_district
 from . import electronic_invoice_sector
