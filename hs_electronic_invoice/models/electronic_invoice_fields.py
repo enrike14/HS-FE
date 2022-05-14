@@ -577,3 +577,6 @@ class electronic_invoice_fields(models.Model):
         response = requests.request(
             "POST", url, headers=headers, data=json.dumps(dataJsonItem))
         return json.loads(response.text)
+
+    def get_pdf_fe(self):
+        self.pagadoCompleto = "Finalizado"
