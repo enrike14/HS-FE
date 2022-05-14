@@ -16,7 +16,7 @@ class product_field(models.Model):
 	fechaFabricacion = fields.Date(string='Fecha de Fabricación')
 	fechaCaducidad = fields.Date(string='Fecha de Caducidad')
 	codigoCPBSAut = fields.Many2one('electronic.invoice.cpbs',string="Código CPBS")
-	codigoCPBSAbrev = fields.Char(string="Código CPBS Abrev",related='codigoCPBSAut.segmentoID')
+	codigoCPBSAbrev = fields.Char(string="Código CPBS Abrev")
 	codigoCPBS = fields.Char(string="Código CPBS",related='codigoCPBSAut.familiaID')
 	district_id = fields.Many2one('neonety.district', string='Distrito', required=False, translate=True)
 	unidadMedidaCPBS = fields.Char(string="Unidad de Medida CPBS")

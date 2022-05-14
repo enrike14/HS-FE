@@ -27,7 +27,7 @@
         "views/views_product_field.xml",
         "views/views_product_variants_field.xml",
         "views/views_customers_field.xml",
-        # "views/views_fe_cpbs.xml",
+        "views/views_fe_cpbs.xml",
         "views/views_fe_province.xml",
         "views/views_fe_district.xml",
         "views/views_fe_sector.xml",
