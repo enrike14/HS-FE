@@ -579,3 +579,4 @@ class electronic_invoice_fields(models.Model):
 
     def get_pdf_fe(self):
         self.pagadoCompleto = "Finalizado"
+        # self.action_download_fe_pdf(self.lastFiscalNumber)
