@@ -24,7 +24,8 @@
 									<field name="precioSeguro"/>
                                 </group>
                                 <group>
-									<field name="unidadMedidaCPBS"/>
+									<field name="unidadMedidaCPBSAut" />
+									<field name="unidadMedidaCPBS"  invisible="1"/>
 									<field name="codigoGTIN"/>
 									 <field name="cantGTINCom"/>
 									<field name="codigoGTINInv"/>
