@@ -17,6 +17,8 @@
           <field name="numeroDocumentoFiscal" />
           <field name="puntoFacturacionFiscal" />
           <field name="hsfeURL" />
+          <field name="hsUser" />
+          <field name="hsPassword" password="True"/>
           
         </tree>
       </field>
@@ -43,7 +45,9 @@
                 <field name="codigoSucursalEmisor" />
                 <field name="numeroDocumentoFiscal" />
                 <field name="puntoFacturacionFiscal" />
-                  <field name="hsfeURL" />
+                <field name="hsfeURL" />
+                <field name="hsUser" />
+                <field name="hsPassword" password="True"/>
     
             </group>
           </sheet>
