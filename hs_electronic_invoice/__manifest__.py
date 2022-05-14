@@ -31,7 +31,9 @@
         "views/views_fe_province.xml",
         "views/views_fe_district.xml",
         "views/views_fe_sector.xml",
+        "views/views_fe_measures.xml",
         "views/views_country_field.xml",
+        
         
     ],
     # only loaded in demonstration mode
