@@ -23,14 +23,14 @@ class customers_fields(models.Model):
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
 	('03', 'Gobierno'),
-	('04', 'Extranjero')],string = 'Tipo Cliente FE')
+	('04', 'Extranjero')],string = 'Tipo Cliente')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
 	('2', 'Jurídico')],string = 'Tipo Contribuyente')
-	numeroRUC =fields.Char(string="Número RUC")
-	digitoVerificadorRUC=fields.Char(string="digitoVerificadorRUC")
-	razonSocial=fields.Char(string="Razón Social")
-	direccion=fields.Char(string="Dirección")
+	numeroRUC =fields.Char(string="Número RUC",size=20)
+	digitoVerificadorRUC=fields.Char(string="Digito Verificador RUC",size=2)
+	razonSocial=fields.Char(string="Razón Social",size=100)
+	direccion=fields.Char(string="Dirección",size=100)
 	#ubicacion change
 	#neonety_country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
 	country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
@@ -38,7 +38,7 @@ class customers_fields(models.Model):
 	district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
 	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
 	#codigo
-	CodigoUbicacion=fields.Char(string="Codigo Ubicación")
+	CodigoUbicacion=fields.Char(string="Codigo Ubicación",size=8)
 	provincia=fields.Char(string="Provincia",related='province_id.code')
 	distrito=fields.Char(string="Distrito",related='district_id.code')
 	corregimiento=fields.Char(string="Corregimiento",related='sector_id.code')
@@ -47,11 +47,11 @@ class customers_fields(models.Model):
 	('01', 'Pasaporte'),
 	('02', 'Numero Tributario'),
 	('99', 'Otro')],string = 'Tipo Identificación')
-	nroIdentificacionExtranjero=fields.Char(string="Nro. Identificación Extranjero")
-	paisExtranjero=fields.Char(string="País Extranjero")
+	nroIdentificacionExtranjero=fields.Char(string="Nro. de Pasaporte o Nro. de Identificación Tributaria Extranjera")
+	paisExtranjero=fields.Char(string="País Extranjero",size=50)
 	#telefono1	 ///correoElectronico1
 	pais=fields.Char(string="País")
-	paisOtro=fields.Char(string="País Otro")
+	paisOtro=fields.Char(string="País Otro",size=50)
 
 	@api.onchange('TipoClienteFE')
 	def on_change_tipoIdent(self):

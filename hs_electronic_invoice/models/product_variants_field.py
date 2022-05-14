@@ -34,7 +34,7 @@ class product_field(models.Model):
 	cantGTINComInv = fields.Float(string="	Cantidad del producto o servicio en el Código GTIN del ítem de comercialización (Inventario)")
 	unidadMedidaAut = fields.Many2one('electronic.invoice.measures',string="Unidad de Medida")
 	unidadMedida=fields.Char(string="Unidad Medida",related='unidadMedidaAut.name')
-	infoItem=fields.Char(string="Información de interés del emisor con respeto a un ítem de la FE")
+	infoItem=fields.Text(string="Información de interés del emisor con respeto a un ítem de la FE",size=5000)
 	precioAcarreo = fields.Float(string="Precio Acarreo")
 	precioSeguro = fields.Float(string="Precio Seguro")
 	

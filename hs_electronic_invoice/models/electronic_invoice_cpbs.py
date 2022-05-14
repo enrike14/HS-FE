@@ -8,9 +8,9 @@ from datetime import datetime
 
 class electronic_invoice_cpbs(models.Model):
 	_name = "electronic.invoice.cpbs"
-	segmentoID =  fields.Char(string="Segmento ID")
+	segmentoID =  fields.Char(string="Segmento ID",size=2)
 	segmento =  fields.Char(string="Segmento")
-	familiaID =  fields.Char(string="Familia ID")
+	familiaID =  fields.Char(string="Familia ID",size=4)
 	familia =  fields.Char(string="Familia")
 	def name_get(self):
 		result = []
