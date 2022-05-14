@@ -8,9 +8,11 @@
       <field name="model">electronic.invoice.measures</field>
       <field name="arch" type="xml">
         <tree>
+          <field name="measures" />
+            <field name="system" />
             <field name="name" />
-              <field name="symbol" />
-           
+            <field name="symbol" />
+            <field name="comments" />
         </tree>
       </field>
     </record>
@@ -28,8 +30,11 @@
             <!-- <div><h6>Ínformación brindada por la DGI.</h6></div> -->
             <br></br>
             <group>
-                <field name="name" />
-              <field name="symbol" />
+               <field name="measures" />
+            <field name="system" />
+            <field name="name" />
+            <field name="symbol" />
+            <field name="comments" />
             </group>
           </sheet>
         </form>
