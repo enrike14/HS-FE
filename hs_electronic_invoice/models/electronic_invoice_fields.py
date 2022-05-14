@@ -318,8 +318,7 @@ class electronic_invoice_fields(models.Model):
             if 'qr' in respuesta:
                 self.generate_qr(respuesta)
 
-            self.download_pdf(self.lastFiscalNumber,
-                              respuesta['pdf_document'])
+            ##self.download_pdf(self.lastFiscalNumber, respuesta['pdf_document'])
             if respuesta['mensaje'] == "Proceso de Anulación ejecutado con éxito.":
                 original_invoice_id.state = "cancel"
             self.pagadoCompleto = "FECompletada"
