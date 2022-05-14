@@ -18,7 +18,8 @@
 									<field name="codigoCPBSAut" />
 									<field name="codigoCPBSAbrev" invisible="1"/>
 									<field name="codigoCPBS" invisible="1" />
-									<field name="unidadMedida"/>
+									<field name="unidadMedidaAut"/>
+									<field name="unidadMedida"  invisible="1"/>
 									<field name="infoItem"/>
 									<field name="precioAcarreo"/>
 									<field name="precioSeguro"/>
