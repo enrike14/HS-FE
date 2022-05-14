@@ -898,7 +898,8 @@ class electronic_invoice_fields(models.Model):
 
             self.download_pdf(self.lastFiscalNumber,
                               respuesta['pdf_document'])
-            original_invoice_id.state = "cancel"
+            if respuesta['mensaje'] == "Proceso de Anulación ejecutado con éxito.":
+                original_invoice_id.state = "cancel"
             self.pagadoCompleto = "FECompletada"
             # self.action_download_fe_pdf(self.lastFiscalNumber)
         else:
