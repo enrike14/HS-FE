@@ -52,10 +52,10 @@
 						<field name="tipoVenta_fe" />							
 						<field name="reversal_reason_fe" />	
 						<field name="lastFiscalNumber"/>	
-						<field name="hsfeURLstr"/>
-						<field name="pdfNumber"/>
-						<field name="tipoDocPdf"/>
-						<field name="tipoEmisionPdf"/>
+						<field name="hsfeURLstr" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						<field name="pdfNumber" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						<field name="tipoDocPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						<field name="tipoEmisionPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 											
 					</group>
 					<group name="right_g" string="">
