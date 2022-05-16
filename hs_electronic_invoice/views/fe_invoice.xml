@@ -54,6 +54,7 @@
 						<field name="reversal_reason_fe" />	
 						<field name="lastFiscalNumber"/>	
 						<field name="hsfeURLstr"/>
+						<field name="pdfNumber"/>
 											
 					</group>
 					<group name="right_g" string="">

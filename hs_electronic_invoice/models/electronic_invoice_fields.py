@@ -162,6 +162,10 @@ class electronic_invoice_fields(models.Model):
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
     total_precio_descuento = 0.0
     hsfeURLstr = fields.Char(string='HermecURL', readonly="True", store="True")
+    pdfNumber = fields.Char(string="PDF Fiscal Number")
+    tipoDocPdf = fields.Char(string="PDF Tipo Documento")
+    tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión")
+
     puntoFacturacion = "0000"
 
     @api.depends('qr_code')
@@ -294,6 +298,9 @@ class electronic_invoice_fields(models.Model):
         if(int(respuesta["codigo"]) == 200):
             self.insert_data_to_electronic_invoice_moves(
                 respuesta, self.name)
+            self.pdfNumber = respuesta["numeroDocumentoFiscal"]
+            self.tipoDocPdf = respuesta["tipoDocumento"]
+            self.tipoEmisionPdf = respuesta["tipoEmision"]
 
             tipo_doc_text = respuesta['mensaje']
 
@@ -579,4 +586,38 @@ class electronic_invoice_fields(models.Model):
 
     def get_pdf_fe(self):
         self.pagadoCompleto = "Finalizado"
-        # self.action_download_fe_pdf(self.lastFiscalNumber)
+        # constultamos el objeto de nuestra configuración del servicio
+        config_document_obj = self.env["electronic.invoice"].search(
+            [('name', '=', 'ebi-pac')], limit=1)
+        if config_document_obj:
+            tokenEmpresa = config_document_obj.tokenEmpresa
+            tokenPassword = config_document_obj.tokenPassword
+            codigoSucursal = config_document_obj.codigoSucursalEmisor
+            url_wsdl = config_document_obj.wsdl
+            self. puntoFacturacion = config_document_obj.puntoFacturacionFiscal
+        url = self.hsfeURLstr + "api/pdf"
+
+        payment_values = json.dumps({
+            "wsdl_url": url_wsdl,
+            "codigoSucursalEmisor": codigoSucursal,
+            "tokenEmpresa": tokenEmpresa,
+            "tokenPassword": tokenPassword,
+            "tipoEmision": self.tipo_emision_fe,
+            "tipoDocumento": self.tipo_documento_fe,
+            "numeroDocumentoFiscal": self.tipoDocPdf,
+            "puntoFacturacionFiscal": self.tipoEmisionPdf,
+
+        })
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': '{"client": "dev", "code": "123456"}'
+        }
+
+        response = requests.request(
+            "POST", url, headers=headers, data=payment_values)
+        #logging.info('Info AZURE PAGOS: ' + str(response.text))
+        # return json.loads(response.text)
+        respuesta = json.loads(response.text)
+
+        self.action_download_fe_pdf(respuesta['documento'])
