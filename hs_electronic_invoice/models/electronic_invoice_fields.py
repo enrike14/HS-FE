@@ -619,6 +619,6 @@ class electronic_invoice_fields(models.Model):
         #logging.info('Info AZURE PAGOS: ' + str(response.text))
         # return json.loads(response.text)
         respuesta = json.loads(response.text)
-        logging.info("PD 64" + respuesta['documento'])
+        logging.info("PD 64" + str(respuesta['documento']))
 
-        self.download_pdf(respuesta['documento'])
+        self.download_pdf(str(respuesta['documento']))
