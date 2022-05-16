@@ -50,11 +50,12 @@
 						<field name="tipo_operacion_fe" />							
 						<field name="destino_operacion_fe" />							
 						<field name="tipoVenta_fe" />							
-						<!-- <field name="reembolso" />							 -->
 						<field name="reversal_reason_fe" />	
 						<field name="lastFiscalNumber"/>	
 						<field name="hsfeURLstr"/>
 						<field name="pdfNumber"/>
+						<field name="tipoDocPdf"/>
+						<field name="tipoEmisionPdf"/>
 											
 					</group>
 					<group name="right_g" string="">

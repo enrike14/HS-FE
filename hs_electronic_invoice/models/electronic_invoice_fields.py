@@ -603,8 +603,8 @@ class electronic_invoice_fields(models.Model):
             "tokenEmpresa": tokenEmpresa,
             "tokenPassword": tokenPassword,
             "tipoEmision": self.tipo_emision_fe,
-            "tipoDocumento": self.tipo_documento_fe,
-            "numeroDocumentoFiscal": self.tipoDocPdf,
+            "tipoDocumento": self.tipoDocPdf,
+            "numeroDocumentoFiscal": self.pdfNumber,
             "puntoFacturacionFiscal": self.tipoEmisionPdf,
 
         })
@@ -619,5 +619,6 @@ class electronic_invoice_fields(models.Model):
         #logging.info('Info AZURE PAGOS: ' + str(response.text))
         # return json.loads(response.text)
         respuesta = json.loads(response.text)
+        logging.info("PD 64" + respuesta['documento'])
 
         self.download_pdf(respuesta['documento'])
