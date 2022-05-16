@@ -602,10 +602,10 @@ class electronic_invoice_fields(models.Model):
             "codigoSucursalEmisor": codigoSucursal,
             "tokenEmpresa": tokenEmpresa,
             "tokenPassword": tokenPassword,
-            "tipoEmision": self.tipo_emision_fe,
+            "tipoEmision": self.tipoEmisionPdf,
             "tipoDocumento": self.tipoDocPdf,
             "numeroDocumentoFiscal": self.pdfNumber,
-            "puntoFacturacionFiscal": self.tipoEmisionPdf,
+            "puntoFacturacionFiscal": self.puntoFacturacion,
 
         })
 
