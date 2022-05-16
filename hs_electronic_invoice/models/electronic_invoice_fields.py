@@ -616,11 +616,13 @@ class electronic_invoice_fields(models.Model):
 
         logging.info('Enviado PDF:: ' + str(pdf_values))
 
-        response = requests.request(
-            "POST", url, headers=headers, data=pdf_values)
-        logging.info('Resultado PDF:: ' + str(response.text))
-        # return json.loads(response.text)
-        respuesta = json.loads(response.text)
+        correcto = False
         #logging.info("PD 64" + str(response))
-        time.sleep(3)
-        self.download_pdf(self.pdfNumber, str(respuesta["documento"]))
+        while correcto != True:
+            response = requests.request(
+                "POST", url, headers=headers, data=pdf_values)
+            respuesta = json.loads(response.text)
+            logging.info('Resultado PDF:: ' + str(response.text))
+            if respuesta["codigo"] == "200":
+                correcto = True
+                self.download_pdf(self.pdfNumber, str(respuesta["documento"]))
