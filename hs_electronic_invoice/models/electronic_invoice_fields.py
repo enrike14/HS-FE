@@ -623,4 +623,4 @@ class electronic_invoice_fields(models.Model):
         respuesta = json.loads(response.text)
         #logging.info("PD 64" + str(response))
         time.sleep(3)
-        self.download_pdf(self.pdfNumber, str(respuesta["document"]))
+        self.download_pdf(self.pdfNumber, str(respuesta["documento"]))
