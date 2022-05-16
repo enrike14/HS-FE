@@ -35,6 +35,7 @@ class electronic_invoice_fields(models.Model):
                             attachment=True, readonly="True")
     tipo_documento_fe = fields.Selection(
         string='Tipo de Documento',
+        readonly="True",
         selection=[
             ('01', 'Factura de operación interna'),
             ('02', 'Factura de importación'),
@@ -51,6 +52,7 @@ class electronic_invoice_fields(models.Model):
     )
     tipo_emision_fe = fields.Selection(
         string='Tipo de Emisión',
+        readonly="True",
         selection=[
             ('01', 'Autorización de Uso Previa, operación normal'),
             ('02', 'Autorización de Uso Previa, operación en contingencia'),
@@ -165,6 +167,7 @@ class electronic_invoice_fields(models.Model):
     pdfNumber = fields.Char(string="PDF Fiscal Number")
     tipoDocPdf = fields.Char(string="PDF Tipo Documento")
     tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión")
+    api_token = ""
 
     puntoFacturacion = "0000"
 
@@ -227,6 +230,10 @@ class electronic_invoice_fields(models.Model):
             record.nota_credito = ""
 
     # HSFE HSServices Calls
+
+    def get_connection(self):
+        self.api_token = ""
+        self.send_fiscal_doc(self)
 
     def send_fiscal_doc(self):
         url = self.hsfeURLstr + "api/send"
