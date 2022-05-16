@@ -232,8 +232,48 @@ class electronic_invoice_fields(models.Model):
     # HSFE HSServices Calls
 
     def get_connection(self):
-        self.api_token = ""
-        self.send_fiscal_doc(self)
+        url = self.hsfeURLstr + "api/token"
+        files = []
+        headers = {}
+        payload = json.dumps({'username': 'Hermec',
+                             'password': '123465'})
+
+        response = requests.request(
+            "POST", url, headers=headers, data=payload, files=files)
+        respuesta = json.loads(response.text)
+        logging.info("RES" + str(respuesta))
+
+        if("access_token" in respuesta):
+            self.api_token = respuesta["access_token"]
+            self.send_fiscal_doc()
+        else:
+            body = "HS Services <br> <b style='color:red;'>Error -- " + \
+                ":</b> ("+respuesta['detail']+")<br>"
+            self.message_post(body=body)
+            logging.info("ERROR: Connection Fail -- " +
+                         str(respuesta["detail"]))
+
+    def get_pdf_token(self):
+        url = self.hsfeURLstr + "api/token"
+        files = []
+        headers = {}
+        payload = json.dumps({'username': 'Hermec',
+                             'password': '123465'})
+
+        response = requests.request(
+            "POST", url, headers=headers, data=payload, files=files)
+        respuesta = json.loads(response.text)
+        logging.info("RES" + str(respuesta))
+
+        if("access_token" in respuesta):
+            self.api_token = respuesta["access_token"]
+            self.get_pdf_fe()
+        else:
+            body = "HS Services <br> <b style='color:red;'>Error -- " + \
+                ":</b> ("+respuesta['detail']+")<br>"
+            self.message_post(body=body)
+            logging.info("ERROR: Connection Fail -- " +
+                         str(respuesta["detail"]))
 
     def send_fiscal_doc(self):
         url = self.hsfeURLstr + "api/send"
@@ -292,7 +332,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
 
         logging.info("VALUES SEND" + str(all_values))
@@ -358,7 +398,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
 
         response = requests.request(
@@ -409,7 +449,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
         logging.info("Transactions Values HS HERMEC" + str(transaction_values))
         response = requests.request(
@@ -439,7 +479,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
         logging.info("Cliente Enviado:" + str(client_values))
         response = requests.request(
@@ -467,7 +507,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
         logging.info("SUBTOTALES Values HS HERMEC" + str(sub_total_values))
         response = requests.request(
@@ -618,7 +658,7 @@ class electronic_invoice_fields(models.Model):
 
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
 
         logging.info('Enviado PDF:: ' + str(pdf_values))

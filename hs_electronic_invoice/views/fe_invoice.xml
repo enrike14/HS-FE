@@ -9,12 +9,12 @@
 	  <field name="arch" type="xml">
 		<xpath expr="//header" position="inside">
 			<button  attrs="{'invisible':['|','|','|',('state','!=','posted'),('pagadoCompleto','=','FECompletada'),('pagadoCompleto','=','Finalizado'),('type','=','in_invoice')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
-			name="send_fiscal_doc" string="Crear Documento Fiscal"  type="object" />
+			name="get_connection" string="Crear Documento Fiscal"  type="object" />
 		</xpath>
 
 		<xpath expr="//header" position="inside">
 			<button  attrs="{'invisible':['|','|','|',('pagadoCompleto','!=','FECompletada'),('pagadoCompleto','=','Finalizado'),('type','=','in_invoice'),('state','=','draft')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
-			name="get_pdf_fe" string="Ver Factura Eléctrónica"  type="object" />
+			name="get_pdf_token" string="Ver Factura Eléctrónica"  type="object" />
 		</xpath>
 
 		<xpath expr="//button[@name='button_draft']" position="attributes" >
