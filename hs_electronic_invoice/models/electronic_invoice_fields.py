@@ -620,4 +620,4 @@ class electronic_invoice_fields(models.Model):
         # return json.loads(response.text)
         respuesta = json.loads(response.text)
 
-        self.action_download_fe_pdf(respuesta['documento'])
+        self.download_pdf(respuesta['documento'])
