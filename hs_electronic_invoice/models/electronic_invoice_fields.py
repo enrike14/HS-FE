@@ -597,7 +597,7 @@ class electronic_invoice_fields(models.Model):
             self. puntoFacturacion = config_document_obj.puntoFacturacionFiscal
         url = self.hsfeURLstr + "api/pdf"
 
-        payment_values = json.dumps({
+        pdf_values = json.dumps({
             "wsdl_url": url_wsdl,
             "codigoSucursalEmisor": codigoSucursal,
             "tokenEmpresa": tokenEmpresa,
@@ -614,11 +614,13 @@ class electronic_invoice_fields(models.Model):
             'Authorization': '{"client": "dev", "code": "123456"}'
         }
 
+        logging.info('Enviado PDF:: ' + str(pdf_values))
+
         response = requests.request(
-            "POST", url, headers=headers, data=payment_values)
+            "POST", url, headers=headers, data=pdf_values)
         logging.info('Resultado PDF:: ' + str(response.text))
         # return json.loads(response.text)
-        #respuesta = json.loads(response)
+        respuesta = json.loads(response.text)
         #logging.info("PD 64" + str(response))
         time.sleep(3)
-        self.download_pdf(self.pdfNumber, str(response.text))
+        self.download_pdf(self.pdfNumber, str(respuesta["document"]))
