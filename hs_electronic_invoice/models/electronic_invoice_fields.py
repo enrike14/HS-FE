@@ -616,7 +616,7 @@ class electronic_invoice_fields(models.Model):
 
         response = requests.request(
             "POST", url, headers=headers, data=payment_values)
-        #logging.info('Resultado PDF:: ' + str(response.text))
+        logging.info('Resultado PDF:: ' + str(response.text))
         # return json.loads(response.text)
         #respuesta = json.loads(response)
         #logging.info("PD 64" + str(response))
