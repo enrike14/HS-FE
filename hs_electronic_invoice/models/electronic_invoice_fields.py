@@ -223,7 +223,7 @@ class electronic_invoice_fields(models.Model):
                                 self.tipo_documento_fe = "04"
                                 self.nota_credito = "NotaCredito"
                     else:
-                        if record.type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id == False:
+                        if record.move_type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id == False:
                             record.tipo_documento_fe = "06"
                             record.nota_credito = "NotaCredito"
         else:
