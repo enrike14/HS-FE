@@ -8,12 +8,12 @@
 	  <field name="inherit_id" ref="account.view_move_form"/>
 	  <field name="arch" type="xml">
 		<xpath expr="//header" position="inside">
-			<button  attrs="{'invisible':['|','|','|',('state','!=','posted'),('pagadoCompleto','=','FECompletada'),('pagadoCompleto','=','Finalizado'),('type','=','in_invoice')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
+			<button  attrs="{'invisible':['|','|','|',('state','!=','posted'),('pagadoCompleto','=','FECompletada'),('pagadoCompleto','=','Finalizado'),('move_type','=','in_invoice')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
 			name="get_connection" string="Crear Documento Fiscal"  type="object" />
 		</xpath>
 
 		<xpath expr="//header" position="inside">
-			<button  attrs="{'invisible':['|','|','|',('pagadoCompleto','!=','FECompletada'),('pagadoCompleto','=','Finalizado'),('type','=','in_invoice'),('state','=','draft')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
+			<button  attrs="{'invisible':['|','|','|',('pagadoCompleto','!=','FECompletada'),('pagadoCompleto','=','Finalizado'),('move_type','=','in_invoice'),('state','=','draft')]}"   style="border: solid 1px;background: #7c7bad;color: white;" 
 			name="get_pdf_token" string="Ver Factura Eléctrónica"  type="object" />
 		</xpath>
 
@@ -21,7 +21,7 @@
 			<attribute name="attrs">{'invisible': [('pagadoCompleto','=','FECompletada')]}</attribute>
 		</xpath>
 		
-		<xpath expr="//field[@name='type']" position="before" >
+		<xpath expr="//field[@name='move_type']" position="before" >
 			<field name="qr_code" widget='image' attrs="{'invisible': [('pagadoCompleto','!=','FECompletada')]}" class="oe_avatar"/>				
 		</xpath>
 
@@ -41,7 +41,7 @@
 		<!-- <xpath expr="/form/sheet/group" position="after" >		other_info		 -->
 		<!-- type -->
 		<xpath expr="//page[@name='other_info']" position="after">	
-			<page name="pageConfigFE" string="Configuración FE" attrs="{'invisible':[('type','=','in_invoice')]}">			
+			<page name="pageConfigFE" string="Configuración FE" attrs="{'invisible':[('move_type','=','in_invoice')]}">			
 				<group name="fe-group" string="Datos FE" >
 					<group name="left_g" string="">
 						<field name="tipo_documento_fe"  />							
