@@ -404,7 +404,7 @@ class electronic_invoice_fields(models.Model):
         url = self.hsfeURLstr + "api/listpayments"
         #logging.info("URL COMPLETO:" + str(url))
         payments_items = self.env["account.payment"].search(
-            [('communication', '=', self.name)])
+            [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
             "payments_items": payments,
@@ -509,7 +509,7 @@ class electronic_invoice_fields(models.Model):
     def get_sub_totals(self):
         url = self.hsfeURLstr + "api/subtotals"
         payments_items = self.env["account.payment"].search(
-            [('communication', '=', self.name)])
+            [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
 
         sub_total_values = json.dumps({
