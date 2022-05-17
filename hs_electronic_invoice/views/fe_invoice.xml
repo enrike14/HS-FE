@@ -56,6 +56,8 @@
 						<field name="pdfNumber" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 						<field name="tipoDocPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 						<field name="tipoEmisionPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						<field name="puntoFacturacion" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						
 											
 					</group>
 					<group name="right_g" string="">
