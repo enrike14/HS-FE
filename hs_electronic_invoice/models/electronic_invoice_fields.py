@@ -234,7 +234,7 @@ class electronic_invoice_fields(models.Model):
     def get_connection(self):
         url = self.hsfeURLstr + "api/token"
         files = []
-        headers = ""
+        headers = {}
         user = ""
         password = ""
         # constultamos el objeto de nuestra configuración del servicio
