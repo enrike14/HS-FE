@@ -21,8 +21,6 @@ class product_field(models.Model):
         string="Código CPBS Abrev", related='codigoCPBSAut.segmentoID')
     codigoCPBS = fields.Char(string="Código CPBS",
                              related='codigoCPBSAut.familiaID')
-    district_id = fields.Many2one(
-        'neonety.district', string='Distrito', required=False, translate=True)
     unidadMedidaCPBSAut = fields.Many2one(
         'electronic.invoice.measures', string="Unidad de Medida CPBS")
     unidadMedidaCPBS = fields.Char(
