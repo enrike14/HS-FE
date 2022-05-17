@@ -229,7 +229,7 @@ class electronic_invoice_fields(models.Model):
         else:
             record.nota_credito = ""
 
-    # HSFE HSServices Calls
+    # HSFE HSServices Calls Security
 
     def get_connection(self):
         url = self.hsfeURLstr + "api/token"
