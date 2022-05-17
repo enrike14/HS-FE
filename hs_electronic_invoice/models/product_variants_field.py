@@ -5,23 +5,47 @@ from datetime import datetime
 
 
 class product_field(models.Model):
-	_inherit = "product.product"
-	#_inherit = "product.template"
-	#asignar campos al modulo de product.product
-	categoryProduct = fields.Selection(
-	[('Sin Categoría', 'Sin Categoría'),
-	('Materia prima Farmacéutica', 'Materia prima Farmacéutica'),
-	('Medicina', 'Medicina'),
-	('Alimento', 'Alimento')],string = 'Categoría del Producto')
-	fechaFabricacion = fields.Date(string='Fecha de Fabricación')
-	fechaCaducidad = fields.Date(string='Fecha de Caducidad')
-	codigoCPBSAbrev = fields.Char(string="CodigoCPBSAbrev")
-	codigoCPBS = fields.Char(string="CodigoCPBS")
-	unidadMedidaCPBS = fields.Char(string="UnidadMedidaCPBS")
-	codigoGTIN = fields.Char(string="CodigoGTIN")
-	codigoGTINInv = fields.Char(string="CodigoGTINInv")
-	tasaISC = fields.Char(string="Tasa ISC")
-	valorISC = fields.Char(string="Valor ISC")
-	tasaOTI = fields.Char(string="Tasa OTI")
-	valorTasa = fields.Char(string="Valor Tasa")
-	
+    _inherit = "product.product"
+    #_inherit = "electronic.invoice.cpbs"
+    #_inherit = "product.template"
+    mensaje_codigo = 'Codigos tipo:\nGTIN – 14 (14 caracteres)\nGTIN – 13 (13 caracteres)\nGTIN – 12 (12 caracteres)\nGTIN – 8 (8 caracteres)'
+    # asignar campos al modulo de product.product
+    categoryProduct = fields.Selection(
+        # [('Materia prima Farmacéutica', 'Materia prima Farmacéutica'),
+        # ('Medicina', 'Medicina'),
+        [('Alimento', 'Alimento')], string='Categoría del Producto')
+    fechaFabricacion = fields.Date(string='Fecha de Fabricación')
+    fechaCaducidad = fields.Date(string='Fecha de Caducidad')
+    codigoCPBSAut = fields.Many2one(
+        'electronic.invoice.cpbs', string="Código CPBS")
+    codigoCPBSAbrev = fields.Char(
+        string="Código CPBS Abrev", related='codigoCPBSAut.segmentoID')
+    codigoCPBS = fields.Char(string="Código CPBS",
+                             related='codigoCPBSAut.familiaID')
+    unidadMedidaCPBSAut = fields.Many2one(
+        'electronic.invoice.measures', string="Unidad de Medida CPBS")
+    unidadMedidaCPBS = fields.Char(
+        string="Unidad de Medida CPBS", related='unidadMedidaCPBSAut.name')
+    codigoGTIN = fields.Char(string="Código GTIN",
+                             size=14, help=mensaje_codigo)
+    codigoGTINInv = fields.Char(
+        string="Código GTIN para la unidad de inventario", size=14, help=mensaje_codigo)
+    tasaISC = fields.Float(string="Tasa ISC")
+    valorISC = fields.Float(string="Valor ISC")
+    tasaOTI = fields.Selection(
+        [('01', 'SUME 911'),
+         ('02', 'Tasa Portabilidad Numérica'),
+            ('03', 'Impuesto sobre seguro')], string='Tasa OTI')
+    valorTasa = fields.Float(string="Valor Tasa")
+    cantGTINCom = fields.Float(
+        string="	Cantidad del producto o servicio en el Código GTIN del ítem de comercialización")
+    cantGTINComInv = fields.Float(
+        string="	Cantidad del producto o servicio en el Código GTIN del ítem de comercialización (Inventario)")
+    unidadMedidaAut = fields.Many2one(
+        'electronic.invoice.measures', string="Unidad de Medida")
+    unidadMedida = fields.Char(
+        string="Unidad Medida", related='unidadMedidaAut.name')
+    infoItem = fields.Text(
+        string="Información de interés del emisor con respeto a un ítem de la FE", size=5000)
+    precioAcarreo = fields.Float(string="Precio Acarreo")
+    precioSeguro = fields.Float(string="Precio Seguro")

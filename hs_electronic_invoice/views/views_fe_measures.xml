@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="electronic_invoice_measures_list">
+      <field name="name">electronic.invoice.measures.list</field>
+      <field name="model">electronic.invoice.measures</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="measures" />
+            <field name="system" />
+            <field name="name" />
+            <field name="symbol" />
+            <field name="comments" />
+        </tree>
+      </field>
+    </record>
+    
+    <!-- VISTA DE FORMULARIO eeee1111e-->
+
+    <record id="electronic_invoice_measures_form" model="ir.ui.view">
+      <field name="name">electronic.invoice.measures.form</field>
+      <field name="model">electronic.invoice.measures</field>
+      <field name="arch" type="xml">
+      
+        <form string="CuentasBank">
+          <sheet>
+            <div><h1>Dastos de Unidades de medida</h1></div>
+            <!-- <div><h6>Ínformación brindada por la DGI.</h6></div> -->
+            <br></br>
+            <group>
+               <field name="measures" />
+            <field name="system" />
+            <field name="name" />
+            <field name="symbol" />
+            <field name="comments" />
+            </group>
+          </sheet>
+        </form>
+
+
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="electronic_invoice_measures_action_window">
+      <field name="name">Registros - Unidades de medida</field>
+      <field name="res_model">electronic.invoice.measures</field>
+      <field name="view_mode">tree,form</field>
+  </record>
+
+  <!-- Top menu item -->
+
+  <!--<menuitem id="electronic_invoice_menu_root" name="Factura Electrónica" sequence="3" parent="account.menu_finance_configuration"/>-->
+  <!-- menu categories -->
+  <menuitem id="electronic_invoice_menu_8" name="Catálogo Unidades de Medidas"  parent="electronic_invoice_menu_root" sequence="8" action="electronic_invoice_measures_action_window"/>
+  <!-- <menuitem id="report_reconciliation_menu" name="Reporte Conciliación"  parent="bank_reconciliation_menu_root" sequence="2" action="bank_reconciliation_action_window"/> -->
+
+  </data>
+</odoo>

@@ -11,11 +11,15 @@
           <field name="name" />
           <field name="wsdl" />
           <field name="descripcion" />
-          <field name="tokenEmpresa" />
-          <field name="tokenPassword" />
+          <field name="tokenEmpresa" password="True" />
+          <field name="tokenPassword" password="True"/>
           <field name="codigoSucursalEmisor" />
           <field name="numeroDocumentoFiscal" />
           <field name="puntoFacturacionFiscal" />
+          <field name="hsfeURL" />
+          <field name="hsUser" />
+          <field name="hsPassword" password="True"/>
+          
         </tree>
       </field>
     </record>
@@ -36,11 +40,14 @@
                 <field name="name" />
                 <field name="wsdl" />
                 <field name="descripcion" />
-                <field name="tokenEmpresa" />
-                <field name="tokenPassword" />
+                <field name="tokenEmpresa" password="True"/>
+                <field name="tokenPassword" password="True"/>
                 <field name="codigoSucursalEmisor" />
                 <field name="numeroDocumentoFiscal" />
                 <field name="puntoFacturacionFiscal" />
+                <field name="hsfeURL" />
+                <field name="hsUser" />
+                <field name="hsPassword" password="True"/>
     
             </group>
           </sheet>
