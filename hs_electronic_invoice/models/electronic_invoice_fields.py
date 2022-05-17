@@ -203,7 +203,7 @@ class electronic_invoice_fields(models.Model):
 
     @api.depends('move_type', 'partner_id')
     def on_change_type(self):
-        if self.type:
+        if self.move_type:
             for record in self:
                 if record.type == 'out_refund' and str(record.amount_residual) == "0.0":
                     record.tipo_documento_fe = "04"
