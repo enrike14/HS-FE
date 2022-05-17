@@ -57,6 +57,8 @@
 						<field name="tipoDocPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 						<field name="tipoEmisionPdf" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 						<field name="puntoFacturacion" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						<field name="api_token" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
+						
 						
 											
 					</group>
