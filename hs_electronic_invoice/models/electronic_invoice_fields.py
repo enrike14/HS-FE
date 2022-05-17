@@ -169,7 +169,7 @@ class electronic_invoice_fields(models.Model):
     tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión")
     api_token = ""
 
-    puntoFacturacion = "0000"
+    puntoFacturacion = fields.Char(string="Punto Fac", invisible="True")
 
     @api.depends('qr_code')
     def on_change_pago(self):
@@ -314,7 +314,7 @@ class electronic_invoice_fields(models.Model):
             tokenPassword = config_document_obj.tokenPassword
             codigoSucursal = config_document_obj.codigoSucursalEmisor
             url_wsdl = config_document_obj.wsdl
-            self. puntoFacturacion = config_document_obj.puntoFacturacionFiscal
+            self.puntoFacturacion = config_document_obj.puntoFacturacionFiscal
 
         precioDescuento = '0'
         for item in self.invoice_line_ids:
