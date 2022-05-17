@@ -205,12 +205,12 @@ class electronic_invoice_fields(models.Model):
     def on_change_type(self):
         if self.move_type:
             for record in self:
-                if record.type == 'out_refund' and str(record.amount_residual) == "0.0":
+                if record.move_type == 'out_refund' and str(record.amount_residual) == "0.0":
                     record.tipo_documento_fe = "04"
                     record.nota_credito = "NotaCredito"
                 else:
                     record.nota_credito = ""
-                    if record.type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id != False:
+                    if record.move_type == 'out_refund' and record.state == "draft" and record.reversed_entry_id.id != False:
                         original_invoice_id = self.env["account.move"].search(
                             [('id', '=', self.reversed_entry_id.id)], limit=1)
                         if original_invoice_id:
