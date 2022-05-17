@@ -624,7 +624,7 @@ class electronic_invoice_fields(models.Model):
             #logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': '{"client": "dev", "code": "123456"}'
+            'Authorization': 'Bearer ' + str(self.api_token)
         }
         dataJsonItem = {"list_items": itemLoad}
         response = requests.request(
