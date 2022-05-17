@@ -10,14 +10,23 @@ class product_field(models.Model):
     mensaje_codigo = 'Codigos tipo:\nGTIN – 14 (14 caracteres)\nGTIN – 13 (13 caracteres)\nGTIN – 12 (12 caracteres)\nGTIN – 8 (8 caracteres)'
     # asignar campos al modulo de product.product
     categoryProduct = fields.Selection(
-        [('Materia prima Farmacéutica', 'Materia prima Farmacéutica'),
-         ('Medicina', 'Medicina'),
-            ('Alimento', 'Alimento')], string='Categoría del Producto')
+        # [('Materia prima Farmacéutica', 'Materia prima Farmacéutica'),
+        # ('Medicina', 'Medicina'),
+        [('Alimento', 'Alimento')], string='Categoría del Producto')
     fechaFabricacion = fields.Date(string='Fecha de Fabricación')
     fechaCaducidad = fields.Date(string='Fecha de Caducidad')
-    codigoCPBSAbrev = fields.Char(string="Código CPBS Abrev")
-    codigoCPBS = fields.Char(string="Código CPBS")
-    unidadMedidaCPBS = fields.Char(string="Unidad de Medida CPBS")
+    codigoCPBSAut = fields.Many2one(
+        'electronic.invoice.cpbs', string="Código CPBS")
+    codigoCPBSAbrev = fields.Char(
+        string="Código CPBS Abrev", related='codigoCPBSAut.segmentoID')
+    codigoCPBS = fields.Char(string="Código CPBS",
+                             related='codigoCPBSAut.familiaID')
+    district_id = fields.Many2one(
+        'neonety.district', string='Distrito', required=False, translate=True)
+    unidadMedidaCPBSAut = fields.Many2one(
+        'electronic.invoice.measures', string="Unidad de Medida CPBS")
+    unidadMedidaCPBS = fields.Char(
+        string="Unidad de Medida CPBS", related='unidadMedidaCPBSAut.name')
     codigoGTIN = fields.Char(string="Código GTIN",
                              size=14, help=mensaje_codigo)
     codigoGTINInv = fields.Char(
@@ -33,7 +42,10 @@ class product_field(models.Model):
         string="	Cantidad del producto o servicio en el Código GTIN del ítem de comercialización")
     cantGTINComInv = fields.Float(
         string="	Cantidad del producto o servicio en el Código GTIN del ítem de comercialización (Inventario)")
-    unidadMedida = fields.Char(string="Unidad Medida")
+    unidadMedidaAut = fields.Many2one(
+        'electronic.invoice.measures', string="Unidad de Medida")
+    unidadMedida = fields.Char(
+        string="Unidad Medida", related='unidadMedidaAut.name')
     infoItem = fields.Char(
         string="Información de interés del emisor con respeto a un ítem de la FE")
     precioAcarreo = fields.Float(string="Precio Acarreo")

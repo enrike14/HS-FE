@@ -13,23 +13,27 @@
                             <group>
                                 <group>
 									<field name="TipoClienteFE"/>
-									<field name="tipoContribuyente"/>
+									<field name="tipoContribuyente" attrs="{'readonly':[('TipoClienteFE','in',('01', '03'))]}"/>
 									<field name="numeroRUC"/>
-									<field name="digitoVerificadorRUC"/>
-									<field name="razonSocial"/>
-									<field name="direccion"/>
-									<field name="CodigoUbicacion"/>
-									<field name="provincia"/>
+									<field name="digitoVerificadorRUC" attrs="{'invisible':[('TipoClienteFE','not in',('01', '03'))], 'required':[('TipoClienteFE','in',('01', '03'))]}"/>
+									<field name="razonSocial" attrs="{'invisible':[('TipoClienteFE','not in',('01', '03'))], 'required':[('TipoClienteFE','in',('01', '03'))]}"/>
+									<field name="direccion" attrs="{'invisible':[('TipoClienteFE','not in',('01', '03'))], 'required':[('TipoClienteFE','in',('01', '03'))]}"/>
+							
+								
                                 </group>
                                 <group>
-									<field name="distrito"/>
-									<field name="corregimiento"/>
-									<field name="distrito"/>
-									<field name="tipoIdentificacion"/>
-									<field name="nroIdentificacionExtranjero"/>
-									<field name="paisExtranjero"/>
-									<field name="pais"/>
-									<field name="paisOtro"/>
+									<field name="country_id"  invisible="1"/>
+									<field name="province_id" attrs="{'required':[('TipoClienteFE','in',('01', '03'))]}"/>
+									<field name="district_id" attrs="{'required':[('TipoClienteFE','in',('01', '03'))]}"/>
+									<field name="sector_id" attrs="{'required':[('TipoClienteFE','in',('01', '03'))]}"/> 
+									<field name="provincia" invisible="1"/>
+									<field name="distrito" invisible="1"/>
+									<field name="corregimiento" invisible="1"/>
+									<field name="CodigoUbicacion" invisible="1"/>
+									<field name="tipoIdentificacion" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
+									<field name="nroIdentificacionExtranjero" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
+									<field name="paisExtranjero" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
+									<!-- <field name="paisOtro"/> -->
                                 </group>
                             </group>
                         </page>
