@@ -201,7 +201,7 @@ class electronic_invoice_fields(models.Model):
                         document.numeroDocumentoFiscal = str(
                             int(document.numeroDocumentoFiscal)+1)
 
-    @api.depends('type', 'partner_id')
+    @api.depends('move_type', 'partner_id')
     def on_change_type(self):
         if self.type:
             for record in self:
