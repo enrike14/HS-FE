@@ -16,6 +16,6 @@ class electronic_invoice_measures(models.Model):
 	def name_get(self):
 		result = []
 		for record in self:
-			record_name = record.name
+			record_name = record.symbol
 			result.append((record.id, record_name))
 		return result
