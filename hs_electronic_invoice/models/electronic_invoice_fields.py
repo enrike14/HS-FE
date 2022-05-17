@@ -257,8 +257,8 @@ class electronic_invoice_fields(models.Model):
         url = self.hsfeURLstr + "api/token"
         files = []
         headers = {}
-        payload = json.dumps({'username': 'Hermec',
-                             'password': '123465'})
+        payload = {'username': 'Hermec',
+                   'password': '123465'}
 
         response = requests.request(
             "POST", url, headers=headers, data=payload, files=files)
@@ -270,7 +270,7 @@ class electronic_invoice_fields(models.Model):
             self.get_pdf_fe()
         else:
             body = "HS Services <br> <b style='color:red;'>Error -- " + \
-                ":</b> ("+respuesta['detail']+")<br>"
+                ":</b> ("+str(respuesta['detail'])+")<br>"
             self.message_post(body=body)
             logging.info("ERROR: Connection Fail -- " +
                          str(respuesta["detail"]))
