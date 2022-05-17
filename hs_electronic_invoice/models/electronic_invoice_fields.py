@@ -636,7 +636,7 @@ class electronic_invoice_fields(models.Model):
                     'precioSeguro': item.product_id.precioSeguro if item.product_id.precioSeguro else 0.00,
                     'infoItem': str(item.product_id.infoItem) if item.product_id.infoItem else "",
                     'tasaOTI': str(item.product_id.tasaOTI) if item.product_id.tasaOTI else "",
-                    'valorTasa': item.product_id.valorTasa if item.roduct_id.valorTasa else 0.00,
+                    'valorTasa': item.product_id.valorTasa if item.product_id.valorTasa else 0.00,
                 })
                 #self.narration if self.narration else "",
             logging.info("ITEMS ENVIADOS::::::" + str(itemLoad))
