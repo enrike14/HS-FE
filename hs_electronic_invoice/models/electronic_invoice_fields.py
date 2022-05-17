@@ -248,7 +248,7 @@ class electronic_invoice_fields(models.Model):
             self.send_fiscal_doc()
         else:
             body = "HS Services <br> <b style='color:red;'>Error -- " + \
-                ":</b> ("+respuesta['detail']+")<br>"
+                ":</b> ("+str(respuesta['detail'])+")<br>"
             self.message_post(body=body)
             logging.info("ERROR: Connection Fail -- " +
                          str(respuesta["detail"]))
