@@ -26,11 +26,11 @@ _logger = logging.getLogger(__name__)
 class electronic_invoice_fields(models.Model):
     _inherit = "account.move"
     lastFiscalNumber = fields.Char(
-        string="Número Fiscal", compute="on_change_state", readonly="True", store="True", default='')
+        string="Número Fiscal", compute="on_change_state", readonly="True", store="True")
     puntoFactFiscal = fields.Char(
         string="Punto Facturación Fiscal", readonly="True", default='')
     pagadoCompleto = fields.Char(
-        string="Estado de Pago", compute="on_change_pago", readonly="True", store="True", default='')
+        string="Estado de Pago", compute="on_change_pago", readonly="True", store="True")
     qr_code = fields.Binary("QR Factura Electrónica",
                             attachment=True, readonly="True")
     tipo_documento_fe = fields.Selection(
@@ -168,12 +168,12 @@ class electronic_invoice_fields(models.Model):
     hsfeURLstr = fields.Char(
         string='HermecURL', readonly="True", store="True")
     pdfNumber = fields.Char(string="PDF Fiscal Number",
-                            default='', store="True")
+                            store="True")
     tipoDocPdf = fields.Char(
-        string="PDF Tipo Documento", default='', store="True")
+        string="PDF Tipo Documento", store="True")
     tipoEmisionPdf = fields.Char(
-        string="PDF Tipo Emisión", default='', store="True")
-    api_token = fields.Char(string="ApiToken", default='')
+        string="PDF Tipo Emisión", store="True")
+    api_token = fields.Char(string="ApiToken")
     puntoFacturacion = fields.Char(
         string="Punto Fac", store="True", default='')
 
