@@ -515,7 +515,7 @@ class electronic_invoice_fields(models.Model):
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": self.amount_by_group[0][1],
+            "amount_tax_completed": self.amount_by_group[0][0],
             "total_discount_price": self.total_precio_descuento,
             "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
