@@ -162,7 +162,7 @@ class electronic_invoice_fields(models.Model):
     anulado = fields.Char(string='Anulado', readonly="True", store="True")
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
-    total_precio_descuento = 0.0
+    total_precio_descuento = fields.Float(string="Precio Descuento")
     hsfeURLstr = fields.Char(string='HermecURL', readonly="True", store="True")
     pdfNumber = fields.Char(string="PDF Fiscal Number")
     tipoDocPdf = fields.Char(string="PDF Tipo Documento")
