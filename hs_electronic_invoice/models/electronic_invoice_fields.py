@@ -26,11 +26,11 @@ _logger = logging.getLogger(__name__)
 class electronic_invoice_fields(models.Model):
     _inherit = "account.move"
     lastFiscalNumber = fields.Char(
-        string="Número Fiscal", compute="on_change_state", readonly="True", store="True")
+        string="Número Fiscal", compute="on_change_state", readonly="True", store="True", default='')
     puntoFactFiscal = fields.Char(
-        string="Punto Facturación Fiscal", readonly="True")
+        string="Punto Facturación Fiscal", readonly="True", default='')
     pagadoCompleto = fields.Char(
-        string="Estado de Pago", compute="on_change_pago", readonly="True", store="True")
+        string="Estado de Pago", compute="on_change_pago", readonly="True", store="True", default='')
     qr_code = fields.Binary("QR Factura Electrónica",
                             attachment=True, readonly="True")
     tipo_documento_fe = fields.Selection(
@@ -162,14 +162,16 @@ class electronic_invoice_fields(models.Model):
     anulado = fields.Char(string='Anulado', readonly="True", store="True")
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type",)
-    total_precio_descuento = fields.Float(string="Precio Descuento")
-    hsfeURLstr = fields.Char(string='HermecURL', readonly="True", store="True")
-    pdfNumber = fields.Char(string="PDF Fiscal Number")
-    tipoDocPdf = fields.Char(string="PDF Tipo Documento")
-    tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión")
-    api_token = fields.Char(string="ApiToken")
+    total_precio_descuento = fields.Float(
+        string="Precio Descuento", default=0.00)
+    hsfeURLstr = fields.Char(
+        string='HermecURL', readonly="True", store="True", default='')
+    pdfNumber = fields.Char(string="PDF Fiscal Number", default='')
+    tipoDocPdf = fields.Char(string="PDF Tipo Documento", default='')
+    tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión", default='')
+    api_token = fields.Char(string="ApiToken", default='')
     puntoFacturacion = fields.Char(
-        string="Punto Fac", store="True")
+        string="Punto Fac", store="True", default='')
 
     @api.depends('qr_code')
     def on_change_pago(self):
