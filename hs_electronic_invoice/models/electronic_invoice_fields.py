@@ -512,10 +512,14 @@ class electronic_invoice_fields(models.Model):
         payments_items = self.env["account.payment"].search(
             [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
+        logging.info("Valores de ITBMS:0" + str(self.amount_by_group[0][1]))
+        logging.info(str(self.amount_by_group[0][2]))
+        logging.info("Valores de ITBMS: 1" + str(self.amount_by_group[1][0]))
+        logging.info(str(self.amount_by_group[1][1]))
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": self.amount_by_group[0][0],
+            "amount_tax_completed": self.amount_by_group[0][1],
             "total_discount_price": self.total_precio_descuento,
             "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
