@@ -166,7 +166,7 @@ class electronic_invoice_fields(models.Model):
     total_precio_descuento = fields.Float(
         string="Precio Descuento", default=0.00, store="True")
     hsfeURLstr = fields.Char(
-        string='HermecURL', readonly="True", store="True", default='')
+        string='HermecURL', readonly="True", store="True")
     pdfNumber = fields.Char(string="PDF Fiscal Number",
                             default='', store="True")
     tipoDocPdf = fields.Char(
