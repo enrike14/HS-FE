@@ -162,7 +162,7 @@ class electronic_invoice_fields(models.Model):
         string='Reason', readonly="True", store="True")
     anulado = fields.Char(string='Anulado', readonly="True", store="True")
     nota_credito = fields.Char(
-        string='Nota de Crédito', readonly="True", compute="on_change_type", store="True")
+        string='Nota de Crédito', readonly="True", compute="on_change_type")
     total_precio_descuento = fields.Float(
         string="Precio Descuento", default=0.00, store="True")
     hsfeURLstr = fields.Char(
