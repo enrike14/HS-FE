@@ -409,7 +409,7 @@ class electronic_invoice_fields(models.Model):
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
             "payments_items": payments,
-            "monto_impuesto_completo": self.amount_by_group[0][1],
+            "monto_impuesto_completo": self.amount_by_group[1][1],
             "amount_untaxed": self.amount_untaxed,
             "total_discount_price": self.total_precio_descuento
         })
