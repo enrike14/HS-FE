@@ -158,17 +158,21 @@ class electronic_invoice_fields(models.Model):
         help='Tipo de sucursal Eletrónica.'
     )
 
-    reversal_reason_fe = fields.Char(string='Reason', readonly="True")
+    reversal_reason_fe = fields.Char(
+        string='Reason', readonly="True", store="True")
     anulado = fields.Char(string='Anulado', readonly="True", store="True")
     nota_credito = fields.Char(
-        string='Nota de Crédito', readonly="True", compute="on_change_type",)
+        string='Nota de Crédito', readonly="True", compute="on_change_type", store="True")
     total_precio_descuento = fields.Float(
-        string="Precio Descuento", default=0.00)
+        string="Precio Descuento", default=0.00, store="True")
     hsfeURLstr = fields.Char(
-        string='HermecURL', readonly="True", store="True", default='')
-    pdfNumber = fields.Char(string="PDF Fiscal Number", default='')
-    tipoDocPdf = fields.Char(string="PDF Tipo Documento", default='')
-    tipoEmisionPdf = fields.Char(string="PDF Tipo Emisión", default='')
+        string='HermecURL', readonly="True", store="True", default='', store="True")
+    pdfNumber = fields.Char(string="PDF Fiscal Number",
+                            default='', store="True")
+    tipoDocPdf = fields.Char(
+        string="PDF Tipo Documento", default='', store="True")
+    tipoEmisionPdf = fields.Char(
+        string="PDF Tipo Emisión", default='', store="True")
     api_token = fields.Char(string="ApiToken", default='')
     puntoFacturacion = fields.Char(
         string="Punto Fac", store="True", default='')
@@ -234,10 +238,10 @@ class electronic_invoice_fields(models.Model):
     # HSFE HSServices Calls Security
 
     def get_connection(self):
-        url = self.hsfeURLstr + "api/token"
         files = []
         headers = {}
         user = ""
+        hsurl = ""
         password = ""
         # constultamos el objeto de nuestra configuración del servicio
         config_document_obj = self.env["electronic.invoice"].search(
@@ -245,7 +249,9 @@ class electronic_invoice_fields(models.Model):
         if config_document_obj:
             user = config_document_obj.hsUser
             password = config_document_obj.hsPassword
+            hsurl = config_document_obj.hsfeURL
 
+        url = hsurl + "api/token"
         payload = {'username': user,
                    'password': password}
 
@@ -265,10 +271,10 @@ class electronic_invoice_fields(models.Model):
                          str(respuesta["detail"]))
 
     def get_pdf_token(self):
-        url = self.hsfeURLstr + "api/token"
         files = []
         headers = {}
         user = ""
+        hsurl = ""
         password = ""
         # constultamos el objeto de nuestra configuración del servicio
         config_document_obj = self.env["electronic.invoice"].search(
@@ -276,7 +282,9 @@ class electronic_invoice_fields(models.Model):
         if config_document_obj:
             user = config_document_obj.hsUser
             password = config_document_obj.hsPassword
+            hsurl = config_document_obj.hsfeURL
 
+        url = hsurl + "api/token"
         payload = {'username': user,
                    'password': password}
 
