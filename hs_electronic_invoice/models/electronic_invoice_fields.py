@@ -167,11 +167,12 @@ class electronic_invoice_fields(models.Model):
         string="Precio Descuento", default=0.00, store="True")
     hsfeURLstr = fields.Char(
         string='HermecURL', readonly="True", store="True")
-    pdfNumber = fields.Char(string="PDF Fiscal Number")
+    pdfNumber = fields.Char(string="PDF Fiscal Number",
+                            store="True")
     tipoDocPdf = fields.Char(
-        string="PDF Tipo Documento")
+        string="PDF Tipo Documento", store="True")
     tipoEmisionPdf = fields.Char(
-        string="PDF Tipo Emisión")
+        string="PDF Tipo Emisión", store="True")
     api_token = fields.Char(string="ApiToken")
     puntoFacturacion = fields.Char(
         string="Punto Fac", store="True", default='')
