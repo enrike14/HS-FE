@@ -23,7 +23,7 @@ class customers_fields(models.Model):
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
 	('03', 'Gobierno'),
-	('04', 'Extranjero')],string = 'Tipo Cliente')
+	('04', 'Extranjero')],string = 'Tipo Cliente',compute="on_change_tipoIdent")
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
 	('2', 'Jurídico')],string = 'Tipo Contribuyente')
@@ -53,7 +53,7 @@ class customers_fields(models.Model):
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro",size=50)
 
-	@api.onchange('TipoClienteFE')
+	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
 		logging.info(str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
