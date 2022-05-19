@@ -57,7 +57,7 @@ class customers_fields(models.Model):
 	def on_change_tipoIdent(self):
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
-		elif str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
+		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
 			self.tipoContribuyente='1'
 	
 	def _get_country_id(self):
