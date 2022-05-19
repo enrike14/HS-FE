@@ -23,10 +23,10 @@ class customers_fields(models.Model):
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
 	('03', 'Gobierno'),
-	('04', 'Extranjero')],string = 'Tipo Cliente',compute="on_change_tipoIdent")
+	('04', 'Extranjero')],string = 'Tipo Cliente')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
-	('2', 'Jurídico')],string = 'Tipo Contribuyente')
+	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="on_change_tipoIdent")
 	numeroRUC =fields.Char(string="Número RUC",size=20)
 	digitoVerificadorRUC=fields.Char(string="Digito Verificador RUC",size=2)
 	razonSocial=fields.Char(string="Razón Social",size=100)
