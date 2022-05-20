@@ -334,6 +334,7 @@ class electronic_invoice_fields(models.Model):
                 precioDescuento = str(
                     (float(item.price_unit) * float(item.discount)) / 100)
                 self.total_precio_descuento += float(precioDescuento)
+        logging.info("VALORES DE TAX:::" + str(len(self.tax_totals_json)))
 
         if(len(self.tax_totals_json) > 1):
             retencion = {
