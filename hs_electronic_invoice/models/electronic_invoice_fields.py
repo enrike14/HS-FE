@@ -174,7 +174,7 @@ class electronic_invoice_fields(models.Model):
         string="PDF Tipo Documento", store="True", default='')
     tipoEmisionPdf = fields.Char(
         string="PDF Tipo Emisión", store="True", default='')
-    api_token = fields.Char(string="ApiToken", default='')
+    api_token = fields.Char(string="ApiToken", store="True", default='')
     puntoFacturacion = fields.Char(
         string="Punto Fac", store="True", default='')
 
