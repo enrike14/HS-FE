@@ -335,7 +335,7 @@ class electronic_invoice_fields(models.Model):
                     (float(item.price_unit) * float(item.discount)) / 100)
                 self.total_precio_descuento += float(precioDescuento)
 
-        if(len(self.amount_by_group) > 1):
+        if(len(self.tax_totals_json) > 1):
             retencion = {
                 'codigoRetencion': "2",
                 'montoRetencion':  str('%.2f' % round((self.amount_total - self.amount_untaxed), 2))
@@ -420,7 +420,7 @@ class electronic_invoice_fields(models.Model):
         payments = [item.amount for item in payments_items]
         payment_values = json.dumps({
             "payments_items": payments,
-            "monto_impuesto_completo": self.amount_by_group[1][1] if len(self.amount_by_group) > 1 else self.amount_by_group[0][1],
+            "monto_impuesto_completo": self.tax_totals_json[1][1] if len(self.tax_totals_json) > 1 else self.tax_totals_json[0][1],
             "amount_untaxed": self.amount_untaxed,
             "total_discount_price": self.total_precio_descuento
         })
@@ -523,14 +523,14 @@ class electronic_invoice_fields(models.Model):
         payments_items = self.env["account.payment"].search(
             [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
-        #logging.info("Valores de ITBMS:0" + str(self.amount_by_group[0][1]))
-        # logging.info(str(self.amount_by_group[0][2]))
-        #logging.info("Valores de ITBMS: 1" + str(self.amount_by_group[1][0]))
-        # logging.info(str(self.amount_by_group[1][1]))
+        #logging.info("Valores de ITBMS:0" + str(self.tax_totals_json[0][1]))
+        # logging.info(str(self.tax_totals_json[0][2]))
+        #logging.info("Valores de ITBMS: 1" + str(self.tax_totals_json[1][0]))
+        # logging.info(str(self.tax_totals_json[1][1]))
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": self.amount_by_group[1][1] if len(self.amount_by_group) > 1 else self.amount_by_group[0][1],
+            "amount_tax_completed": self.tax_totals_json[1][1] if len(self.tax_totals_json) > 1 else self.tax_totals_json[0][1],
             "total_discount_price": self.total_precio_descuento,
             "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
