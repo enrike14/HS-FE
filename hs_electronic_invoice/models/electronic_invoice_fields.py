@@ -165,7 +165,7 @@ class electronic_invoice_fields(models.Model):
     nota_credito = fields.Char(
         string='Nota de Crédito', readonly="True", compute="on_change_type", default='')
     total_precio_descuento = fields.Float(
-        string="Precio Descuento", default=0.00, store="True", default='')
+        string="Precio Descuento", default=0.00, store="True")
     hsfeURLstr = fields.Char(
         string='HermecURL', readonly="True", store="True", default='')
     pdfNumber = fields.Char(string="PDF Fiscal Number",
