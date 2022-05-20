@@ -159,21 +159,22 @@ class electronic_invoice_fields(models.Model):
     )
 
     reversal_reason_fe = fields.Char(
-        string='Reason', readonly="True", store="True")
-    anulado = fields.Char(string='Anulado', readonly="True", store="True")
+        string='Reason', readonly="True", store="True", default='')
+    anulado = fields.Char(string='Anulado', readonly="True",
+                          store="True", default='')
     nota_credito = fields.Char(
-        string='Nota de Crédito', readonly="True", compute="on_change_type")
+        string='Nota de Crédito', readonly="True", compute="on_change_type", default='')
     total_precio_descuento = fields.Float(
-        string="Precio Descuento", default=0.00, store="True")
+        string="Precio Descuento", default=0.00, store="True", default='')
     hsfeURLstr = fields.Char(
-        string='HermecURL', readonly="True", store="True")
+        string='HermecURL', readonly="True", store="True", default='')
     pdfNumber = fields.Char(string="PDF Fiscal Number",
-                            store="True")
+                            store="True", default='')
     tipoDocPdf = fields.Char(
-        string="PDF Tipo Documento", store="True")
+        string="PDF Tipo Documento", store="True", default='')
     tipoEmisionPdf = fields.Char(
-        string="PDF Tipo Emisión", store="True")
-    api_token = fields.Char(string="ApiToken")
+        string="PDF Tipo Emisión", store="True", default='')
+    api_token = fields.Char(string="ApiToken", default='')
     puntoFacturacion = fields.Char(
         string="Punto Fac", store="True", default='')
 
