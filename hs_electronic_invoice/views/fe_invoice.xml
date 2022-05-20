@@ -58,21 +58,16 @@
 						<field name="tipoEmisionPdf" />
 						<field name="puntoFacturacion" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
 						<field name="api_token" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
-						<field name="total_precio_descuento" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>
-
-						
-						
-						
-											
+						<field name="total_precio_descuento" attrs="{'invisible': [('pagadoCompleto','!=','-000')]}"/>						
 					</group>
 					<group name="right_g" string="">
 						<field name="fecha_inicio_contingencia"  attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))], 'required':[('tipo_emision_fe','in',('02', '04'))]}"/>	
 						<field name="motivo_contingencia"  attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>
-						<field name="formatoCAFE_fe" />	
-						<field name="entregaCAFE_fe" />	
-						<field name="envioContenedor_fe" />	
-						<field name="procesoGeneracion_fe" />
-						<field name="tipoSucursal_fe" />	
+						<field name="formatoCAFE_fe" attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }" />	
+						<field name="entregaCAFE_fe" attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>	
+						<field name="envioContenedor_fe" attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>	
+						<field name="procesoGeneracion_fe" attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>
+						<field name="tipoSucursal_fe" attrs="{'invisible':[('tipo_emision_fe','not in',('02', '04'))],'required':[('tipo_emision_fe','in',('02', '04'))] }"/>	
 					</group>
 				</group>
 			</page>
