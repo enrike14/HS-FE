@@ -337,7 +337,7 @@ class electronic_invoice_fields(models.Model):
         logging.info("VALORES DE TAX:::" +
                      str(json.loads(self.tax_totals_json)))
         totalTaxes = json.loads(self.tax_totals_json)
-        arrayTaxes = totalTaxes["Untaxed Amount"]
+        arrayTaxes = totalTaxes["groups_by_subtotal"]["Untaxed Amount"]
         logging.info("VALORES ARRAY DE TAXES:::" +
                      str(arrayTaxes))
 
