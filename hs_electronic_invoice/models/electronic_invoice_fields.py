@@ -426,10 +426,9 @@ class electronic_invoice_fields(models.Model):
         payments = [item.amount for item in payments_items]
         totalTaxes = json.loads(self.tax_totals_json)
         arrayTaxes = totalTaxes["groups_by_subtotal"]["Untaxed Amount"]
-        impuesto_completo = json.loads(str(arrayTaxes[0]))
         payment_values = json.dumps({
             "payments_items": payments,
-            "monto_impuesto_completo": impuesto_completo["tax_group_amount"],
+            "monto_impuesto_completo": str(arrayTaxes[0]["tax_group_amount"]),
             "amount_untaxed": self.amount_untaxed,
             "total_discount_price": self.total_precio_descuento
         })
@@ -534,11 +533,10 @@ class electronic_invoice_fields(models.Model):
         payments = [item.amount for item in payments_items]
         totalTaxes = json.loads(self.tax_totals_json)
         arrayTaxes = totalTaxes["groups_by_subtotal"]["Untaxed Amount"]
-        impuesto_completo = json.loads(str(arrayTaxes[0]))
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": impuesto_completo["tax_group_amount"],
+            "amount_tax_completed": str(arrayTaxes[0]["tax_group_amount"]),
             "total_discount_price": self.total_precio_descuento,
             "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
