@@ -336,8 +336,12 @@ class electronic_invoice_fields(models.Model):
                 self.total_precio_descuento += float(precioDescuento)
         logging.info("VALORES DE TAX:::" +
                      str(json.loads(self.tax_totals_json)))
+        totalTaxes = json.loads(self.tax_totals_json)
+        arrayTaxes = totalTaxes["Untaxed Amount"]
+        logging.info("VALORES ARRAY DE TAXES:::" +
+                     str(arrayTaxes))
 
-        if(len(self.tax_totals_json) > 1):
+        if(len(arrayTaxes) > 1):
             retencion = {
                 'codigoRetencion': "2",
                 'montoRetencion':  str('%.2f' % round((self.amount_total - self.amount_untaxed), 2))
