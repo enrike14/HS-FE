@@ -424,9 +424,12 @@ class electronic_invoice_fields(models.Model):
         payments_items = self.env["account.payment"].search(
             [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
+        totalTaxes = json.loads(self.tax_totals_json)
+        arrayTaxes = totalTaxes["groups_by_subtotal"]["Untaxed Amount"]
+        impuesto_completo = json.loads(arrayTaxes[1])
         payment_values = json.dumps({
             "payments_items": payments,
-            "monto_impuesto_completo": self.tax_totals_json[1][1] if len(self.tax_totals_json) > 1 else self.tax_totals_json[0][1],
+            "monto_impuesto_completo": impuesto_completo["tax_group_amount"],
             "amount_untaxed": self.amount_untaxed,
             "total_discount_price": self.total_precio_descuento
         })
@@ -529,14 +532,13 @@ class electronic_invoice_fields(models.Model):
         payments_items = self.env["account.payment"].search(
             [('ref', '=', self.name)])
         payments = [item.amount for item in payments_items]
-        #logging.info("Valores de ITBMS:0" + str(self.tax_totals_json[0][1]))
-        # logging.info(str(self.tax_totals_json[0][2]))
-        #logging.info("Valores de ITBMS: 1" + str(self.tax_totals_json[1][0]))
-        # logging.info(str(self.tax_totals_json[1][1]))
+        totalTaxes = json.loads(self.tax_totals_json)
+        arrayTaxes = totalTaxes["groups_by_subtotal"]["Untaxed Amount"]
+        impuesto_completo = json.loads(arrayTaxes[1])
 
         sub_total_values = json.dumps({
             "amount_untaxed": self.amount_untaxed,
-            "amount_tax_completed": self.tax_totals_json[1][1] if len(self.tax_totals_json) > 1 else self.tax_totals_json[0][1],
+            "amount_tax_completed": impuesto_completo["tax_group_amount"],
             "total_discount_price": self.total_precio_descuento,
             "items_qty": str(len(self.invoice_line_ids)),
             "payment_time": 1,
