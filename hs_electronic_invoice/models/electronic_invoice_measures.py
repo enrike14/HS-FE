@@ -13,10 +13,9 @@ class electronic_invoice_measures(models.Model):
 	system=fields.Char(string="Sistema")
 	measures=fields.Char(string="Medida")
 	comments=fields.Char(string="Comentario")
-	IDSymbol=fields.Char(string="ID Símbolo")
 	def name_get(self):
 		result = []
 		for record in self:
-			record_name = record.IDSymbol
+			record_name = record.symbol
 			result.append((record.id, record_name))
 		return result

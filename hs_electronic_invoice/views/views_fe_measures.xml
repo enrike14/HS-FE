@@ -13,7 +13,6 @@
             <field name="name" />
             <field name="symbol" />
             <field name="comments" />
-            <field name="IDSymbol" />
         </tree>
       </field>
     </record>
@@ -36,7 +35,6 @@
             <field name="name" />
             <field name="symbol" />
             <field name="comments" />
-            <field name="IDSymbol"/>
             </group>
           </sheet>
         </form>
