@@ -10,7 +10,7 @@
         <tree>
             <field name="segmentoID" />
               <field name="segmento" />
-              <field name="name" />
+              <field name="familiaID" />
               <field name="familia" />
         </tree>
       </field>
@@ -31,7 +31,7 @@
             <group>
                <field name="segmentoID" />
               <field name="segmento" />
-              <field name="name" />
+              <field name="familiaID" />
               <field name="familia" />
             </group>
           </sheet>
