@@ -14,9 +14,9 @@ class electronic_invoice_district(models.Model):
 		country_id = self.env['res.country'].search([['name', '=', 'Panama']]).id
 		self.country_id = country_id
 	
-	def name_get(self):
-		result = []
-		for record in self:
-			record_name = record.name
-			result.append((record.id, record_name))
-		return result
+	# def name_get(self):
+	# 	result = []
+	# 	for record in self:
+	# 		record_name = record.name
+	# 		result.append((record.id, record_name))
+	# 	return result
