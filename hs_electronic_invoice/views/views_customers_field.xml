@@ -32,7 +32,8 @@
 									<field name="CodigoUbicacion" invisible="1"/>
 									<field name="tipoIdentificacion" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
 									<field name="nroIdentificacionExtranjero" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
-									<field name="paisExtranjero" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/>
+									<field name="paisExtranjero"/>
+									<!-- <field name="paisExtranjero" attrs="{'required':[('TipoClienteFE','in',('04'))]}"/> -->
 									<!-- <field name="paisOtro"/> -->
                                 </group>
                             </group>
