@@ -28,7 +28,7 @@ class customers_fields(models.Model):
 	[('1', 'Natural'),
 	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="on_change_tipoIdent")
 	numeroRUC =fields.Char(string="Número RUC",size=20)
-	digitoVerificadorRUC=fields.Char(string="Digito Verificador RUC",size=2)
+	digitoVerificadorRUC=fields.Char(string="Dígito Verificador RUC",size=2)
 	razonSocial=fields.Char(string="Razón Social",size=100)
 	direccion=fields.Char(string="Dirección",size=100)
 	#ubicacion change
@@ -48,7 +48,7 @@ class customers_fields(models.Model):
 	('02', 'Numero Tributario'),
 	('99', 'Otro')],string = 'Tipo Identificación')
 	nroIdentificacionExtranjero=fields.Char(string="Nro. de Pasaporte o Nro. de Identificación Tributaria Extranjera")
-	paisExtranjero=fields.Char(string="País Extranjero",size=50)
+	paisExtranjero=fields.Char(string="País Extranjero",size=50,help="Solo se utiliza si se llena el campo Nro. de Pasaporte o Nro. de Identificación Tributaria Extranjera con el pasaporte (Utilizar nombre completo del país).")
 	#telefono1	 ///correoElectronico1
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro",size=50)
@@ -101,4 +101,3 @@ class customers_fields(models.Model):
 	@api.onchange('sector_id')
 	def onchange_sector_id(self):
 		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
-		
