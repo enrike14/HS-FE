@@ -67,37 +67,37 @@ class customers_fields(models.Model):
 		country_id = self._cr.fetchone()
 		return country_id
 	
-	@api.onchange('province_id')
-	def onchange_province_id(self):
-		res = {}
-		# self.district_id=""
-		# self.sector_id=""
+	# @api.onchange('province_id')
+	# def onchange_province_id(self):
+	# 	res = {}
+	# 	# self.district_id=""
+	# 	# self.sector_id=""
 
-		if self.province_id:
-			self._cr.execute('SELECT electronic_invoice_district.id, electronic_invoice_district.name FROM electronic_invoice_district WHERE electronic_invoice_district.province_id = %s AND electronic_invoice_district.country_id = ( SELECT electronic_invoice_province.country_id FROM electronic_invoice_province WHERE electronic_invoice_province.id = %s) ', (self.province_id.id, self.province_id.id))
-			districts = self._cr.fetchall()
-			ids = []
+	# 	if self.province_id:
+	# 		self._cr.execute('SELECT electronic_invoice_district.id, electronic_invoice_district.name FROM electronic_invoice_district WHERE electronic_invoice_district.province_id = %s AND electronic_invoice_district.country_id = ( SELECT electronic_invoice_province.country_id FROM electronic_invoice_province WHERE electronic_invoice_province.id = %s) ', (self.province_id.id, self.province_id.id))
+	# 		districts = self._cr.fetchall()
+	# 		ids = []
 
-			for district in districts:
-				ids.append(district[0])
-			res['domain'] = {'district_id': [('id', 'in', ids)]}
-		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
-		return res
+	# 		for district in districts:
+	# 			ids.append(district[0])
+	# 		res['domain'] = {'district_id': [('id', 'in', ids)]}
+	# 	self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
+	# 	return res
 
-	@api.onchange('district_id')
-	def onchange_district_id(self):
-		res = {}
-		# self.sector_id=""
-		if self.district_id:
-			self._cr.execute('SELECT electronic_invoice_sector.id, electronic_invoice_sector.name FROM electronic_invoice_sector WHERE electronic_invoice_sector.district_id = %s AND  electronic_invoice_sector.country_id = ( SELECT electronic_invoice_district.country_id FROM electronic_invoice_district WHERE electronic_invoice_district.id = %s) ', (self.district_id.id, self.district_id.id))
-			sectors = self._cr.fetchall()
-			ids = []
+	# @api.onchange('district_id')
+	# def onchange_district_id(self):
+	# 	res = {}
+	# 	# self.sector_id=""
+	# 	if self.district_id:
+	# 		self._cr.execute('SELECT electronic_invoice_sector.id, electronic_invoice_sector.name FROM electronic_invoice_sector WHERE electronic_invoice_sector.district_id = %s AND  electronic_invoice_sector.country_id = ( SELECT electronic_invoice_district.country_id FROM electronic_invoice_district WHERE electronic_invoice_district.id = %s) ', (self.district_id.id, self.district_id.id))
+	# 		sectors = self._cr.fetchall()
+	# 		ids = []
 
-			for sector in sectors:
-				ids.append(sector[0])
-			res['domain'] = {'sector_id': [('id', 'in', ids)]}
-		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
-		return res
+	# 		for sector in sectors:
+	# 			ids.append(sector[0])
+	# 		res['domain'] = {'sector_id': [('id', 'in', ids)]}
+	# 	self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
+	# 	return res
 	
 	@api.onchange('sector_id')
 	def onchange_sector_id(self):
