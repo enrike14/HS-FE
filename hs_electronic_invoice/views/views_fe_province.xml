@@ -29,7 +29,7 @@
             <group>
                <field name="code" />
               <field name="name" />
-              <field name="country_id" />
+              <!-- <field name="country_id" /> -->
             </group>
           </sheet>
         </form>

@@ -33,7 +33,7 @@ class customers_fields(models.Model):
 	direccion=fields.Char(string="Dirección",size=100)
 	#ubicacion change
 	#neonety_country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
-	country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
+	#country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
 	province_id = fields.Many2one('electronic.invoice.province', string='Provincia')
 	district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
 	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
@@ -62,10 +62,10 @@ class customers_fields(models.Model):
 		else:
 			self.tipoContribuyente=''
 	
-	def _get_country_id(self):
-		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
-		country_id = self._cr.fetchone()
-		return country_id
+	# def _get_country_id(self):
+	# 	self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
+	# 	country_id = self._cr.fetchone()
+	# 	return country_id
 	
 	@api.onchange('province_id')
 	def onchange_province_id(self):
