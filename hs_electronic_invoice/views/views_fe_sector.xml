@@ -10,7 +10,6 @@
         <tree>
             <field name="code" />
               <field name="name" />
-              <field name="country_id" />
               <field name="province_id" />  
              <field name="district_id" /> 
           
