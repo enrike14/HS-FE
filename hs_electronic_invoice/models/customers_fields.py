@@ -26,22 +26,22 @@ class customers_fields(models.Model):
 	('04', 'Extranjero')],string = 'Tipo Cliente')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
-	('2', 'Jurídico')],string = 'Tipo Contribuyente')
+	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="on_change_tipoIdent")
 	numeroRUC =fields.Char(string="Número RUC",size=20)
 	digitoVerificadorRUC=fields.Char(string="Digito Verificador RUC",size=2)
 	razonSocial=fields.Char(string="Razón Social",size=100)
 	direccion=fields.Char(string="Dirección",size=100)
 	#ubicacion change
 	#neonety_country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
-	#country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
+	country_id = fields.Many2one('res.country', string='País', default=lambda self: self._get_country_id())
 	province_id = fields.Many2one('electronic.invoice.province', string='Provincia')
 	district_id = fields.Many2one('electronic.invoice.district', string='Distrito')
 	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
 	#codigo
 	CodigoUbicacion=fields.Char(string="Codigo Ubicación",size=8)
-	provincia=fields.Integer(string="Provincia",related='province_id.code')
-	distrito=fields.Integer(string="Distrito",related='district_id.code')
-	corregimiento=fields.Integer(string="Corregimiento",related='sector_id.code')
+	provincia=fields.Char(string="Provincia",related='province_id.code')
+	distrito=fields.Char(string="Distrito",related='district_id.code')
+	corregimiento=fields.Char(string="Corregimiento",related='sector_id.code')
 	tipoIdentificacion=fields.Selection(
 	[('04', 'Extranjero'),
 	('01', 'Pasaporte'),
@@ -53,19 +53,18 @@ class customers_fields(models.Model):
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro",size=50)
 
-	@api.onchange('TipoClienteFE')
+	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
+		logging.info(str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
-		elif str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
+		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
 			self.tipoContribuyente='1'
-		else:
-			self.tipoContribuyente=''
 	
-	# def _get_country_id(self):
-	# 	self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
-	# 	country_id = self._cr.fetchone()
-	# 	return country_id
+	def _get_country_id(self):
+		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
+		country_id = self._cr.fetchone()
+		return country_id
 	
 	@api.onchange('province_id')
 	def onchange_province_id(self):
