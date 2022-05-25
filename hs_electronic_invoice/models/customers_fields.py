@@ -39,9 +39,9 @@ class customers_fields(models.Model):
 	sector_id = fields.Many2one('electronic.invoice.sector', string='Corregimiento')
 	#codigo
 	CodigoUbicacion=fields.Char(string="Codigo Ubicación",size=8)
-	provincia=fields.Integer(string="Provincia",related='province_id.code')
-	distrito=fields.Integer(string="Distrito",related='district_id.code')
-	corregimiento=fields.Integer(string="Corregimiento",related='sector_id.code')
+	provincia=fields.Char(string="Provincia",related='province_id.code')
+	distrito=fields.Char(string="Distrito",related='district_id.code')
+	corregimiento=fields.Char(string="Corregimiento",related='sector_id.code')
 	tipoIdentificacion=fields.Selection(
 	[('04', 'Extranjero'),
 	('01', 'Pasaporte'),

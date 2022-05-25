@@ -3,7 +3,7 @@ from odoo import models, fields, api
 
 class electronic_invoice_province(models.Model):
 	_name = 'electronic.invoice.province'
-	code = fields.Integer(string='Código', size=3, required=True)
+	code = fields.Char(string='Código', size=3, required=True)
 	name = fields.Char(string='Nombre', size=255, required=True, translate=True)
 	country_id = fields.Many2one('res.country', string='País', required=False, compute='_get_country_id', store=True, ondelete='cascade')
 	district_ids = fields.One2many('electronic.invoice.district', 'province_id', string='Distritos')
