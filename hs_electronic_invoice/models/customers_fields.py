@@ -18,7 +18,7 @@ class customers_fields(models.Model):
 		country = self.pool.get('res.country')
 		country_id = self.env['res.country'].search([['name', '=', 'Panama']]).id
 		self.country_id = country_id
-	#@api.multi
+	@api.multi
 	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
@@ -58,13 +58,15 @@ class customers_fields(models.Model):
 	#telefono1	 ///correoElectronico1
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro",size=50)
-
 	
+	@api.multi
+	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
 		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
 			self.tipoContribuyente='1'
+			
 	def _get_country_id(self):
 		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
 		country_id = self._cr.fetchone()
