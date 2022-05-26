@@ -4,6 +4,7 @@ import base64
 from cmath import log
 from io import BytesIO
 from pydoc import cli
+from xmlrpc.client import DateTime
 from odoo import models, fields, api
 import zeep
 import logging
@@ -626,8 +627,8 @@ class electronic_invoice_fields(models.Model):
                     'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "",
                     'codigoGTINInv': item.product_id.codigoGTINInv if item.product_id.cantGTINCom else "",
                     'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "",
-                    'fechaFabricacion': item.product_id.fechaFabricacion if item.product_id.fechaFabricacion else date.today(),
-                    'fechaCaducidad': item.product_id.fechaCaducidad if item.product_id.fechaCaducidad else date.today(),
+                    'fechaFabricacion': item.product_id.fechaFabricacion if item.product_id.fechaFabricacion else datetime.now(),
+                    'fechaCaducidad': item.product_id.fechaCaducidad if item.product_id.fechaCaducidad else datetime.now(),
                     'codigoCPBS': str(item.product_id.codigoCPBS),
                     'unidadMedidaCPBS': str(item.product_id.unidadMedidaCPBS),
                     'codigoCPBSAbrev': str(item.product_id.codigoCPBSAbrev),
