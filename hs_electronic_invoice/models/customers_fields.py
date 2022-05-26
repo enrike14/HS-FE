@@ -18,7 +18,7 @@ class customers_fields(models.Model):
 		country = self.pool.get('res.country')
 		country_id = self.env['res.country'].search([['name', '=', 'Panama']]).id
 		self.country_id = country_id
-	@api.multi
+
 	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
