@@ -6,7 +6,7 @@ from datetime import datetime
 
 class product_field(models.Model):
 	#_inherit = "product.product"
-	_inherit = "product.template"
+	_inherit = "product.product"
 	mensaje_codigo='Codigos tipo:\nGTIN – 14 (14 caracteres)\nGTIN – 13 (13 caracteres)\nGTIN – 12 (12 caracteres)\nGTIN – 8 (8 caracteres)'
 	#asignar campos al modulo de product.product
 	categoryProduct = fields.Selection(
