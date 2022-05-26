@@ -626,8 +626,8 @@ class electronic_invoice_fields(models.Model):
                     'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "",
                     'codigoGTINInv': item.product_id.codigoGTINInv if item.product_id.cantGTINCom else "",
                     'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "",
-                    'fechaFabricacion': str(item.product_id.fechaFabricacion).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaFabricacion else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
-                    'fechaCaducidad': str(item.product_id.fechaCaducidad).strftime("%Y-%m-%dT%H:%M:%S-05:00") if item.product_id.fechaCaducidad else datetime.today().strftime("%Y-%m-%dT%H:%M:%S-05:00"),
+                    'fechaFabricacion': item.product_id.fechaFabricacion.strftime("%Y-%m-%dT%I:%M:%S-05:00") if item.product_id.fechaFabricacion else None
+                    'fechaCaducidad': item.product_id.fechaCaducidad.strftime("%Y-%m-%dT%I:%M:%S-05:00") if item.product_id.fechaCaducidad else None
                     'codigoCPBS': str(item.product_id.codigoCPBS),
                     'unidadMedidaCPBS': str(item.product_id.unidadMedidaCPBS),
                     'codigoCPBSAbrev': str(item.product_id.codigoCPBSAbrev),
