@@ -19,12 +19,6 @@ class customers_fields(models.Model):
 		country_id = self.env['res.country'].search([['name', '=', 'Panama']]).id
 		self.country_id = country_id
 
-	@api.depends('TipoClienteFE')
-	def on_change_tipoIdent(self):
-		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
-			self.tipoContribuyente='2'
-		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
-			self.tipoContribuyente='1'
 	TipoClienteFE = fields.Selection(
 	[('01', 'Contribuyente'),
 	('02', 'Consumidor final'),
@@ -32,7 +26,7 @@ class customers_fields(models.Model):
 	('04', 'Extranjero')],string = 'Tipo Cliente')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
-	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="on_change_tipoIdent")
+	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="_compute_tipoIdent")
 	numeroRUC =fields.Char(string="Número RUC",size=20)
 	digitoVerificadorRUC=fields.Char(string="Dígito Verificador RUC",size=2)
 	razonSocial=fields.Char(string="Razón Social",size=100)
@@ -60,7 +54,7 @@ class customers_fields(models.Model):
 	paisOtro=fields.Char(string="País Otro",size=50)
 	
 	@api.depends('TipoClienteFE')
-	def on_change_tipoIdent(self):
+	def _compute_tipoIdent(self):
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
 		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
