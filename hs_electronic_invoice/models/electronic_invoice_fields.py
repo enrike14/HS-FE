@@ -8,7 +8,7 @@ from odoo import models, fields, api
 import zeep
 import logging
 from base64 import b64decode
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from odoo import http
 from odoo.http import request
 from odoo.http import content_disposition
@@ -626,8 +626,8 @@ class electronic_invoice_fields(models.Model):
                     'cantGTINCom': item.product_id.cantGTINCom if item.product_id.cantGTINCom else "",
                     'codigoGTINInv': item.product_id.codigoGTINInv if item.product_id.cantGTINCom else "",
                     'cantGTINComInv': item.product_id.cantGTINComInv if item.product_id.cantGTINComInv else "",
-                    'fechaFabricacion': item.product_id.fechaFabricacion if item.product_id.fechaFabricacion else '',
-                    'fechaCaducidad': item.product_id.fechaCaducidad if item.product_id.fechaCaducidad else '',
+                    'fechaFabricacion': item.product_id.fechaFabricacion if item.product_id.fechaFabricacion else date.today(),
+                    'fechaCaducidad': item.product_id.fechaCaducidad if item.product_id.fechaCaducidad else date.today(),
                     'codigoCPBS': str(item.product_id.codigoCPBS),
                     'unidadMedidaCPBS': str(item.product_id.unidadMedidaCPBS),
                     'codigoCPBSAbrev': str(item.product_id.codigoCPBSAbrev),
