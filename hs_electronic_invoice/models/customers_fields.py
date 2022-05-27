@@ -55,11 +55,12 @@ class customers_fields(models.Model):
 	
 	@api.depends('TipoClienteFE')
 	def _compute_tipoIdent(self):
-		 logging.info('Enviado error computer:: ')
-		# if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
-		# 	self.tipoContribuyente='2'
-		# if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
-		# 	self.tipoContribuyente='1'
+		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
+			self.tipoContribuyente='2'
+		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
+			self.tipoContribuyente='1'
+		else:
+			self.tipoContribuyente=''
 
 	def _get_country_id(self):
 		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
