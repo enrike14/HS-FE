@@ -26,9 +26,9 @@ class customers_fields(models.Model):
 	('04', 'Extranjero')],string = 'Tipo Cliente')
 	tipoContribuyente = fields.Selection(
 	[('1', 'Natural'),
-	('2', 'Jurídico')],string = 'Tipo Contribuyente')
+	('2', 'Jurídico')],string = 'Tipo Contribuyente',compute="on_change_tipoIdent")
 	numeroRUC =fields.Char(string="Número RUC",size=20)
-	digitoVerificadorRUC=fields.Char(string="Digito Verificador RUC",size=2)
+	digitoVerificadorRUC=fields.Char(string="Dígito Verificador RUC",size=2)
 	razonSocial=fields.Char(string="Razón Social",size=100)
 	direccion=fields.Char(string="Dirección",size=100)
 	#ubicacion change
@@ -48,20 +48,21 @@ class customers_fields(models.Model):
 	('02', 'Numero Tributario'),
 	('99', 'Otro')],string = 'Tipo Identificación')
 	nroIdentificacionExtranjero=fields.Char(string="Nro. de Pasaporte o Nro. de Identificación Tributaria Extranjera")
-	paisExtranjero=fields.Char(string="País Extranjero",size=50)
+	paisExtranjero=fields.Char(string="País Extranjero",size=50,help="Solo se utiliza si se llena el campo Nro. de Pasaporte o Nro. de Identificación Tributaria Extranjera con el pasaporte (Utilizar nombre completo del país).")
 	#telefono1	 ///correoElectronico1
 	pais=fields.Char(string="País")
 	paisOtro=fields.Char(string="País Otro",size=50)
 
-	@api.onchange('TipoClienteFE')
+	@api.depends('TipoClienteFE')
 	def on_change_tipoIdent(self):
+		logging.info(str(self.TipoClienteFE))
 		if str(self.TipoClienteFE)=='01' or str(self.TipoClienteFE)=='03':
 			self.tipoContribuyente='2'
-		elif str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
+		if str(self.TipoClienteFE)=='02' or str(self.TipoClienteFE)=='04':
 			self.tipoContribuyente='1'
 		else:
 			self.tipoContribuyente=''
-	
+			
 	def _get_country_id(self):
 		self._cr.execute("SELECT id FROM res_country WHERE code LIKE 'PA' LIMIT 1")
 		country_id = self._cr.fetchone()
@@ -102,4 +103,3 @@ class customers_fields(models.Model):
 	@api.onchange('sector_id')
 	def onchange_sector_id(self):
 		self.CodigoUbicacion=str(str(self.provincia)+"-"+str(self.distrito)+"-"+str(self.corregimiento))
-		
